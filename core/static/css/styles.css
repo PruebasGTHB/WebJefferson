@@ -1,8 +1,8 @@
+/* Estilos generales */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow: hidden; 
 }
 
 body, html {
@@ -15,35 +15,62 @@ body, html {
     grid-template-rows: auto 1fr;
     grid-template-columns: 1fr;
     height: 100vh;
-    gap: 0;
     overflow: hidden;
 }
 
 .contenedor__banner {
-    background-color: brown;
+    background: linear-gradient(135deg, #042f1a, #065f3c, #0a7d56);
+    color: white;
+    font-size: 2rem;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
     position: sticky;
     top: 0;
-    width: 100%;
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    padding: 1rem;
+    width: 100%;
     z-index: 100;
     max-height: 12vh;
-    min-height: 12vh;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
 }
 
-.contenedor__banner img {
-    height: 100px;
-    max-height: 12vh;
-    min-height: 12vh;
+.banner_logo img {
+    max-width: 100px;
+    height: auto;
+    
 }
 
-.logo-1{
-    padding-left: 2rem;
+.logo_user {
+    background-color: transparent;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    
 }
 
-.logo-2{
-    padding-right: 2rem;
+.logo_account {
+    background-color: transparent;
+    height: 50px; 
+    width: 50px;
+    border-radius: 30px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
 }
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .banner_logo img {
+        max-width: 80px;
+    }
+    .logo_account {
+        height: 40px;
+        width: 40px;
+    }
+}
+
+
 
 .contenedor__principal {
     display: grid;
@@ -61,48 +88,45 @@ body, html {
 }
 
 .superior__semaforo {
-    background-color: yellow;
-    padding: 1rem 3%;
+    position: relative;
+    background-color: rgb(4, 25, 11);
+    padding: 4rem 3%;
     display: flex;
     justify-content: center;
     align-items: center;
-}
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;}
 
-.semaforo__btn {
-    width: 100px;
-    height: 100px;
+.foco {
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
-    background-color: gray;
-    transition: background-color 0.5s ease;
+    background: radial-gradient(circle, 
+        rgba(255, 255, 255, 1) 0%,       /* Punto de luz central */
+        rgba(255, 0, 0, 1) 50%,         /* Rojo brillante */
+        rgba(139, 0, 0, 0.8) 70%,       /* Rojo oscuro */
+        rgba(0, 0, 0, 0.9) 95%,         /* Negro en el borde */
+        rgba(0, 0, 0, 1) 100%           /* Negro más concentrado */
+    );
+    box-shadow: 
+        0 0 50px rgba(255, 0, 0, 0.7),  /* Luz roja brillante */
+        0 0 15px rgba(255, 255, 255, 0.8); /* Resplandor blanco */
+    transition: background 0.5s ease, box-shadow 0.5s ease;
 }
 
 
-.semaforo__btn:hover {
-    background-color: green;
-}
-
-.semaforo__btn:hover::after {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .superior__graficos {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: red;
+    background-color: rgb(4, 25, 11);
     overflow: hidden; 
+    border-radius: 10px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
 .graficos__scrollh {
@@ -111,24 +135,54 @@ body, html {
     overflow: hidden;
     width: 100%;
     height: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     padding: 0;
+    margin: 1rem;
     position: relative;
 }
 
 .grafico {
+    background-color: white;
     flex: 0 0 25%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-radius: 10%;
+    border-color: #069227;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    
 }
 
+.grafico:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.graficos__scrollh canvas {
+    display: flex;
+    gap: 2rem;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    margin: 1rem;
+    position: relative;
+}
+
+.grafico canvas {
+    width: 100px !important; /* Ajusta según el tamaño deseado */
+    height: 100px !important;
+    display: block;
+}
+
+
 .graficos__scrollh img {
-    height: 20vh;
+    height: 15vh;
     width: auto;
     max-width: 100%;
-
 }
 
 .flecha {
@@ -155,6 +209,63 @@ body, html {
 .flecha.oculto {
     display: none;
 }
+
+/* Modal estilos */
+.modal {
+    display: none; /* Ocultar por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: auto;
+    padding: 1rem;
+    border-radius: 10px;
+    max-width: 80%;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 5px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.open-modal{
+    background-color: transparent;
+    width: 20%;
+    border-radius: 10px;
+}
+
+
+
+
+
+
 
 .principal__inferior {
     display: grid;

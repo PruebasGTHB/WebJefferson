@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eficiencia y Pérdidas</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #e0f7fa; color: #333; padding: 20px; }
+        .contenedor { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .dato { font-size: 22px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Eficiencia y Pérdidas</h1>
+    <p class="dato">Eficiencia: <span id="eficiencia">0</span>%</p>
+    <p class="dato">Pérdidas: <span id="perdidas">0</span>%</p>
+    <div class="contenedor">
+        <canvas id="grafico"></canvas>
+    </div>
+
+    <script>
+        let ctx = document.getElementById('grafico').getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Eficiencia", "Pérdidas"],
+                datasets: [{
+                    label: "Porcentaje",
+                    data: [0, 0],
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                    borderColor: ['#388E3C', '#D32F2F'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                scales: { x: { beginAtZero: true, max: 100 } },
+                animation: { duration: 1000 }
+            }
+        });
+
+        function actualizarDatos() {
+            fetch('/api/dashboard/4/')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('eficiencia').textContent = data.eficiencia;
+                    document.getElementById('perdidas').textContent = data.perdidas;
+                    chart.data.datasets[0].data = [data.eficiencia, data.perdidas];
+                    chart.update();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        setInterval(actualizarDatos, 5000);
+        actualizarDatos();
+    </script>
+</body>
+</html>

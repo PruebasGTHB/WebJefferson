@@ -1,24 +1,17 @@
-"""
-URL configuration for WebJefferson project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 from core import views
 
 urlpatterns = [
     path('', views.inicio, name='inicio'),
+    path('api/dashboard/<str:dashboard_id>/',
+         views.get_dashboard_data, name='dashboard_data'),
+    path("hora-servidor/", views.obtener_hora_servidor, name="hora_servidor"),
+    path('dashboard/1/', views.dashboard1, name='dashboard1'),
+    path('dashboard/2/', views.dashboard2, name='dashboard2'),
+    path('dashboard/3/', views.dashboard3, name='dashboard3'),
+    path('dashboard/4/', views.dashboard4, name='dashboard4'),
+    path('dashboard/5/', views.dashboard5, name='dashboard5'),
     path('admin/', admin.site.urls),
 ]

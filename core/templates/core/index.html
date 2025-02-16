@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,46 +6,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Web</title>
     <link rel="stylesheet" href="../static/css/styles.css">
-    <script src="../static/js/script.js" defer></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static '../static/js/script.js' %}" defer></script>    
 </head>
 <body>
     <div id="main__contenedor" class="main__contenedor">
         <div id="contenedor__banner" class="contenedor__banner"> 
             <div class="banner_logo logo-1">
-                <img class="logo-1__img" src="https://img.freepik.com/vector-gratis/diseno-logotipo-energia_23-2150045657.jpg?semt=ais_hybrid" alt="">
+                <img class="logo-1__img" src="../static/img/logos/logo-1__img.png" alt="">
             </div>
-            <div class="banner_logo logo-2">
-                <img class="logo-2__img" src="https://img.freepik.com/vector-gratis/diseno-logotipo-energia_23-2150045657.jpg?semt=ais_hybrid" alt="">
+            <div class="logo_user logo-user-1">
+                <img class="logo_account" src="../static/img/logos/account.png" alt="">
             </div>
+            <span id="reloj">Cargando...</span>
         </div>
-
         <div class="contenedor__principal">
             <div class="principal__superior">
                 <div class="superior__semaforo">
-                    <div class="semaforo__btn">
-                        Normal
-                    </div>
+                    <div class="foco" id="foco"></div>
                 </div>
                 <div class="superior__graficos">
                     <button class="flecha izquierda oculto">←</button>
                     <div class="graficos__scrollh">
-                        <div class="grafico"><a href="#"><img src="https://www.jaspersoft.com/content/dam/jaspersoft/images/graphics/infographics/pie-chart-example.svg" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://www.jaspersoft.com/content/dam/jaspersoft/images/graphics/infographics/combination-chart-example.svg" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://piktochart.com/wp-content/uploads/2021/08/gauge_1-1024x759.png" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeWxUeds13ngMi8vkjEgp40x36ghCXPrYhgg&s" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://www.jaspersoft.com/content/dam/jaspersoft/images/graphics/infographics/pie-chart-example.svg" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://www.jaspersoft.com/content/dam/jaspersoft/images/graphics/infographics/pie-chart-example.svg" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://www.jaspersoft.com/content/dam/jaspersoft/images/graphics/infographics/pie-chart-example.svg" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://www.jaspersoft.com/content/dam/jaspersoft/images/graphics/infographics/pie-chart-example.svg" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://www.jaspersoft.com/content/dam/jaspersoft/images/graphics/infographics/pie-chart-example.svg" alt=""></a></div>
-                        <div class="grafico"><a href="#"><img src="https://www.jaspersoft.com/content/dam/jaspersoft/images/graphics/infographics/pie-chart-example.svg" alt=""></a></div>
+                        <!-- Dashboard 1 -->
+                        <div class="grafico">
+                            <canvas id="miniatura1"></canvas>
+                            <button class="open-modal" data-src="{% url 'dashboard1' %}">Abrir</button>
+                        </div>
+                    
+                        <!-- Dashboard 2 -->
+                        <div class="grafico">
+                            <canvas id="miniatura2"></canvas>
+                            <button class="open-modal" data-src="{% url 'dashboard2' %}">Abrir</button>
+                        </div>
+                    
+                        <!-- Dashboard 3 -->
+                        <div class="grafico">
+                            <canvas id="miniatura3"></canvas>
+                            <button class="open-modal" data-src="{% url 'dashboard3' %}">Abrir</button>
+                        </div>
+                    
+                        <!-- Dashboard 4 -->
+                        <div class="grafico">
+                            <canvas id="miniatura4"></canvas>
+                            <button class="open-modal" data-src="{% url 'dashboard4' %}">Abrir</button>
+                        </div>
+                    
+                        <!-- Dashboard 5 -->
+                        <div class="grafico">
+                            <canvas id="miniatura5"></canvas>
+                            <button class="open-modal" data-src="{% url 'dashboard5' %}">Abrir</button>
+                        </div>
                     </div>
+                    
                     <button class="flecha derecha">→</button>
                 </div>
-                         
+            </div>
+            
+            <!-- Modal -->
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <iframe id="dashboard-frame" src="" frameborder="0" width="100%" height="500px"></iframe>
+                </div>
             </div>
 
+            
             <div class="principal__inferior">
                 <div class="principal__inferior-izq">
                     <div class="inferior-izq__filtro">
@@ -72,12 +99,7 @@
                     </div>
                 </div>
             </div>
-        
         </div>
     </div>
-
-
-
-    
 </body>
 </html>
