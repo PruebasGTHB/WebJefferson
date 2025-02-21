@@ -7,7 +7,10 @@
     <title>Página Web</title>
     <link rel="stylesheet" href="../static/css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{% static '../static/js/script.js' %}" defer></script>    
+    <script src="{% static '../static/js/script.js' %}" defer></script> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">   
 </head>
 <body>
     <div id="main__contenedor" class="main__contenedor">
@@ -20,90 +23,28 @@
             </div>
             <span id="reloj">Cargando...</span>
         </div>
-        <div class="contenedor__principal">
-            <div class="principal__superior">
-                <div class="superior__semaforo">
-                    <div class="foco" id="foco"></div>
-                </div>
-                <div class="superior__graficos">
-                    <button class="flecha izquierda oculto">←</button>
-                    <div class="graficos__scrollh">
-                        <!-- Dashboard 1 -->
-                        <div class="grafico">
-                            <canvas id="miniatura1"></canvas>
-                            <button class="open-modal" data-src="{% url 'dashboard1' %}">Abrir</button>
-                        </div>
-                    
-                        <!-- Dashboard 2 -->
-                        <div class="grafico">
-                            <canvas id="miniatura2"></canvas>
-                            <button class="open-modal" data-src="{% url 'dashboard2' %}">Abrir</button>
-                        </div>
-                    
-                        <!-- Dashboard 3 -->
-                        <div class="grafico">
-                            <canvas id="miniatura3"></canvas>
-                            <button class="open-modal" data-src="{% url 'dashboard3' %}">Abrir</button>
-                        </div>
-                    
-                        <!-- Dashboard 4 -->
-                        <div class="grafico">
-                            <canvas id="miniatura4"></canvas>
-                            <button class="open-modal" data-src="{% url 'dashboard4' %}">Abrir</button>
-                        </div>
-                    
-                        <!-- Dashboard 5 -->
-                        <div class="grafico">
-                            <canvas id="miniatura5"></canvas>
-                            <button class="open-modal" data-src="{% url 'dashboard5' %}">Abrir</button>
-                        </div>
-                    </div>
-                    
-                    <button class="flecha derecha">→</button>
-                </div>
-            </div>
-            
-            <!-- Modal -->
-            <div id="modal" class="modal">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <iframe id="dashboard-frame" src="" frameborder="0" width="100%" height="500px"></iframe>
-                </div>
-            </div>
-
-            
+        <div class="contenedor__principal">            
             <div class="principal__inferior">
                 <div class="principal__inferior-izq">
-                    <h2>Filtros</h2>
-                    <form id="filtroForm">
-                        <fieldset>
-                            <legend>Filtrar por Año</legend>
-                            <label for="filtroAnio">Año:</label>
-                            <select id="filtroAnio">
-                                <option value="">Todos</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                            </select>
-                        </fieldset>
-                
-                        <fieldset>
-                            <legend>Filtrar por Categoría</legend>
-                            <label for="filtroCategoria">Categoría:</label>
-                            <select id="filtroCategoria">
-                                <option value="">Todas</option>
-                                <option value="Energía">Energía</option>
-                                <option value="Tecnología">Tecnología</option>
-                                <option value="Salud">Salud</option>
-                            </select>
-                        </fieldset>
-                
-                        <button type="button" onclick="filtrarTabla()">Filtrar</button>
-                    </form>
+                    <div class="inferior-izq__semaforo">
+                        <!-- <div class="tittle-estado">
+                            <span>ESTADO</span>
+                        </div> -->
+                        <div class="semaforo__foco">
+                            <div class="foco foco-1" id="foco-1"></div>                       
+                            <div class="foco foco-2" id="foco-2"></div>
+                            <div class="foco foco-3" id="foco-3"></div>
+                        </div>
+                    </div>
+                    <div class="inferior-izq__botones">
+                        <button class="botones">Consumo de Energía</button>
+                        <button class="botones">Producciones</button>
+                        <button class="botones">Costo de Energía</button>
+                    </div>
                 </div>
                 <div class="principal__inferior-der">
+                    <h2> TABLA DE USUARIOS </h2>
                     <div class="tabla-container">
-                        <h2>Tabla de Usuarios</h2>
                         <table class="tabla__energia">
                             <thead class="energia__thead">
                             <tr>
@@ -394,7 +335,6 @@
                             </tr>
                             
                         </table>
-                        
                     </div>
                 </div>
             </div>
