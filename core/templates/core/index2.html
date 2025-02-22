@@ -1,0 +1,344 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Web</title>
+    <link rel="stylesheet" href="../static/css/styles2.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static '../static/js/script.js' %}" defer></script> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">   
+</head>
+<body>
+    <div id="main__contenedor" class="main__contenedor">
+        <div id="contenedor__banner" class="contenedor__banner"> 
+            <div class="banner_logo logo-1">
+                <img class="logo-1__img" src="../static/img/logos/logo-1__img.png" alt="">
+            </div>
+            <div class="logo_user logo-user-1">
+                <img class="logo_account" src="../static/img/logos/account.png" alt="">
+            </div>
+            <span id="reloj">Cargando...</span>
+        </div>
+        <div class="contenedor__principal">            
+            <div class="principal__inferior">
+                <div class="principal__inferior-izq">
+                    <div class="inferior-izq__semaforo">
+                        <!-- <div class="tittle-estado">
+                            <span>ESTADO</span>
+                        </div> -->
+                        <div class="semaforo__foco">
+                            <div class="foco foco-1" id="foco-1"></div>                       
+                            <div class="foco foco-2" id="foco-2"></div>
+                            <div class="foco foco-3" id="foco-3"></div>
+                        </div>
+                    </div>
+                    <div class="inferior-izq__botones">
+                        <button class="botones">Consumo de Energía</button>
+                        <button class="botones">Producciones</button>
+                        <button class="botones">Costo de Energía</button>
+                    </div>
+                </div>
+                <div class="principal__inferior-der">
+                    <h2> TABLA DE USUARIOS </h2>
+                    <div class="tabla-container">
+                        <table class="tabla__energia">
+                            <thead class="energia__thead">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Edad</th>
+                                <th>Género</th>
+                                <th>País</th>
+                                <th>Ciudad</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Empresa</th>
+                                <th>Puesto</th>
+                                <th>Salario</th>
+                                <th>Estado Civil</th>
+                                <th>Fecha de Nacimiento</th>
+                                <th>Educación</th>
+                                <th>Años de Experiencia</th>
+                                <th>Idiomas</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td>1</td>
+                                <td>Juan Pérez</td>
+                                <td>25</td>
+                                <td>Masculino</td>
+                                <td>Chile</td>
+                                <td>Santiago</td>
+                                <td>Av. Providencia 1234</td>
+                                <td>+56 9 1234 5678</td>
+                                <td>juan@example.com</td>
+                                <td>TechCorp</td>
+                                <td>Ingeniero</td>
+                                <td>$1,500,000</td>
+                                <td>Soltero</td>
+                                <td>1998-03-12</td>
+                                <td>Universitario</td>
+                                <td>3</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>María Gómez</td>
+                                <td>30</td>
+                                <td>Femenino</td>
+                                <td>México</td>
+                                <td>Ciudad de México</td>
+                                <td>Calle Reforma 567</td>
+                                <td>+52 1 9876 5432</td>
+                                <td>maria@example.com</td>
+                                <td>MediHealth</td>
+                                <td>Doctora</td>
+                                <td>$2,000,000</td>
+                                <td>Casada</td>
+                                <td>1993-07-22</td>
+                                <td>Universitario</td>
+                                <td>7</td>
+                                <td>Español, Francés</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Carlos Fernández</td>
+                                <td>28</td>
+                                <td>Masculino</td>
+                                <td>Argentina</td>
+                                <td>Buenos Aires</td>
+                                <td>Av. Corrientes 850</td>
+                                <td>+54 9 8765 4321</td>
+                                <td>carlos@example.com</td>
+                                <td>LexCorp</td>
+                                <td>Abogado</td>
+                                <td>$1,800,000</td>
+                                <td>Soltero</td>
+                                <td>1995-01-18</td>
+                                <td>Universitario</td>
+                                <td>5</td>
+                                <td>Español, Portugués</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Ana Torres</td>
+                                <td>35</td>
+                                <td>Femenino</td>
+                                <td>España</td>
+                                <td>Madrid</td>
+                                <td>Calle Mayor 210</td>
+                                <td>+34 678 901 234</td>
+                                <td>ana@example.com</td>
+                                <td>BuildTech</td>
+                                <td>Arquitecta</td>
+                                <td>$2,500,000</td>
+                                <td>Divorciada</td>
+                                <td>1988-11-05</td>
+                                <td>Doctorado</td>
+                                <td>10</td>
+                                <td>Español, Inglés, Alemán</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Pedro Martínez</td>
+                                <td>40</td>
+                                <td>Masculino</td>
+                                <td>Perú</td>
+                                <td>Lima</td>
+                                <td>Av. Javier Prado 450</td>
+                                <td>+51 987 654 321</td>
+                                <td>pedro@example.com</td>
+                                <td>EducaPeru</td>
+                                <td>Profesor</td>
+                                <td>$1,200,000</td>
+                                <td>Casado</td>
+                                <td>1983-09-30</td>
+                                <td>Magíster</td>
+                                <td>15</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Luisa Ramírez</td>
+                                <td>22</td>
+                                <td>Femenino</td>
+                                <td>Colombia</td>
+                                <td>Bogotá</td>
+                                <td>Carrera 45 #12-30</td>
+                                <td>+57 312 345 6789</td>
+                                <td>luisa@example.com</td>
+                                <td>Creativa S.A.</td>
+                                <td>Diseñadora</td>
+                                <td>$1,000,000</td>
+                                <td>Soltera</td>
+                                <td>2001-06-25</td>
+                                <td>Técnico</td>
+                                <td>2</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Fernando Silva</td>
+                                <td>33</td>
+                                <td>Masculino</td>
+                                <td>Brasil</td>
+                                <td>São Paulo</td>
+                                <td>Rua Paulista 600</td>
+                                <td>+55 11 99876 5432</td>
+                                <td>fernando@example.com</td>
+                                <td>SoftDev</td>
+                                <td>Desarrollador</td>
+                                <td>$2,200,000</td>
+                                <td>Soltero</td>
+                                <td>1990-12-14</td>
+                                <td>Universitario</td>
+                                <td>8</td>
+                                <td>Portugués, Inglés, Español</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Gabriela López</td>
+                                <td>29</td>
+                                <td>Femenino</td>
+                                <td>Uruguay</td>
+                                <td>Montevideo</td>
+                                <td>Calle Artigas 88</td>
+                                <td>+598 94 567 890</td>
+                                <td>gabriela@example.com</td>
+                                <td>MindHealth</td>
+                                <td>Psicóloga</td>
+                                <td>$1,700,000</td>
+                                <td>Casada</td>
+                                <td>1994-04-09</td>
+                                <td>Magíster</td>
+                                <td>6</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Gabriela López</td>
+                                <td>29</td>
+                                <td>Femenino</td>
+                                <td>Uruguay</td>
+                                <td>Montevideo</td>
+                                <td>Calle Artigas 88</td>
+                                <td>+598 94 567 890</td>
+                                <td>gabriela@example.com</td>
+                                <td>MindHealth</td>
+                                <td>Psicóloga</td>
+                                <td>$1,700,000</td>
+                                <td>Casada</td>
+                                <td>1994-04-09</td>
+                                <td>Magíster</td>
+                                <td>6</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Gabriela López</td>
+                                <td>29</td>
+                                <td>Femenino</td>
+                                <td>Uruguay</td>
+                                <td>Montevideo</td>
+                                <td>Calle Artigas 88</td>
+                                <td>+598 94 567 890</td>
+                                <td>gabriela@example.com</td>
+                                <td>MindHealth</td>
+                                <td>Psicóloga</td>
+                                <td>$1,700,000</td>
+                                <td>Casada</td>
+                                <td>1994-04-09</td>
+                                <td>Magíster</td>
+                                <td>6</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Gabriela López</td>
+                                <td>29</td>
+                                <td>Femenino</td>
+                                <td>Uruguay</td>
+                                <td>Montevideo</td>
+                                <td>Calle Artigas 88</td>
+                                <td>+598 94 567 890</td>
+                                <td>gabriela@example.com</td>
+                                <td>MindHealth</td>
+                                <td>Psicóloga</td>
+                                <td>$1,700,000</td>
+                                <td>Casada</td>
+                                <td>1994-04-09</td>
+                                <td>Magíster</td>
+                                <td>6</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Gabriela López</td>
+                                <td>29</td>
+                                <td>Femenino</td>
+                                <td>Uruguay</td>
+                                <td>Montevideo</td>
+                                <td>Calle Artigas 88</td>
+                                <td>+598 94 567 890</td>
+                                <td>gabriela@example.com</td>
+                                <td>MindHealth</td>
+                                <td>Psicóloga</td>
+                                <td>$1,700,000</td>
+                                <td>Casada</td>
+                                <td>1994-04-09</td>
+                                <td>Magíster</td>
+                                <td>6</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Gabriela López</td>
+                                <td>29</td>
+                                <td>Femenino</td>
+                                <td>Uruguay</td>
+                                <td>Montevideo</td>
+                                <td>Calle Artigas 88</td>
+                                <td>+598 94 567 890</td>
+                                <td>gabriela@example.com</td>
+                                <td>MindHealth</td>
+                                <td>Psicóloga</td>
+                                <td>$1,700,000</td>
+                                <td>Casada</td>
+                                <td>1994-04-09</td>
+                                <td>Magíster</td>
+                                <td>6</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Gabriela López</td>
+                                <td>29</td>
+                                <td>Femenino</td>
+                                <td>Uruguay</td>
+                                <td>Montevideo</td>
+                                <td>Calle Artigas 88</td>
+                                <td>+598 94 567 890</td>
+                                <td>gabriela@example.com</td>
+                                <td>MindHealth</td>
+                                <td>Psicóloga</td>
+                                <td>$1,700,000</td>
+                                <td>Casada</td>
+                                <td>1994-04-09</td>
+                                <td>Magíster</td>
+                                <td>6</td>
+                                <td>Español, Inglés</td>
+                            </tr>
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
