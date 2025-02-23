@@ -16,12 +16,24 @@
     <div id="main__contenedor" class="main__contenedor">
         <div id="contenedor__banner" class="contenedor__banner"> 
             <div class="banner_logo logo-1">
-                <img class="logo-1__img" src="../static/img/logos/logo-1__img.png" alt="">
+                <img class="logo-1__img" src="../static/img/logos/logo-1__img.png" alt="">   
             </div>
-            <div class="logo_user logo-user-1">
+            <div class="menu-banner">
+                <a href="{% url 'inicio2' %}" class="menu-content content-1">Ingresos</a>
+                <a href="https://chatgpt.com/c/67b8feca-81bc-8013-88a8-5a123027c38c" class="menu-content content-2">Constantes</a>
+                <a href="https://chatgpt.com/c/67b8feca-81bc-8013-88a8-5a123027c38c" class="menu-content content-3">Indicadores</a>
+            </div>
+            
+            <!-- <div class="logo_user logo-user-1">
                 <img class="logo_account" src="../static/img/logos/account.png" alt="">
+            </div> -->
+            <div class="menu-reloj">
+                <span id="reloj" class="reloj-1">Cargando...</span>
+                <div class="logout">
+                    <a class="logout-text" href="{% url 'salir' %}">Cerrar sesión</a>
+                </div>
             </div>
-            <span id="reloj">Cargando...</span>
+
         </div>
         <div class="contenedor__principal">            
             <div class="principal__inferior">
