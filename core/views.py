@@ -9,7 +9,6 @@ def obtener_hora_servidor(request):
     return JsonResponse({"hora_servidor": now().strftime("%H:%M:%S")})
 
 
-@login_required
 def inicio(request):
     return render(request, 'core/index2.html')
 
@@ -17,6 +16,14 @@ def inicio(request):
 def inicio2(request):
     return render(request, 'core/index.html')
 
+def ingresos(request):
+    return render(request, 'core/ingresos.html')
+
+def constantes(request):
+    return render(request, 'core/constantes.html')
+
+def indicadores(request):
+    return render(request, 'core/indicadores.html')
 
 def salir(request):
     logout(request)

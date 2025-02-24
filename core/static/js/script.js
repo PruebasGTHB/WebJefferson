@@ -83,4 +83,29 @@ async function actualizarHora() {
 }
 
 
+function cambiarColor(botonSeleccionado) {
+    console.log("Botón presionado:", botonSeleccionado.innerText);
 
+    // Selecciona todos los botones
+    const botones = document.querySelectorAll(".botones");
+
+    // Elimina la clase 'boton-activo' de todos los botones
+    botones.forEach(b => b.classList.remove("boton-activo"));
+
+    // Agrega la clase solo al botón presionado
+    botonSeleccionado.classList.add("boton-activo");
+
+    // Cambia el texto del <h2>
+    const titulo = document.querySelector(".principal__inferior-der h2");
+    if (titulo) {
+        titulo.textContent = botonSeleccionado.innerText;
+    }
+}
+
+// Marcar el primer botón como activo al cargar la página
+document.addEventListener("DOMContentLoaded", function () {
+    const primerBoton = document.querySelector(".inferior-izq__selector .botones");
+    if (primerBoton) {
+        primerBoton.classList.add("boton-activo");
+    }
+});
