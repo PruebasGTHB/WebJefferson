@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-X_FRAME_OPTIONS = 'ALLOWALL'
+X_FRAME_OPTIONS = "ALLOW-FROM http://190.114.253.120:3000"
+CSRF_TRUSTED_ORIGINS = ["http://190.114.253.120:3000"]
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -79,11 +80,17 @@ WSGI_APPLICATION = 'WebJefferson.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'constantes',
+        'USER': 'postgres',
+        'PASSWORD': 'admin1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

@@ -5,38 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Web</title>
-    <link rel="stylesheet" href="../static/css/styles2.css">
+    <link rel="stylesheet" href="{% static '../static/css/styles2.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static '../static/js/script.js' %}" defer></script> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">   
 </head>
-<body>
-    <div id="main__contenedor" class="main__contenedor">
-        <div id="contenedor__banner" class="contenedor__banner"> 
-            <div class="banner_logo logo-1">
-                <img class="logo-1__img" src="../static/img/logos/logo-1__img.png" alt="">   
-            </div>
-            <div class="menu-banner">
-                <a href="{% url 'ingresos' %}" class="menu-content content-1">Ingresos</a>
-                <a href="{% url 'constantes' %}" class="menu-content content-2">Constantes</a>
-                <a href="{% url 'indicadores' %}" class="menu-content content-3">Indicadores</a>
-            </div>
-            
-            <!-- <div class="logo_user logo-user-1">
-                <img class="logo_account" src="../static/img/logos/account.png" alt="">
-            </div> -->
-            <div class="menu-reloj">
-                <span id="reloj" class="reloj-1">Cargando...</span>
-                <div class="logout">
-                    <a class="logout-text" href="{% url 'salir' %}">Cerrar sesión</a>
-                </div>
-            </div>
 
+
+
+<body>
+    {% block banner %}
+    <div id="contenedor__banner" class="contenedor__banner"> 
+        <div class="banner_logo logo-1">
+            <img class="logo-1__img" src="{% static 'img/logos/logo-1__img.png' %}" alt="">   
         </div>
-        <div class="contenedor__principal">            
+        <div class="menu-banner">
+            <a href="{% url 'ingresos' %}" class="menu-content content-1">Ingresos</a>
+            <a href="{% url 'constantes' %}" class="menu-content content-2">Constantes</a>
+            <a href="{% url 'indicadores' %}" class="menu-content content-3">Indicadores</a>
+            <a href="{% url 'dashboards' %}" class="menu-content content-3">Dashboards</a>
+        </div>
+        <div class="menu-reloj">
+            <span id="reloj" class="reloj-1">Cargando...</span>
+            <div class="logout">
+                <a class="logout-text" href="{% url 'salir' %}">Cerrar sesión</a>
+            </div>
         </div>
     </div>
+    {% endblock banner %}
+
+    {% block content %}
+    <div class="contenedor__principal">
+    </div>
+    {% endblock content %}
 </body>
+
 </html>

@@ -83,6 +83,8 @@ async function actualizarHora() {
 }
 
 
+
+
 function cambiarColor(botonSeleccionado) {
     console.log("Botón presionado:", botonSeleccionado.innerText);
 
@@ -102,6 +104,12 @@ function cambiarColor(botonSeleccionado) {
     }
 }
 
+
+
+function cambiarIframe(nuevaURL) {
+    document.getElementById("miIframe").src = nuevaURL;
+}
+
 // Marcar el primer botón como activo al cargar la página
 document.addEventListener("DOMContentLoaded", function () {
     const primerBoton = document.querySelector(".inferior-izq__selector .botones");
@@ -109,3 +117,16 @@ document.addEventListener("DOMContentLoaded", function () {
         primerBoton.classList.add("boton-activo");
     }
 });
+
+function cambiarContenido(tipo) {
+    var iframe = document.getElementById('miIframe');
+    
+    // Cambiar el src del iframe dependiendo del botón presionado
+    if (tipo === 'consumos') {
+        iframe.src = "http://localhost:3000/d-solo/eeeq935b21i4gb/dashboard1?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=1&__feature.dashboardSceneSolo";
+    } else if (tipo === 'producciones') {
+        iframe.src = "http://localhost:3000/d-solo/eeeq935b21i4gb/dashboard2?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=1&__feature.dashboardSceneSolo";
+    } else if (tipo === 'costos') {
+        iframe.src = "http://localhost:3000/d-solo/eeeq935b21i4gb/dashboard3?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=1&__feature.dashboardSceneSolo";
+    }
+}
