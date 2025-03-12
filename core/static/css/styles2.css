@@ -17,63 +17,64 @@ body, html {
     grid-template-columns: 1fr;
     height: 100vh;
     overflow: hidden;
-    background-color: #DEDEDE;
+    background-color: #b9b9b9;
 }
 
+
+
+
+
 .contenedor__banner {
-    position: relative;
-    background-color: #156082;
+    display: flex;
+    background-color: white;
     /*background: linear-gradient(135deg, #042f1a, #065f3c, #0a7d56);*/
-    color: white;
+    color: black;
     font-size: 2rem;
     text-align: center;
     position: sticky;
     top: 0;
-    display: flex;
     align-items: center;
     justify-content: center;
     padding: 1rem;
     width: 100%;
-    z-index: 100;
-    min-height: 10vh;
-    max-height: 10vh;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
+    min-height: 15vh;
+    max-height: 15vh;
+
+    /*box-shadow: rgba(0, 0, 0, 0.10) 0px -50px 36px -28px inset;*/
 }
 
 .banner_logo{
-    position: relative;
     display: flex;
-    width: 20%;
+    width: 30%;
 }
 
 .banner_logo img {
     max-width: 100px;
     left: 0;
+    padding: 0;
     height: auto;
     
 }
 
 .menu-banner{
-    position: relative;
-    justify-content: end;
-    width: 60%;
+    justify-content: start;
     display: flex;
-    gap: 20px;
-    padding: 10px;
+    gap: 50px;
+    padding: 0;
     margin: 0;
 }
 
 .menu-content{
     background-color: transparent;
     text-decoration: none;
-    font-size: 25px;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
-    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    /*box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;*/
+    color: black;
 }
 
 .menu-content:hover{
-    color: #E97132;
-    font-size: 27px;
+    color: #E37475;
     
 }
 
@@ -115,24 +116,6 @@ body, html {
 }
 
 
-
-/* .logo_user {
-    background-color: transparent;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    
-}
-
-.logo_account {
-    background-color: transparent;
-    height: 50px; 
-    width: 50px;
-    border-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
-} */
-
 /* Responsividad */
 @media (max-width: 768px) {
     .banner_logo img {
@@ -168,104 +151,55 @@ body, html {
 
 
 
-.inferior-izq__semaforo {
-    background-color: #DEDEDE;
-    padding: 1rem 3%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    
-}
-
-/* .tittle-estado{
-    width: 80%;
-    height: 10%;
-    display: flex;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    border-style: solid;
-} */
-
-.semaforo__foco{
-    background-color: rgb(20, 34, 16);
-    width: 80%;
-    height: 30%;
-    display: flex;
-    justify-content: center;
-    border-radius: 5%;
-    justify-content: space-between;
-    padding: 1rem;
-    gap: 1rem;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;    max-width: 400px;
-}
-
-/* Estado apagado */
-.foco-1, .foco-2, .foco-3 {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    transition: background 0.5s ease, box-shadow 0.5s ease;
-}
-
-/* Foco rojo apagado */
-.foco-1-apagado {
-    background: radial-gradient(circle, rgba(50, 0, 0, 1) 0%, rgba(30, 0, 0, 1) 50%, rgba(10, 0, 0, 0.8) 70%);
-    box-shadow: none;
-}
-
-/* Foco rojo encendido */
-.foco-1-encendido {
-    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 0, 0, 1) 50%, rgba(139, 0, 0, 0.8) 70%);
-    box-shadow: 0 0 50px rgba(255, 0, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.8);
-}
-
-/* Foco amarillo apagado */
-.foco-2-apagado {
-    background: radial-gradient(circle, rgba(50, 50, 0, 1) 0%, rgba(30, 30, 0, 1) 50%, rgba(10, 10, 0, 0.8) 70%);
-    box-shadow: none;
-}
-
-/* Foco amarillo encendido */
-.foco-2-encendido {
-    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 0, 1) 50%, rgba(204, 204, 0, 0.8) 70%);
-    box-shadow: 0 0 50px rgba(255, 255, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.8);
-}
-
-/* Foco verde apagado */
-.foco-3-apagado {
-    background: radial-gradient(circle, rgba(0, 50, 0, 1) 0%, rgba(0, 30, 0, 1) 50%, rgba(0, 10, 0, 0.8) 70%);
-    box-shadow: none;
-}
-
-/* Foco verde encendido */
-.foco-3-encendido {
-    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(0, 255, 0, 1) 50%, rgba(0, 139, 0, 0.8) 70%);
-    box-shadow: 0 0 50px rgba(0, 255, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.8);
-}
-
-/* Layout General */
 .principal__inferior {
     display: grid;
     grid-template-rows: 20% 80%;
-    height: 90%; /* Se asegura de que no exceda el alto de la pantalla */
+    height: 85%;
     width: 100%;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, 
+                rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, 
+                rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    position: relative; /* Necesario para que los pseudo-elementos se posicionen bien */
+    background-color: #f5f5f5; /* Ajusta al color de fondo de tu diseño */
 }
+
+/* Borde rojo en el centro */
+.principal__inferior::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10%;  /* Comienza después del primer 10% */
+    width: 80%; /* Ocupa el 80% del ancho */
+    height: 2px; /* Grosor del borde */
+    background-color: red; /* Color del borde */
+}
+
+/* Líneas laterales del color del fondo */
+.principal__inferior::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px; /* Grosor igual al borde rojo */
+    background: linear-gradient(to right, #f5f5f5);
+}
+
+
+
+
 
 .principal__inferior-izq {
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
-    background-color: #DEDEDE; /* Fondo oscuro */
+    background-color: #e0dcdc; /* Fondo oscuro */
     padding: 20px;
     color: black;
 }
 
 .selector__botones {
-    background-color: #DEDEDE;
+    background-color: #e0dcdc;
     display: flex;
     justify-content: center;
     gap: 2rem;
@@ -296,9 +230,9 @@ body, html {
 }
 
 .principal__inferior-der {
-    background-color: #DEDEDE;
+    background-color: #e0dcdc;
     padding: 2vh 2%;
-    color: black;
+    color: rgb(0, 0, 0);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -321,6 +255,13 @@ h1 {
     height: 60vh; /* Define un alto máximo para habilitar el scroll vertical */
 }   
 
+
+
+iframe{
+    border-radius: 10px;
+    /*border: 1px #000000 solid;*/
+    box-shadow: rgb(172, 172, 172) 0px 20px 30px -10px;
+}
 .d3{
     width: 100%;
     height: 100%;
@@ -358,28 +299,6 @@ h1 {
 
     .principal__inferior-izq{
         max-width: 100vw;
-    }
-    .superior__graficos {
-        overflow-x: auto; 
-        overflow-y: visible; 
-    }
-
-    .graficos__scrollh {
-        flex-wrap: nowrap; 
-        justify-content: center;
-        align-items: center;
-        overflow-x: auto; 
-        padding-bottom: 1rem;
-    }
-
-    .graficos__scrollh::-webkit-scrollbar {
-        display: none;
-    }
-    
-
-    .grafico {
-        flex: 0 0 auto; 
-        max-width: 100%;
     }
 
 

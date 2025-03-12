@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const focoRojo = document.getElementById("foco-1");
     const focoAmarillo = document.getElementById("foco-2");
@@ -130,3 +132,5 @@ function cambiarContenido(tipo) {
         iframe.src = "http://localhost:3000/d-solo/eeeq935b21i4gb/dashboard3?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=1&__feature.dashboardSceneSolo";
     }
 }
+
+
