@@ -1,3 +1,18 @@
+// Usamos el evento 'DOMContentLoaded' para asegurarnos de que el DOM esté cargado antes de ejecutar el código
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleccionamos el elemento que vamos a modificar
+    var elemento = document.getElementById('contenido__principal');
+
+    // Usamos setTimeout para ejecutar una función después de 3 segundos (3000 milisegundos)
+    setTimeout(function() {
+        // Agregamos la clase 'visible' al elemento, lo que hará que se muestre
+        elemento.classList.remove('contenido__principal'); // Quitamos la clase 'invisible' (si está)
+        elemento.classList.add('contenido__principal_visible'); // Añadimos la clase 'visible' para que aparezca
+    }, 1000); // 3000 milisegundos = 3 segundos
+});
+
+
+
 
 
 document.addEventListener("DOMContentLoaded", function () {

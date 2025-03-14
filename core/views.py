@@ -5,16 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
 
-# 🔹 1. Vista para mostrar la tabla en el HTML
-
-
 def obtener_hora_servidor(request):
     return JsonResponse({"hora_servidor": now().strftime("%H:%M:%S")})
 
 
 @login_required
 def inicio(request):
-    return render(request, 'core/index2.html')
+    return render(request, 'core/index.html')
 
 
 def ingresos(request):

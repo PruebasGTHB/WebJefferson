@@ -1,24 +1,23 @@
-{% extends "core/index2.html" %}
+{% extends "core/index.html" %}
 {% load static %}
 
 
 {% block title %}Ingresos{% endblock title %}
 
 {% block content %}
-<div class="principal__inferior">
-    <div class="principal__inferior-izq">
-        <div class="inferior-izq__selector">
-            <h1 class="selector__titulo">Ingresos</h1>
-            <div class="selector__botones">
-                <button class="botones" onclick="cambiarIframe('http://190.114.253.120:3000/d-solo/cefmelr7tmigwc/new-dashboard?orgId=1&panelId=1')">Consumos de Energía</button>
-                <button class="botones" onclick="cambiarIframe('http://localhost:3000/d-solo/bef4lgfi3x1c0b/produccion?orgId=1&panelId=1')">Producciones</button>
-                <button class="botones" onclick="cambiarIframe('http://localhost:3000/d-solo/eeeq935b21i4gb/dashboard1?orgId=1&panelId=3')">Costos de Energía</button>
+<div id="contenido__principal" class="contenido__principal">
+    <div class="principal__superior">
+                <h1 class="superior__titulo">Ingresos</h1>
+                <div class="superior__botones">
+                    <button class="botones" onclick="cambiarColor(this); cambiarIframe('http://190.114.253.120:3000/d-solo/ceffkzn702txca/influxcloud?orgId=1&from=1741981819595&to=1741982119595&timezone=browser&refresh=5m&theme=light&panelId=1&__feature.dashboardSceneSolo')">Consumos de Energía</button>
+                    <button class="botones" onclick="cambiarColor(this); cambiarIframe('http://190.114.253.120:3000/d-solo/feftoz7gd2qkgb/ingresos?orgId=1&from=1741961657464&to=1741983257464&timezone=browser&theme=light&panelId=5&__feature.dashboardSceneSolo')">Producciones</button>
+                    <button class="botones" onclick="cambiarColor(this); cambiarIframe('http://190.114.253.120:3000/d-solo/cefmelr7tmigwc/new-dashboard?orgId=1&from=1741786701357&to=1741808301357&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo')">Costos de Energía</button>
+                </div>
+            
+        <div class="principal__inferior">
+            <div class="inferior__tabla">
+                <iframe id="miIframe" class="d3" src="http://190.114.253.120:3000/d-solo/ceffkzn702txca/influxcloud?orgId=1&from=1741981819595&to=1741982119595&timezone=browser&refresh=5m&theme=light&panelId=1&__feature.dashboardSceneSolo"></iframe>
             </div>
-        </div>
-    </div>
-    <div class="principal__inferior-der">
-        <div class="tabla-container">
-            <iframe id="miIframe" class="d3" src="http://190.114.253.120:3000/d-solo/cefmelr7tmigwc/new-dashboard?orgId=1&from=1741786701357&to=1741808301357&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo"></iframe>
         </div>
     </div>
 </div>
