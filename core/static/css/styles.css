@@ -11,6 +11,11 @@ body, html {
     font-family: "Montserrat";
 }
 
+body{
+    display: relative;
+    overflow: hidden;
+}
+
 
 .contenedor__banner {
     display: flex;
@@ -61,11 +66,16 @@ body, html {
     color: black;
 }
 
-.menu-content:hover{
-    color: #E37475;
-    
-}
 
+
+
+.menu_opcion-1::before {
+    content: "";
+    position: absolute;
+    top: -5px; left: -5px; right: -5px; bottom: -5px;
+    clip-path: ellipse(49% 97% at 50% 100%);
+    z-index: -1;
+}
 
 .banner_reloj{
     position: relative;
@@ -85,7 +95,7 @@ body, html {
 
 .logout-text{
     font-size: 15px;
-    color: red;
+    color: blue;
     text-decoration: none;
     font-weight: bold;
 }
@@ -137,7 +147,7 @@ body, html {
     display: grid;
     animation: slideDown 1s ease-out forwards; 
     grid-template-rows: 100%;
-    height: 90vh;
+    height: 85vh;
     width: 100%;
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, 
                 rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, 

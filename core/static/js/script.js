@@ -1,3 +1,6 @@
+
+
+
 // Usamos el evento 'DOMContentLoaded' para asegurarnos de que el DOM esté cargado antes de ejecutar el código
 document.addEventListener('DOMContentLoaded', function() {
     // Seleccionamos el elemento que vamos a modificar
