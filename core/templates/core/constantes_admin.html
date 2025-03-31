@@ -1,0 +1,34 @@
+{% extends "core/index_admin.html" %}
+{% load static %}
+
+
+{% block title %}Constantes{% endblock title %}
+
+{% block content %}     
+<div id="contenido__principal" class="contenido__principal">
+    <div class="principal__superior">
+        <div class="superior__botones">
+            <button class="botones" onclick="cambiarColor(this); cambiarIframe('https://localhost:3000/d-solo/eeeq935b21i4gb/ingresos?orgId=1&from=1741108316834&to=1741205621473&timezone=browser&panelId=1&__feature.dashboardSceneSolo')">Matriz Energética</button>
+            <button class="botones btn-producciones" onclick="cambiarColor(this); cambiarIframe('https://localhost:3000/d-solo/bef4lgfi3x1c0b/produccion?orgId=1&from=1741340255296&to=1741361855296&timezone=browser&panelId=1&__feature.dashboardSceneSolo')">Objetivos Metas y Planes</button>
+            <button class="botones" onclick="cambiarColor(this); cambiarIframe('https://localhost:3000/d-solo/eeeq935b21i4gb/dashboard1?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=3')">Constantes Físicas</button>
+            <button class="botones" onclick="cambiarColor(this); cambiarIframe('https://localhost:3000/d-solo/bef4lgfi3x1c0b/produccion?orgId=1&from=1741340255296&to=1741361855296&timezone=browser&panelId=1&__feature.dashboardSceneSolo')">Consumos Futuros</button>
+            <button class="botones" onclick="cambiarColor(this); cambiarIframe('https://localhost:3000/d-solo/eeeq935b21i4gb/dashboard1?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=3')">Plan de Recuperación de Datos</button>
+        </div>
+    </div>
+
+
+    <div class="principal__inferior">
+        <div class="inferior__tabla">
+            <iframe id="miIframe" class="d3" src="https://190.114.253.120:3000/d-solo/cefmelr7tmigwc/new-dashboard?orgId=1&from=1741786701357&to=1741808301357&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo"></iframe>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function cambiarIframe(nuevaURL) {
+        document.getElementById("miIframe").src = nuevaURL;
+    }
+</script>
+{% endblock content %}
+
