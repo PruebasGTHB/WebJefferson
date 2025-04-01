@@ -18,17 +18,17 @@ urlpatterns = [
     path('inicio/', views.inicio_usuario, name='inicio_usuario'),
 
     # Rutas usuario
-    path('ingresos_usuario/', views.ingresos_usuario, name='ingresos_usuario'),
-    path('constantes_usuario/', views.constantes_usuario,
+    path('ingresos_view/', views.ingresos_usuario, name='ingresos_usuario'),
+    path('constantes_view/', views.constantes_usuario,
          name='constantes_usuario'),
-    path('indicadores_usuario/', views.indicadores_usuario,
+    path('indicadores_view/', views.indicadores_usuario,
          name='indicadores_usuario'),
-    path('dashboards_usuario/', views.dashboards_usuario,
+    path('dashboards_view/', views.dashboards_usuario,
          name='dashboards_usuario'),
 
     # Rutas admin
-    path('ingresos_admin/', views.ingresos_admin, name='ingresos_admin'),
-    path('constantes_admin/', views.constantes_admin, name='constantes_admin'),
-    path('indicadores_admin/', views.indicadores_admin, name='indicadores_admin'),
-    path('dashboards_admin/', views.dashboards_admin, name='dashboards_admin'),
+    path('ingresos/', views.ingresos_admin, name='ingresos_admin'),
+    path('constantes/', views.constantes_admin, name='constantes_admin'),
+    path('indicadores/', views.indicadores_admin, name='indicadores_admin'),
+    path('dashboards/', views.dashboards_admin, name='dashboards_admin'),
 ]
