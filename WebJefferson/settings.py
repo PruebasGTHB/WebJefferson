@@ -12,9 +12,14 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-X_FRAME_OPTIONS = "ALLOW-FROM http://190.114.253.120:3000"
-CSRF_TRUSTED_ORIGINS = ["http://190.114.253.120:3000"]
+X_FRAME_OPTIONS = 'ALLOWALL'
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://ingero.cloud",
+    "https://www.ingero.cloud",
+    "https://190.114.253.120:3000",
+    "https://localhost",
+]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +34,7 @@ SECRET_KEY = 'django-insecure-5#5$6zv2j$o58hr#6djeiblw7)81pw*4wguxu4#x3@@$c0r+qg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ingero.cloud', 'www.ingero.cloud', "127.0.0.1"]
 
 
 # Application definition
@@ -80,18 +85,10 @@ WSGI_APPLICATION = 'WebJefferson.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'constantes',
-        'USER': 'postgres',
-        'PASSWORD': 'admin1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -132,9 +129,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 # settings.py
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
-
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
