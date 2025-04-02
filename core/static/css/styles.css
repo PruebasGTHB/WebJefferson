@@ -9,6 +9,7 @@ html, body {
     font-family: "Montserrat", sans-serif;
 }
 
+
 .body_principal {
     display: grid;
     grid-template-rows: 15vh 1fr; /* primera fila fija, segunda flexible */
@@ -19,7 +20,7 @@ html, body {
 
 .contenedor__banner {
     display: grid;
-    grid-template-columns: 10%  1fr 10%;
+    grid-template-columns: 10% 10% 1fr 10% 10%;
     grid-template-rows: 15vh;
     /*background: linear-gradient(135deg, #042f1a, #065f3c, #0a7d56);*/
     color: black;
@@ -53,7 +54,7 @@ html, body {
 .banner_menu{
     position: relative;
     justify-content: end;
-    align-items: end;
+    align-items: center;
     height: 100%;
     display: flex;
     padding-top: 1rem;
@@ -68,7 +69,8 @@ html, body {
     font-size: 18px;
     font-weight: bold;
     color: black;
-    padding-bottom: 25px;
+    padding-top: 12px;
+    padding-bottom: 12px;
   
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: text-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -193,7 +195,7 @@ html, body {
     align-items: center;
     justify-content: center;
     overflow: hidden; /* Evita que el contenido altere el diseño */
-    height: 20%;
+    height: 15%;
 }
 
 .superior__botones {
@@ -318,7 +320,7 @@ html, body {
     align-items: center;
     flex-direction: column;
     overflow: hidden; /* Evita que el contenido altere el diseño */
-    height: 80%;
+    height: 85%;
 }
 
 /* Estilos del título */
@@ -329,9 +331,8 @@ html, body {
     justify-content: center;
     align-items: center;
     width: 100%; /* Que no ocupe todo el ancho */
-    height: 60vh; /* Define un alto máximo para habilitar el scroll vertical */
+    height: 67vh; /* Define un alto máximo para habilitar el scroll vertical */
 }   
-
 
 
 iframe{
@@ -347,27 +348,7 @@ iframe{
     height: 100%;
 }
 
-.logout-boton {
-    background-color: transparent;
-    color: #E97132;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: bold;
-    font-size: 16px;
-    text-decoration: none;
-    padding: 10px 18px;
-    border: 2px solid #E97132;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .logout-boton:hover {
-    background-color: #E97132;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  }
-  
+
 
 /* LOGIN */
 

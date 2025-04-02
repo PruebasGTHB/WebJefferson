@@ -131,3 +131,20 @@ function cambiarContenido(tipo) {
 }
 
 
+////////////////////////////////////////mostrar/ocultar menú al hacer clic//////////////////////////////////////////
+
+
+const toggle = document.getElementById('userMenuToggle');
+const dropdown = document.getElementById('userDropdown');
+
+toggle.addEventListener('click', () => {
+  dropdown.classList.toggle('show');
+  toggle.classList.toggle('active');
+});
+
+document.addEventListener('click', function(event) {
+  if (!toggle.contains(event.target) && !dropdown.contains(event.target)) {
+    dropdown.classList.remove('show');
+    toggle.classList.remove('active');
+  }
+});
