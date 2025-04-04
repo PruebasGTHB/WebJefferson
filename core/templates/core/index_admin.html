@@ -7,7 +7,7 @@
     <title>Gestión de Energía</title>
 
 
-    <link rel="icon" href="{% static 'img/logos/logo-foodcorp.png' %}" sizes="64x64" type="image/png">
+    <link rel="icon" href="{% static 'img/logos/LOGO2+ALFA.png' %}" sizes="64x64" type="image/png">
 
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -34,7 +34,7 @@
                         <div class="menu_botones">
                             <a href="{% url 'ingresos_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'ingresos_admin' %}activo{% endif %}">INGRESOS</a>
                             <a href="{% url 'constantes_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'constantes_admin' %}activo{% endif %}">CONSTANTES</a>
-                            <a href="{% url 'indicadores_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'indicadores_admin' %}activo{% endif %}">INDICADORES</a>
+                            <a href="{% url 'indicadores_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'indicadores_admin' %}activo{% endif %}">SEGUIMIENTO</a>
                             <a href="{% url 'dashboards_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'dashboards_admin' %}activo{% endif %}">DASHBOARDS</a>
                             
                         </div>

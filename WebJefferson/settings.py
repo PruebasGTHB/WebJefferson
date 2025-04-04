@@ -15,9 +15,8 @@ from pathlib import Path
 X_FRAME_OPTIONS = 'ALLOWALL'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://ingero.cloud",
-    "https://www.ingero.cloud",
-    "https://190.114.253.120:3000",
+    "https://foodcorp.sgen.ingero.cloud",
+    "https://www.foodcorp.sgen.ingero.cloud",
     "https://localhost",
 ]
 
@@ -34,7 +33,8 @@ SECRET_KEY = 'django-insecure-5#5$6zv2j$o58hr#6djeiblw7)81pw*4wguxu4#x3@@$c0r+qg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ingero.cloud', 'www.ingero.cloud', "127.0.0.1"]
+ALLOWED_HOSTS = ['foodcorp.sgen.ingero.cloud',
+                 'www.foodcorp.sgen.ingero.cloud', "localhost", "127.0.0.1"]
 
 
 # Application definition

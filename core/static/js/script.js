@@ -15,51 +15,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //CAMBIAR_COLOR-BOTONES//
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     const botones = document.querySelectorAll('.botones');
 
-//     botones.forEach(function(boton) {
-//       boton.addEventListener('click', function() {
-//         // Primero quitamos la clase "clicado" a todos los botones
-//         botones.forEach(b => b.classList.remove('clicado'));
-
-//         // Luego agregamos la clase "clicado" solo al botón que fue clicado
-//         boton.classList.add('clicado');
-//       });
-//     });
-//   });
 
 document.addEventListener('DOMContentLoaded', function () {
     const botones = document.querySelectorAll('.botones');
     const iframe = document.getElementById('miIframe');
 
-    // Marcar el primer botón como clicado al cargar
-    let clicado = botones[0];
+    // Recuperar desde localStorage
+    const idGuardado = localStorage.getItem('botonSeleccionado');
+    const urlGuardada = localStorage.getItem('iframeSeleccionado');
+    let clicado = null;
+
+    // Buscar el botón guardado
+    if (idGuardado) {
+        clicado = document.getElementById(idGuardado);
+    }
+
+    // Si no hay ninguno, usar el primero
+    if (!clicado) {
+        clicado = botones[0];
+    }
+
+    // Marcar visualmente el botón activo
     clicado.classList.add('clicado');
 
-    botones.forEach(function(boton) {
-      boton.addEventListener('click', function() {
-        // Si haces clic en el mismo, no hacer nada
-        if (boton === clicado) return;
+    // Si hay URL guardada, cargarla en el iframe
+    if (urlGuardada) {
+        iframe.src = urlGuardada;
+    }
 
-        // Intercambiar los botones
-        const parent = boton.parentNode;
-        const next = boton.nextSibling === clicado ? boton : boton.nextSibling;
+    botones.forEach(function (boton) {
+        boton.addEventListener('click', function () {
+            if (boton === clicado) return;
 
-        parent.insertBefore(boton, clicado);
-        parent.insertBefore(clicado, next);
+            // Actualizar clases
+            clicado.classList.remove('clicado');
+            boton.classList.add('clicado');
 
-        // Actualizar clases
-        clicado.classList.remove('clicado');
-        boton.classList.add('clicado');
+            // Guardar en localStorage
+            localStorage.setItem('botonSeleccionado', boton.id);
+            localStorage.setItem('iframeSeleccionado', boton.getAttribute('onclick').match(/'(.*?)'/)[1]);
 
-        // Actualizar el botón actual
-        clicado = boton;
-      });
+            // Cambiar iframe
+            cambiarIframe(boton.getAttribute('onclick').match(/'(.*?)'/)[1]);
+
+            // Actualizar referencia del botón clicado
+            clicado = boton;
+        });
     });
-  });
+});
+
+// Función externa para cambiar el iframe
+function cambiarIframe(nuevaURL) {
+    document.getElementById("miIframe").src = nuevaURL;
+}
 
 
+
+////////////////////////////////////////MOSTRAR CONTENIDO//////////////////////////////////////////
 
 
 // Usamos el evento 'DOMContentLoaded' para asegurarnos de que el DOM esté cargado antes de ejecutar el código
