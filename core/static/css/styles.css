@@ -548,6 +548,12 @@ html, body {
     background-color: #B4B8C5;
     }
 
+    .dropdown-boton-iframe.iframe-activo {
+      font-weight: bold;
+      color: #e60000;
+    }
+    
+
 
   }
   

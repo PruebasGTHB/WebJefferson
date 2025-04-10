@@ -49,6 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
       sessionStorage.setItem(`iframeText_${vistaKey}`, newText);
       sessionStorage.setItem(`iframeSeleccionado_${vistaKey}`, newURL);
+
+      // Marcar opción activa
+      iframeButtons.forEach(btn => btn.classList.remove("iframe-activo"));
+      this.classList.add("iframe-activo");
+
+      // Cerrar menú
+      iframeDropdown.classList.remove("active");
     });
   });
 
@@ -57,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const idGuardado = sessionStorage.getItem(`botonSeleccionado_${vistaKey}`);
   const urlGuardada = sessionStorage.getItem(`iframeSeleccionado_${vistaKey}`);
 
-  // Al loguearse por primera vez, forzar el botón 1
   if (!idGuardado || !urlGuardada) {
     clicado = botones[0];
     if (clicado) {
@@ -158,14 +164,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function sincronizarBotonConIframe() {
     const iframeURL = new URL(iframe.src);
     const baseIframePath = iframeURL.origin + iframeURL.pathname;
-  
+
     let matched = false;
-  
+
     botones.forEach(boton => {
       const botonURLRaw = boton.getAttribute("onclick").match(/'(.*?)'/)?.[1];
       const botonURL = new URL(botonURLRaw, window.location.origin);
       const baseBotonPath = botonURL.origin + botonURL.pathname;
-  
+
       if (baseIframePath === baseBotonPath) {
         boton.classList.add("clicado");
         matched = true;
@@ -175,14 +181,35 @@ document.addEventListener("DOMContentLoaded", function () {
         boton.classList.remove("clicado");
       }
     });
-  
+
     if (!matched && iframeToggle) {
       iframeToggle.textContent = "Contenido externo ▾";
     }
   }
-  
 
-  // Ejecutar sincronización al cargar y cada vez que cambia el iframe
+  // -------------------- MARCAR OPCIÓN ACTIVA EN MENÚ IFRAME --------------------
+  function marcarOpcionIframeActual() {
+    const iframeURL = new URL(iframe.src);
+    const baseIframePath = iframeURL.origin + iframeURL.pathname;
+
+    iframeButtons?.forEach(button => {
+      const btnUrlRaw = button.getAttribute("onclick").match(/'(.*?)'/)?.[1];
+      const btnURL = new URL(btnUrlRaw, window.location.origin);
+      const baseBtnPath = btnURL.origin + btnURL.pathname;
+
+      if (baseIframePath === baseBtnPath) {
+        button.classList.add("iframe-activo");
+      } else {
+        button.classList.remove("iframe-activo");
+      }
+    });
+  }
+
   sincronizarBotonConIframe();
-  iframe.addEventListener("load", sincronizarBotonConIframe);
+  marcarOpcionIframeActual();
+
+  iframe.addEventListener("load", () => {
+    sincronizarBotonConIframe();
+    marcarOpcionIframeActual();
+  });
 });
