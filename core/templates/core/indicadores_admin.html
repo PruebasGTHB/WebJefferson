@@ -6,20 +6,27 @@
 
 {% block content %}          
 <div id="contenido__principal" class="contenido__principal">
-    <div class="principal__superior">
-        <div class="superior__botones">
-            <button id="boton1" class="botones" onclick="cambiarColor(this); cambiarIframe('https://www.ingero.cloud:3000/d-solo/cefmelr7tmigwc/energia-electrica-tablas-finales?orgId=1&from=1742320411065&to=1742666011065&timezone=browser&refresh=5s&theme=light&panelId=3&__feature.dashboardSceneSolo')">MENSUAL</button>
-            <button id="boton3" class="botones" onclick="cambiarColor(this); cambiarIframe('https://www.ingero.cloud:3000/d-solo/cefmelr7tmigwc/energia-electrica-tablas-finales?orgId=1&from=1742320411065&to=1742666011065&timezone=browser&refresh=5s&theme=light&panelId=3&__feature.dashboardSceneSolo')">DESVIACIONES</button>
+    <div class="contenido_inferior">
+        <div class="principal__superior">
+            <div class="superior__botones">
+                <button id="boton7" class="botones" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/aei55vs4or30ge/seguimiento?orgId=1&from=1743968259803&to=1743989859803&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo')">MENSUAL</button>
+                <button id="boton8" class="botones" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/feifpab3u4v0gf/desviaciones?orgId=1&from=1744223530805&to=1744245130805&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo ')">DESVIACIONES</button>
+                <div class="superior__botones-2 dropdown-menu-container-botones">
+                    <button class="dropdown-toggle">SELECCIONAR OPCIÓN ▾</button>
+                    <div class="dropdown-links-botones">
+                        <button class="dropdown-boton-iframe" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/aei55vs4or30ge/seguimiento?orgId=1&from=1743968259803&to=1743989859803&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo')">MENSUAL</button>
+                        <button class="dropdown-boton-iframe" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/feifpab3u4v0gf/desviaciones?orgId=1&from=1744223530805&to=1744245130805&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo ')">DESVIACIONES</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="principal__inferior">
+            <div class="inferior__tabla">
+                <iframe id="miIframe" class="d3"></iframe>
+            </div>
         </div>
     </div>
-    
-    <div class="principal__inferior">
-        <div class="inferior__tabla">
-            <iframe id="miIframe" class="d3" src="https://www.ingero.cloud:3000/d-solo/cefmelr7tmigwc/energia-electrica-tablas-finales?orgId=1&from=1742320411065&to=1742666011065&timezone=browser&refresh=5s&theme=light&panelId=3&__feature.dashboardSceneSolo"></iframe>
-        </div>
-    </div>
-    
-</div>
 
 <script>
     function cambiarIframe(nuevaURL) {

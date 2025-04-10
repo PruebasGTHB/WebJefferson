@@ -1,163 +1,153 @@
-//CAMBIAR_COLOR-MENU//
-document.addEventListener('DOMContentLoaded', function () {
-    const enlaces = document.querySelectorAll('.menu-content');
+document.addEventListener("DOMContentLoaded", function () {
+  const vistaKey = window.location.pathname;
+  const iframe = document.getElementById("miIframe");
+  const botones = document.querySelectorAll(".botones");
+  const iframeDropdown = document.querySelector(".dropdown-menu-container-botones");
+  const iframeToggle = iframeDropdown?.querySelector(".dropdown-toggle");
+  const iframeButtons = iframeDropdown?.querySelectorAll(".dropdown-boton-iframe");
 
-    enlaces.forEach(link => {
-      link.addEventListener('click', function () {
-        enlaces.forEach(el => el.classList.remove('activo'));
-        this.classList.add('activo');
-      });
+  // -------------------- MENÚ BANNER --------------------
+  const bannerDropdown = document.querySelector(".dropdown-menu-container");
+  const bannerToggle = bannerDropdown?.querySelector(".dropdown-toggle");
+  const bannerLinks = bannerDropdown?.querySelectorAll(".dropdown-links a");
+
+  const storedBannerText = localStorage.getItem("selectedDropdownText_banner");
+  const activoMenu = document.querySelector(".menu-content.activo");
+
+  if (activoMenu && bannerToggle) {
+    bannerToggle.textContent = activoMenu.textContent.trim() + " ▾";
+    localStorage.setItem("selectedDropdownText_banner", activoMenu.textContent.trim());
+  } else if (storedBannerText && bannerToggle) {
+    bannerToggle.textContent = storedBannerText + " ▾";
+  }
+
+  bannerLinks?.forEach(link => {
+    link.addEventListener("click", function () {
+      localStorage.setItem("selectedDropdownText_banner", this.textContent.trim());
     });
   });
 
+  // -------------------- BOTÓN IFRAME MENÚ --------------------
+  const storedIframeText = sessionStorage.getItem(`iframeText_${vistaKey}`);
+  const storedIframeURL = sessionStorage.getItem(`iframeSeleccionado_${vistaKey}`);
 
-
-
-//CAMBIAR_COLOR-BOTONES//
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const botones = document.querySelectorAll('.botones');
-    const iframe = document.getElementById('miIframe');
-
-    // Recuperar desde localStorage
-    const idGuardado = localStorage.getItem('botonSeleccionado');
-    const urlGuardada = localStorage.getItem('iframeSeleccionado');
-    let clicado = null;
-
-    // Buscar el botón guardado
-    if (idGuardado) {
-        clicado = document.getElementById(idGuardado);
-    }
-
-    // Si no hay ninguno, usar el primero
-    if (!clicado) {
-        clicado = botones[0];
-    }
-
-    // Marcar visualmente el botón activo
-    clicado.classList.add('clicado');
-
-    // Si hay URL guardada, cargarla en el iframe
-    if (urlGuardada) {
-        iframe.src = urlGuardada;
-    }
-
-    botones.forEach(function (boton) {
-        boton.addEventListener('click', function () {
-            if (boton === clicado) return;
-
-            // Actualizar clases
-            clicado.classList.remove('clicado');
-            boton.classList.add('clicado');
-
-            // Guardar en localStorage
-            localStorage.setItem('botonSeleccionado', boton.id);
-            localStorage.setItem('iframeSeleccionado', boton.getAttribute('onclick').match(/'(.*?)'/)[1]);
-
-            // Cambiar iframe
-            cambiarIframe(boton.getAttribute('onclick').match(/'(.*?)'/)[1]);
-
-            // Actualizar referencia del botón clicado
-            clicado = boton;
-        });
-    });
-});
-
-// Función externa para cambiar el iframe
-function cambiarIframe(nuevaURL) {
-    document.getElementById("miIframe").src = nuevaURL;
-}
-
-
-
-////////////////////////////////////////MOSTRAR CONTENIDO//////////////////////////////////////////
-
-
-// Usamos el evento 'DOMContentLoaded' para asegurarnos de que el DOM esté cargado antes de ejecutar el código
-document.addEventListener('DOMContentLoaded', function() {
-    // Seleccionamos el elemento que vamos a modificar
-    var elemento = document.getElementById('contenido__principal');
-
-    // Usamos setTimeout para ejecutar una función después de 3 segundos (3000 milisegundos)
-    setTimeout(function() {
-        // Agregamos la clase 'visible' al elemento, lo que hará que se muestre
-        elemento.classList.remove('contenido__principal'); // Quitamos la clase 'invisible' (si está)
-        elemento.classList.add('contenido__principal_visible'); // Añadimos la clase 'visible' para que aparezca
-    }, 1000); // 3000 milisegundos = 3 segundos
-});
-
-
-
-
-////////////////////////////////////////HORA//////////////////////////////////////////
-
-
-
-function cambiarColor(botonSeleccionado) {
-    console.log("Botón presionado:", botonSeleccionado.innerText);
-
-    // Selecciona todos los botones
-    const botones = document.querySelectorAll(".botones");
-
-    // Elimina la clase 'boton-activo' de todos los botones
-    botones.forEach(b => b.classList.remove("boton-activo"));
-
-    // Agrega la clase solo al botón presionado
-    botonSeleccionado.classList.add("boton-activo");
-
-    // Cambia el texto del <h2>
-    const titulo = document.querySelector(".principal__inferior-der h2");
-    if (titulo) {
-        titulo.textContent = botonSeleccionado.innerText;
-    }
-}
-
-
-
-
-
-function cambiarIframe(nuevaURL) {
-    document.getElementById("miIframe").src = nuevaURL;
-}
-
-// Marcar el primer botón como activo al cargar la página
-document.addEventListener("DOMContentLoaded", function () {
-    const primerBoton = document.querySelector(".inferior-izq__selector .botones");
-    if (primerBoton) {
-        primerBoton.classList.add("boton-activo");
-    }
-});
-
-function cambiarContenido(tipo) {
-    var iframe = document.getElementById('miIframe');
-    
-    // Cambiar el src del iframe dependiendo del botón presionado
-    if (tipo === 'consumos') {
-        iframe.src = "http://localhost:3000/d-solo/eeeq935b21i4gb/dashboard1?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=1&__feature.dashboardSceneSolo";
-    } else if (tipo === 'producciones') {
-        iframe.src = "http://localhost:3000/d-solo/eeeq935b21i4gb/dashboard2?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=1&__feature.dashboardSceneSolo";
-    } else if (tipo === 'costos') {
-        iframe.src = "http://localhost:3000/d-solo/eeeq935b21i4gb/dashboard3?orgId=1&from=1741182822830&to=1741204422830&timezone=browser&panelId=1&__feature.dashboardSceneSolo";
-    }
-}
-
-
-////////////////////////////////////////mostrar/ocultar menú al hacer clic//////////////////////////////////////////
-
-
-const toggle = document.getElementById('userMenuToggle');
-const dropdown = document.getElementById('userDropdown');
-
-toggle.addEventListener('click', () => {
-  dropdown.classList.toggle('show');
-  toggle.classList.toggle('active');
-});
-
-document.addEventListener('click', function(event) {
-  if (!toggle.contains(event.target) && !dropdown.contains(event.target)) {
-    dropdown.classList.remove('show');
-    toggle.classList.remove('active');
+  if (storedIframeText && iframeToggle) {
+    iframeToggle.textContent = storedIframeText + " ▾";
   }
+
+  if (storedIframeURL && iframe) {
+    iframe.src = storedIframeURL;
+  }
+
+  iframeButtons?.forEach(button => {
+    button.addEventListener("click", function () {
+      const newText = this.textContent;
+      const newURL = this.getAttribute("onclick").match(/'(.*?)'/)[1];
+
+      iframe.src = newURL;
+      if (iframeToggle) iframeToggle.textContent = newText + " ▾";
+
+      sessionStorage.setItem(`iframeText_${vistaKey}`, newText);
+      sessionStorage.setItem(`iframeSeleccionado_${vistaKey}`, newURL);
+    });
+  });
+
+  // -------------------- BOTONES NORMALES --------------------
+  let clicado = null;
+  const idGuardado = sessionStorage.getItem(`botonSeleccionado_${vistaKey}`);
+  const urlGuardada = sessionStorage.getItem(`iframeSeleccionado_${vistaKey}`);
+
+  // Al loguearse por primera vez, forzar el botón 1
+  if (!idGuardado || !urlGuardada) {
+    clicado = botones[0];
+    if (clicado) {
+      const url = clicado.getAttribute('onclick').match(/'(.*?)'/)[1];
+      iframe.src = url;
+      sessionStorage.setItem(`botonSeleccionado_${vistaKey}`, clicado.id);
+      sessionStorage.setItem(`iframeSeleccionado_${vistaKey}`, url);
+    }
+  } else {
+    clicado = document.getElementById(idGuardado);
+    if (clicado) {
+      clicado.classList.add('clicado');
+      if (iframe && storedIframeURL) iframe.src = storedIframeURL;
+    }
+  }
+
+  botones.forEach(function (boton) {
+    boton.addEventListener('click', function () {
+      if (boton === clicado) return;
+
+      if (clicado) clicado.classList.remove('clicado');
+      boton.classList.add('clicado');
+      const url = boton.getAttribute('onclick').match(/'(.*?)'/)[1];
+
+      iframe.src = url;
+      sessionStorage.setItem(`botonSeleccionado_${vistaKey}`, boton.id);
+      sessionStorage.setItem(`iframeSeleccionado_${vistaKey}`, url);
+      sessionStorage.setItem(`iframeText_${vistaKey}`, boton.textContent.trim());
+
+      if (iframeToggle) iframeToggle.textContent = boton.textContent.trim() + " ▾";
+
+      clicado = boton;
+    });
+  });
+
+  // -------------------- DROPDOWN CLOSURE --------------------
+  const dropdownContainers = document.querySelectorAll(".dropdown-menu-container, .dropdown-menu-container-botones");
+
+  dropdownContainers.forEach(container => {
+    const toggleButton = container.querySelector(".dropdown-toggle");
+
+    if (toggleButton) {
+      toggleButton.addEventListener("click", function (e) {
+        e.stopPropagation();
+        dropdownContainers.forEach(other => {
+          if (other !== container) other.classList.remove("active");
+        });
+        container.classList.toggle("active");
+      });
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    dropdownContainers.forEach(container => {
+      if (!container.contains(e.target)) container.classList.remove("active");
+    });
+  });
+
+  // -------------------- EFECTO DE CARGA --------------------
+  const contenidoPrincipal = document.getElementById('contenido__principal');
+  if (contenidoPrincipal) {
+    setTimeout(() => {
+      contenidoPrincipal.classList.remove('contenido__principal');
+      contenidoPrincipal.classList.add('contenido__principal_visible');
+    }, 1000);
+  }
+
+  // -------------------- LOGOUT MENU --------------------
+  const logoutToggle = document.getElementById("userMenuToggle");
+  const logoutMenu = document.getElementById("userDropdown");
+
+  if (logoutToggle && logoutMenu) {
+    logoutToggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      logoutMenu.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!logoutMenu.contains(e.target) && e.target !== logoutToggle) {
+        logoutMenu.classList.remove("show");
+      }
+    });
+  }
+
+  // -------------------- MENÚ HORIZONTAL ACTIVO --------------------
+  const enlaces = document.querySelectorAll('.menu-content');
+  enlaces.forEach(link => {
+    link.addEventListener('click', function () {
+      enlaces.forEach(el => el.classList.remove('activo'));
+      this.classList.add('activo');
+    });
+  });
 });

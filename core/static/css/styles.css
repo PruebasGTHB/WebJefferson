@@ -1,418 +1,669 @@
+/* Reset y tipografía base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "JetBrains Mono",monospace;
+    font-family: "JetBrains Mono", monospace;
 }
 
 html, body {
     height: 100%;
-
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden; /* evitar scroll innecesario global */
 }
 
-
+/* -------------------- LAYOUT GENERAL -------------------- */
 .body_principal {
     display: grid;
-    grid-template-rows: 15vh 1fr; /* primera fila fija, segunda flexible */
-    height: 100vh;
-    background: rgb(192,198,207);
-    background: linear-gradient(0deg, rgba(192,198,207,1) 64%, rgba(108,114,121,1) 100%);}
-
-
-.contenedor__banner {
-    display: grid;
-    grid-template-columns: 10% 10% 1fr 10% 10%;
-    grid-template-rows: 15vh;
-    /*background: linear-gradient(135deg, #042f1a, #065f3c, #0a7d56);*/
-    color: black;
-    font-size: 2rem;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 15vh;
-    min-height: 15vh;
-    max-height: 15vh;
-    background: rgb(255,255,255);
-    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(236,236,236,1) 65%);
-    /*box-shadow: rgba(0, 0, 0, 0.10) 0px -50px 36px -28px inset;*/
-}
-
-.banner_logo{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.banner_logo img {
-    max-width: 100%;
-    left: 0;
-    padding: 10px;
-    height: auto;
-    
-}
-
-.banner_menu{
-    position: relative;
-    justify-content: end;
-    align-items: center;
+    grid-template-rows: 15vh 1fr;
+    grid-template-areas:
+        "contenedor__banner"
+        "contenido__principal";
     height: 100%;
-    display: flex;
-    padding-top: 1rem;
+    width: 100%;
+    background: linear-gradient(0deg, rgba(192,198,207,1) 64%, rgba(108,114,121,1) 100%);
 }
+
+/* -------------------- BANNER -------------------- */
+.contenedor__banner {
+    grid-area: contenedor__banner;
+    display: grid;
+    grid-template-columns: minmax(60px, 8%) minmax(0, 1fr) auto minmax(0, 1fr) minmax(60px, 8%);
+    grid-template-areas:
+        "logo div_invisible menu user foodcorp"
+        "menu-botones menu-botones menu-botones menu-botones menu-botones";
+    gap: 0.5rem 1rem;
+    align-items: center;
+    justify-items: center;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    background: linear-gradient(145deg, #ffffff, #e7e7e7);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.banner_logo,
+.banner_logo_foodcorp,
+.banner_menu,
+.user-menu-container {
+    min-width: 0;
+}
+
+/* Imágenes logos */
+.banner_logo, .banner_logo_foodcorp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.banner_logo img, .banner_logo_foodcorp img {
+    width: clamp(50%, 7vw, 70%);
+    height: auto;
+    object-fit: contain;
+}
+
+/* Menú */
+.banner_menu {
+    grid-area: menu;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(0.5rem, 2vw, 2rem);
+    width: 100%;
+}
+
+/* ------------------- MENÚ SUPERIOR INTERACTIVO ------------------- */
 
 .menu-content {
-    position: relative;
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  font-weight: bold;
+  color: #000;
+  text-decoration: none;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.menu-content:hover {
+  color: #E97132;
+  /* background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); */
+  transform: scale(1.05);
+}
+
+.menu-content::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  width: 80%;
+  height: 2px;
+  background-color: #E97132;
+  transition: transform 0.3s ease;
+}
+
+.menu-content:hover::after,
+.menu-content.activo::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.menu-content.activo {
+  color: #ff0000;
+  /* background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 8px rgba(85, 79, 79, 0.2); */
+}
+
+
+/* ------------------- LOGOS ------------------- */
+
+.banner_logo img,
+.banner_logo_foodcorp img,
+.logout-icon {
+  width: clamp(50%, 7vw, 70%);
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+}
+
+.banner_logo img,
+.banner_logo_foodcorp img,
+.logout-icon:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+}
+
+/* Usuario */
+
+.logout-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.user-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.logout-boton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-boton:hover .logout-icon {
+  transform: scale(1.15);
+}
+
+.user-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  min-width: 120px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 0.2rem 0;
+  z-index: 999;
+  text-align: center;
+  animation: fadeIn 0.2s ease-out;
+  border: 1px solid #e0e0e0; /* sutil, para elegancia */
+}
+
+.user-dropdown.show {
+  display: block !important;
+}
+
+.logout-option {
+  background: none;
+  border: none;
+  padding: 0.3rem 1rem;
+  width: 100%;
+  font-size: 0.65rem;
+  font-weight: bold;
+  font-family: "JetBrains Mono", monospace;
+  text-align: center;
+  cursor: pointer;
+  color: #222;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.logout-option:hover {
+  background-color: #f4f4f4;
+  color: #e60023; /* rojo elegante en hover */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+  
+
+/* -------------------- CONTENIDO PRINCIPAL -------------------- */
+#contenido__principal {
+    grid-area: contenido__principal;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-    padding-top: 12px;
-    padding-bottom: 12px;
-  
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    transition: text-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-  
-  /* Línea que se expande desde el centro al hacer hover o si está activo */
-  .menu-content::after {
-    content: '';
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%) scaleX(0);
-    transform-origin: center;
-    width: 60%;
-    height: 2px;
-    background-color: #E97132;
-    transition: transform 0.3s ease;
-  }
-  
-  /* Hover: flotado sutil + línea visible */
-  .menu-content:hover {
-    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-    transform: translateY(-1px);
-  }
-  
-  .menu-content:hover::after {
-    transform: translateX(-50%) scaleX(1);
-  }
-  
-  /* Clic: sensación de presión */
-  .menu-content:active {
-    transform: translateY(1px);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Opción activa: resalta al cargar o cuando se selecciona */
-  .menu-content.activo {
-    color: #ff0000;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  }
-  
-  .menu-content.activo::after {
-    transform: translateX(-50%) scaleX(1);
-  }
-  
-  
-
-.menu_botones{
-    width: 100%;
-    display: flex;
-    gap: 50px;
-    justify-content: center;
-}
-
-
-
-.banner_logo_foodcorp{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.banner_logo_foodcorp img {
-    max-width: 100%;
-    left: 0;
-    padding: 20px;
-    height: auto;
-    
-}
-
-  
-
-.contenido__principal{
-    display: none;
-    
-}
-
-@keyframes slideDown {
-    0% {
-        opacity: 0; /* Inicia completamente invisible */
-    }
-
-
-
-    100% {
-        opacity: 1; /* Termina completamente visible */
-    }
-}
-
-
-
-
-.contenido_principal_visible {
-    display: flex;
-    animation: slideDown 1s ease-out forwards; 
     flex-direction: column;
-    overflow: auto;
+    height: 100%;
     width: 100%;
-    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, 
-                rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, 
-                rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
-    position: relative; /* Necesario para que los pseudo-elementos se posicionen bien */
-    align-items: center;
-    color: black;
-    flex-grow: 1;
     overflow: hidden;
-    background-color: #B4B8C5;
 }
 
+/* Sección inferior (botones + iframe) */
+.contenido_inferior {
+    display: grid;
+    grid-template-rows: 7vh 1fr;
+    grid-template-areas:
+        "principal__superior"
+        "principal__inferior";
+    height: 100%;
+    width: 100%;
+    color: black;
+    background: linear-gradient(to bottom, #d2d5dd, #b4b8c5);
+}
 
-
-
+/* -------------------- BOTONES SUPERIORES -------------------- */
+/* -------------------- BOTONES SUPERIORES -------------------- */
 .principal__superior {
-    animation: slideDown 1s ease-out forwards;
-    color: rgb(0, 0, 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Evita que el contenido altere el diseño */
-    height: 15%;
+  grid-area: principal__superior;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  flex-wrap: wrap;
+  height: 100%;
 }
 
 .superior__botones {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    padding: 2rem 1rem 1rem 1rem;
-
-}
-
-/* .botones {
-
-    background: rgb(0,61,91);
-    background: -moz-radial-gradient(circle, rgba(0,61,91,1) 54%, rgba(0,61,91,1) 100%);
-    background: -webkit-radial-gradient(circle, rgba(0,61,91,1) 54%, rgba(0,61,91,1) 100%);
-    background: radial-gradient(circle, rgba(0,61,91,1) 54%, rgba(0,61,91,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#003d5b",endColorstr="#003d5b",GradientType=1);
-    
-    
-    height: 3rem;
-    border: none;
-    width: 12rem;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, 
-                rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, 
-                rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
-    transition: background-color 0.3s ease;
-} */
-
-
-
-/* CSS */
-.botones {
-  align-items: center;
-  appearance: none;
-  background-color: #FCFCFD;
-  border-radius: 4px;
-  border-width: 0;
-  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: #36395A;
-  cursor: pointer;
-  display: inline-flex;
-  height: 48px;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  line-height: 1;
-  list-style: none;
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition: box-shadow 0.15s, transform 0.15s, margin 0.3s ease, order 0.3s ease;
-
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow,transform;
-  font-size: 18px;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 2rem);
+  width: 65%;
 }
 
-.botones:focus {
-  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+.botones {
+  flex: 1 1 clamp(140px, 20%, 240px);
+  font-size: 0.9rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(to top, #e0e5e5, #dae6e8);
+  border: 1px solid #c9d6d8;
+  border-radius: 8px;
+  color: #000;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
 }
 
 .botones:hover {
-  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(to top, #b2ebf2, #ffffff);
+  color: #ff0000;
 }
 
 .botones:active {
-  box-shadow: #D6D6E7 0 3px 7px inset;
-  transform: translateY(2px);
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .botones.clicado {
+  color: #ff0000;
+  font-weight: bold;
+  background: linear-gradient(to top, #88e4ee, #c1f5fa);
+  /* border: 2px solid #E97132; */
+}
 
-    color: #299ba7;
-    font-weight: bold;
+
+/* -------------------- IFRAME -------------------- */
+.principal__inferior {
+    grid-area: principal__inferior;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow: auto;
+}
+.inferior__tabla {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 1.5rem;
+}
+.d3 {
+    width: 100%;
+    min-height: 70vh;
+    height: 100%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+/* -------------------- MENÚ DESPLEGABLE -------------------- */
+.dropdown-menu-container {
+  position: relative;
+  display: none;
+  text-align: center;
+}
+
+/* Botón principal */
+.dropdown-toggle {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-toggle:hover {
+  background-color: #f5f5f5;
+  color: #ff0000;
+}
+
+.dropdown-menu-container.active .dropdown-toggle {
+  background-color: #fef0f0;
+  border-color: #ff0000;
+  color: #ff0000;
+}
+
+/* Contenedor del menú */
+.dropdown-links {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  min-width: 180px;
+  padding: 0.3rem 0;
+  z-index: 500;
+  text-align: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.dropdown-links a {
+  display: block;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+  font-family: "JetBrains Mono", monospace;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-links a:hover {
+  background-color: #f8f8f8;
+  color: #ff0000;
+}
+
+.dropdown-menu-container.active .dropdown-links {
+  display: block !important;
+}
+
+/* -------------------- MENÚ BOTONES -------------------- */
+.dropdown-menu-container-botones {
+  position: relative;
+  display: none;
+  text-align: center;
+}
+
+.dropdown-menu-container-botones .dropdown-toggle {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-menu-container-botones .dropdown-toggle:hover {
+  background-color: #f5f5f5;
+  color: #ff0000;
+}
+
+.dropdown-menu-container-botones.active .dropdown-toggle {
+  background-color: #fef0f0;
+  border-color: #ff0000;
+  color: #ff0000;
+}
+
+.dropdown-links-botones {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  min-width: 200px;
+  padding: 0.3rem 0;
+  z-index: 999;
+  text-align: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.dropdown-boton-iframe {
+  width: 100%;
+  padding: 0.5rem 0.9rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+  background: none;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-boton-iframe:hover {
+  background-color: #f8f8f8;
+  color: #ff0000;
+}
+
+.dropdown-menu-container-botones.active .dropdown-links-botones {
+  display: block !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+
+
+  @media (max-width: 634px) {
+    .banner_menu {
+      gap: 0.4rem;
+    }
+    .dropdown-menu-container {
+        position: relative;
+
+        display: inline-block;
+      }
+    .menu-content {
+      display: none;
+      font-size: clamp(0.6rem, 0.8rem, 0.9rem);
+      gap: 0.1rem;
+      flex-wrap: wrap;
+    }
+  
+    .logout-icon {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+  
+
+    .banner_logo{
+        width: 120px;
+        height: 100%;
+    }
+    .banner_logo_foodcorp{
+        width: 100px;
+        height: 100%;
+    }
+    .superior__botones {
+      width: 100%;
+      justify-content: center;
+    }
+    .dropdown-menu-container-botones {
+        position: relative;
+        /* display: none; */
+        display: inline-block;
+        text-align: center;
+      }
+      
+    .botones {
+      display: none;
+    }
+
+
+
+    .principal__superior{
+        align-items: center;
+        margin: 0.5rem 0 0 0.5rem;
+    }
+
+    .principal__inferior{
+        margin: 0 0 0 0;
+        overflow: hidden;
+    }
+
+    .contenido_inferior {
+    display: grid;
+    grid-template-rows: 8vh 1fr;
+    grid-template-areas:
+        "principal__superior"
+        "principal__inferior";
+    height: 100%;
+    width: 100%;
+    color: black;
+    background-color: #B4B8C5;
+    }
+
+
+  }
+  
+
+
+  
+  @media (min-width: 634px) {
+    .banner_menu {
+      flex-wrap: nowrap;
+      gap: 0.4rem;
+    }
+
+
+    .banner_logo{
+        display: flex;
+        justify-content: center;
+        right: 0;
+    }
+    
+    /* .dropdown-menu-container {
+        position: relative;
+
+        display: inline-block;
+      } */
+    .menu-content {
+      flex-wrap: nowrap;
+    }
+  
+    .logout-icon {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+  
+
+    .banner_logo{
+        width: 120px;
+        height: 100%;
+    }
+    .banner_logo_foodcorp{
+        width: 100px;
+        height: 100%;
+    }
+    .superior__botones {
+      width: 90%;
+      gap: 0.5rem;
+    }
+  
+    .botones {
+      font-size: clamp(0.6rem, 0.8rem, 0.9rem);
+      padding: 0.5rem 0.8rem;
+    }
+
+    .contenido_inferior {
+    display: grid;
+    grid-template-rows: 8vh 1fr;
+    grid-template-areas:
+        "principal__superior"
+        "principal__inferior";
+    height: 100%;
+    width: 100%;
+    color: black;
+    background-color: #B4B8C5;
+
+    }
+
+    .principal__inferior{
+        overflow: hidden;
+    }
+
   }
 
 
 
 
 
-
-
-
-/* Estilo del botón seleccionado */
-/* .boton-activo {
-    background-color: #E97132 !important;
-}
-
-.botones:hover{
-    background-color: #E97132;
-} */
-
-@keyframes slideOpacity {
-    0% {
-        opacity: 0;
-        clip-path: inset(0 0 100% 0); /* Comienza con el contenido completamente recortado */
-    }
-
-    100% {
-        opacity: 1;
-        clip-path: inset(0 0 0 0); /* El contenido se muestra completamente */
-    }
-}
-
-
-.principal__inferior {
-    animation: slideDown 1s ease-out forwards;
-    padding: 2vh 2%;
-    color: rgb(0, 0, 0);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    overflow: hidden; /* Evita que el contenido altere el diseño */
-    height: 85%;
-}
-
-/* Estilos del título */
-
-.inferior__tabla {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%; /* Que no ocupe todo el ancho */
-    height: 67vh; /* Define un alto máximo para habilitar el scroll vertical */
-}   
-
-
-iframe{
-    border-radius: 10px;
     
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}
+  @media (max-height: 480px) {
+    .body_principal {
+        display: grid;
+        grid-template-rows: 85px 1fr;
+        grid-template-areas:
+            "contenedor__banner"
+            "contenido__principal";
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(0deg, rgba(192,198,207,1) 64%, rgba(108,114,121,1) 100%);
+    }
+
+    .contenido_inferior {
+        display: grid;
+        grid-template-rows: 30px 500px;
+        grid-template-areas:
+            "principal__superior"
+            "principal__inferior";
+        height: 100%;
+        width: 100%;
+        color: black;
+        background-color: #B4B8C5;
+        }
 
 
 
-.d3{
-    width: 100%;
-    height: 100%;
-}
+        .principal__superior{
+            margin-top: 0.8rem;
+        }
 
 
+        .contenido_inferior{
+            overflow-y: scroll;
+        }
+        
+        .principal__inferior{
+            margin-top: 1px;
+        }
 
-/* LOGIN */
-
-
-.login-container {
-    background-color: white;
-    padding: 40px 30px;
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 400px;
-}
-
-.login-container h2 {
-    margin-bottom: 20px;
-    font-weight: 600;
-    color: #333;
-    text-align: center;
-}
-
-.login-container label {
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    font-weight: 600;
-    font-size: 14px;
-    color: #444;
-}
-
-.login-container input {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    outline: none;
-    transition: border 0.3s ease;
-}
-
-.login-container input:focus {
-    border-color: #E97132;
-}
-
-.login-container button {
-    margin-top: 25px;
-    width: 100%;
-    padding: 12px;
-    background-color: #E97132;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.login-container button:hover {
-    background-color: #d15d22;
-    transform: translateY(-1px);
-}
-
-.error-msg {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
-    text-align: center;
-}
-
+        .d3{
+            margin-top: 0.8rem;
+            height: 450px;
+        }
+  
+    }

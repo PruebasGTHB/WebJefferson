@@ -6,21 +6,33 @@
 
 {% block content %}
 <div id="contenido__principal" class="contenido__principal">
-    <div class="principal__superior">
-        <div class="superior__botones">
-            <button id="boton1" class="botones" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/cefmelr7tmigwc/energia-electrica?orgId=1&from=1742320411065&to=1742666011065&timezone=browser&refresh=5s&theme=light&panelId=3&__feature.dashboardSceneSolo')">CONSUMOS DE ENERGÍA ELÉCTRICA</button>
-            <button id="boton2" class="botones" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/aehm826z3aw3ke/energia-termica?orgId=1&from=1743756011408&to=1743777611408&timezone=browser&theme=light&panelId=2&__feature.dashboardSceneSolo')">CONSUMOS DE ENERGÍA TÉRMICA</button>
-            <button id="boton3" class="botones" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/begt0v9mefy0wc/ingreso-de-datos?orgId=1&from=1743755871221&to=1743777471221&timezone=browser&theme=light&panelId=2&__feature.dashboardSceneSolo')">INGRESO DE DATOS</button>
-        </div>
-    </div>
-            
-    <div class="principal__inferior">
-        <div class="inferior__tabla">
-            <iframe id="miIframe" class="d3" src="https://foodcorp.sgen.ingero.cloud:3000/d-solo/cefmelr7tmigwc/energia-electrica?orgId=1&from=1742320411065&to=1742666011065&timezone=browser&refresh=5s&theme=light&panelId=3&__feature.dashboardSceneSolo"></iframe>
-            
-        </div>
-    </div>
     
+    <div class="contenido_inferior">
+
+        <div class="principal__superior">
+            <div class="superior__botones">
+                <button id="boton1" class="botones" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/dei7ayp77hji8f/energia-electrica-copy?orgId=1&from=1742320411065&to=1742666011065&timezone=browser&refresh=5s&theme=light&panelId=4&__feature.dashboardSceneSolo')">CONSUMOS DE ENERGÍA ELÉCTRICA</button>
+                <button id="boton2" class="botones" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/aehm826z3aw3ke/energia-termica?orgId=1&from=1743756011408&to=1743777611408&timezone=browser&theme=light&panelId=2&__feature.dashboardSceneSolo')">CONSUMOS DE ENERGÍA TÉRMICA</button>
+                <button id="boton3" class="botones" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/begt0v9mefy0wc/ingreso-de-datos?orgId=1&from=1744018366648&to=1744039966648&timezone=browser&theme=light&panelId=3&__feature.dashboardSceneSolo')">INGRESO DE DATOS</button>
+                <div class="superior__botones-2 dropdown-menu-container-botones">
+                    <button class="dropdown-toggle">SELECCIONAR OPCIÓN ▾</button>
+                    <div class="dropdown-links-botones">
+                      <button class="dropdown-boton-iframe" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/dei7ayp77hji8f/energia-electrica-copy?orgId=1&from=1742320411065&to=1742666011065&timezone=browser&refresh=5s&theme=light&panelId=4&__feature.dashboardSceneSolo')">CONSUMOS DE ENERGÍA ELÉCTRICA</button>
+                      <button class="dropdown-boton-iframe" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/aehm826z3aw3ke/energia-termica?orgId=1&from=1743756011408&to=1743777611408&timezone=browser&theme=light&panelId=2&__feature.dashboardSceneSolo')">CONSUMOS DE ENERGÍA TÉRMICA</button>
+                      <button class="dropdown-boton-iframe" onclick="cambiarIframe('https://foodcorp.sgen.ingero.cloud:3000/d-solo/begt0v9mefy0wc/ingreso-de-datos?orgId=1&from=1744018366648&to=1744039966648&timezone=browser&theme=light&panelId=3&__feature.dashboardSceneSolo')">INGRESO DE DATOS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+        <div class="principal__inferior">
+            <div class="inferior__tabla">
+                <iframe id="miIframe" class="d3"></iframe>
+                
+            </div>
+        </div>
+        
+    </div>
 </div>
 
 <script>
@@ -29,3 +41,6 @@
     }
 </script>
 {% endblock content %}
+
+
+

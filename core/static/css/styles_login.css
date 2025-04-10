@@ -1,30 +1,32 @@
-body {
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    display: flex;
     font-family: 'Montserrat', sans-serif;
     background-color: #f5f5f5;
-    margin: 0;
+    width: 100%;
     min-height: 100vh;
-    height: auto;
-    display: block;
-    overflow-y: austo;
+    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 .background {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100%;
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     z-index: 0;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .background__fondo {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: absolute;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -32,43 +34,50 @@ body {
 }
 
 .glass-effect {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: absolute;
     width: 100%;
     height: 100%;
-    backdrop-filter: brightness(0.7);
-    background: rgba(255, 255, 255, 0.05);
-    z-index: -90;
+    backdrop-filter: brightness(0.9);
+    background: rgba(255, 255, 255, 0.02);
+    z-index: 0;
 }
 
-.login_contenido {
+.grid_layout {
     display: grid;
-    grid-template-rows: 20% 80%;
-    grid-template-columns: 100%;
-    justify-content: center;
-    width: 80%;
-    height: auto; /* CAMBIO: antes tenías height: 100vh */
-    min-height: 100vh;
+    grid-template-columns: 20% 1fr 20%;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "logo_invisible login_titulo logo_ingero"
+        "login login login";
+    width: 100%;
+    max-width: 80rem;
+    padding: 20px;
+    padding-top: 10vh;
+    margin: 1rem auto;
+    min-height: auto;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .grid_layout {
+      padding-top: 5vh;
+    }
+  }
+
+.logo_invisible {
+    grid-area: logo_invisible;
+    display: none;
+    width: 100%;
+    height: 80%;
 }
 
 .login_titulo {
+    grid-area: login_titulo;
     display: flex;
-    width: 100%;
-    justify-content: space-between;
     align-items: center;
-    height: auto;
-    margin-bottom: 40px;
-}
-
-.login_titulo_content {
-    display: grid;
-    grid-template-columns: 10% 80% 10%;
-    grid-template-rows: 100%;
-    width: 100%;
-    height: 100%;
     justify-content: center;
-    align-items: end;
+    font-size: 1rem;
+    position: relative;
 }
 
 .login_titulo_content-1 {
@@ -93,15 +102,19 @@ body {
     100% { background-position: 100% center; }
 }
 
-.logo_invisible{
+.logo_ingero {
+    grid-area: logo_ingero;
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
     width: 100%;
-    height: 80%;
+    height: 30%;
+    
 }
 
-
 .login_logo_ingero {
-    width: 100%;
-    height: 80%;
+    width: 6rem;
+    height: 5rem;
     animation: floatLogo 6s ease-in-out infinite alternate;
     filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3))
             drop-shadow(0 0 5px rgba(0, 150, 255, 0.1));
@@ -121,14 +134,12 @@ body {
     }
 }
 
-
 .login {
+    grid-area: login;
     display: flex;
-    width: 100%;
-    height: 100%;
     justify-content: center;
-    align-items: start;
-    padding-top: 50px;
+    align-items: flex-start;
+    padding-top: clamp(10px, 5vh, 50px);
 }
 
 .login-container {
@@ -162,11 +173,10 @@ body {
     font-weight: 600;
     color: #000000;
     display: block;
-    /* margin-bottom: 6px; */
 }
 
 .login-container input {
-    width: 92%;
+    width: 100%;
     padding: 12px 14px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px;
@@ -217,103 +227,56 @@ body {
 
 
 
+@media (max-width: 900px){
 
-
-
-
-
-
-
-
-
-
-
-
-
-/* ---------------------- RESPONSIVIDAD ---------------------- */
-
-@media (max-width: 768px) {
-    .login_contenido {
-        width: 95%;
-        padding: 10px;
-        grid-template-rows: auto auto;
-    }
-
-    .login_titulo {
-        flex-direction: column;
-        align-items: center;
-        padding: 0 20px;
-        margin-bottom: 20px;
-    }
-
-    .login_titulo_content {
+    .logo_ingero {
+        grid-area: logo_ingero;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
+        justify-content: flex-end;
+        align-items: end;
+        width: 100%;
+        height: 30%;
+        margin: 1rem 0 0 1rem;
+        
     }
-
-    .login_titulo_content-1 {
-        font-size: 1.6em;
-        padding-left: 0;
-        text-align: center;
-    }
-
-    .logo_invisible{
-        height: 60px;
-        width: auto
-    }
+    
     .login_logo_ingero {
-        height: 60px;
-        width: auto;
+        width: 5rem;
+        height: 4rem;
+        animation: floatLogo 6s ease-in-out infinite alternate;
+        filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3))
+                drop-shadow(0 0 5px rgba(0, 150, 255, 0.1));
+        transition: transform 0.4s ease, filter 0.4s ease;
     }
 
-    .login-container {
-        max-width: 95%;
-        padding: 20px;
+    .login_titulo_content-1{
+        font-size: 1.8rem;
     }
+} 
 
-    body {
-        flex-direction: column;
-        height: auto;
-        padding: 20px 0;
-        align-items: flex-start;
-    }
-}
-@media (max-width: 400px) {
-    .login_titulo {
-        padding: 0 10px;
-        margin-bottom: 15px;
-    }
+@media (max-height: 500px){
 
-    .login_titulo_content-1 {
-        font-size: 1.2em;
-        padding-left: 0;
+    .logo_ingero {
+        grid-area: logo_ingero;
+        display: flex;
+        justify-content: flex-end;
+        align-items: end;
+        width: 100%;
+        height: 30%;
+        margin: 1rem 0 0 1rem;
+        
     }
-
-    .logo_invisible{
-        height: 50px
-    }
+    
     .login_logo_ingero {
-        height: 50px;
+        width: 5rem;
+        height: 4rem;
+        animation: floatLogo 6s ease-in-out infinite alternate;
+        filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3))
+                drop-shadow(0 0 5px rgba(0, 150, 255, 0.1));
+        transition: transform 0.4s ease, filter 0.4s ease;
     }
 
-    .login-container {
-        padding: 16px;
-        max-width: 100%;
+    .login_titulo_content-1{
+        font-size: 1.8rem;
     }
-
-    .login-container h2 {
-        font-size: 20px;
-    }
-
-    .login-container input,
-    .login-container button {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    body {
-        padding: 10px 0;
-    }
-}
+} 

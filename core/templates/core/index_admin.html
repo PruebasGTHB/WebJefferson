@@ -22,144 +22,72 @@
 
 <body>
     {% block body__principal %}
-        <div class="body_principal">
+    <div class="body_principal">
+    
+        {% block banner %}
+        <div id="contenedor__banner" class="contenedor__banner">
+    
+            <!-- Logo -->
+            <div class="banner_logo">
+                <img src="{% static 'img/logos/logo_ingero.png' %}" alt="Logo Ingero">
+            </div>
+
             
-            {% block banner %}
-                <div id="contenedor__banner" class="contenedor__banner"> 
-                    <div class="banner_logo">
-                        <img src="{% static 'img/logos/logo_ingero.png' %}" alt="">   
+            <div class="div_invisible"></div> 
+
+            <!-- Menú principal (enlaces) -->
+            <div class="banner_menu">
+                <a href="{% url 'ingresos_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'ingresos_admin' %}activo{% endif %}">INGRESOS</a>
+                <a href="{% url 'constantes_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'constantes_admin' %}activo{% endif %}">CONSTANTES</a>
+                <a href="{% url 'indicadores_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'indicadores_admin' %}activo{% endif %}">SEGUIMIENTO</a>
+                <a href="{% url 'dashboards_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'dashboards_admin' %}activo{% endif %}">DASHBOARDS</a>
+                <div class="dropdown-menu-container">
+                    <button class="dropdown-toggle">Contenido ▾</button>
+                    <div class="dropdown-links" id="menuDesplegable">
+                      <a href="{% url 'ingresos_admin' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'ingresos_admin' %}activo{% endif %}">INGRESOS</a>
+                      <a href="{% url 'constantes_admin' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'constantes_admin' %}activo{% endif %}">CONSTANTES</a>
+                      <a href="{% url 'indicadores_admin' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'indicadores_admin' %}activo{% endif %}">SEGUIMIENTO</a>
+                      <a href="{% url 'dashboards_admin' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'dashboards_admin' %}activo{% endif %}">DASHBOARDS</a>
                     </div>
-                    <div class="relleno_10%"></div>
-                    <div class="banner_menu">
-                        <div class="menu_botones">
-                            <a href="{% url 'ingresos_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'ingresos_admin' %}activo{% endif %}">INGRESOS</a>
-                            <a href="{% url 'constantes_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'constantes_admin' %}activo{% endif %}">CONSTANTES</a>
-                            <a href="{% url 'indicadores_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'indicadores_admin' %}activo{% endif %}">SEGUIMIENTO</a>
-                            <a href="{% url 'dashboards_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'dashboards_admin' %}activo{% endif %}">DASHBOARDS</a>
-                            
-                        </div>
-                    </div>
-                    {% if user.is_authenticated %}
-                    <div class="user-menu-container">
-                      <button type="button" class="logout-boton" id="userMenuToggle">
-                        <img src="{% static 'img/logos/account.png' %}" alt="Usuario" class="logout-icon">
-                      </button>
-                    
-                      <div class="user-dropdown" id="userDropdown">
-                        <form id="logout-form" action="{% url 'logout' %}" method="post">
-                          {% csrf_token %}
-                          <button type="submit" class="logout-option">Cerrar sesión</button>
-                        </form>
-                      </div>
-                    </div>
-                    {% endif %}
-                    
-                    
-                    <style>
-                        .user-menu-container {
-                        position: relative;
-                        display: inline-block;
-                        }
+                  </div>
+            </div>
+              
 
-                        /* Botón del ícono */
-                        .logout-boton {
-                        background: transparent;
-                        border: none;
-                        padding: 0;
-                        margin: 0;
-                        cursor: pointer;
-                        outline: none;
-                        width: 48px;
-                        height: 48px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        transition: transform 0.15s ease;
-                        }
-
-                        /* Ícono dentro del botón */
-                        .logout-icon {
-                        width: 32px;
-                        height: 32px;
-                        transition: transform 0.25s ease, filter 0.25s ease;
-                        }
-
-                        /* Efectos hover y active */
-                        .logout-boton:hover .logout-icon,
-                        .logout-boton.active .logout-icon {
-                        transform: scale(1.15);
-                        filter: brightness(1.2);
-                        }
-
-                        .logout-boton:active .logout-icon {
-                        transform: scale(0.95);
-                        filter: brightness(0.9);
-                        }
-
-                        /* Menú desplegable */
-                        .user-dropdown {
-                        position: absolute;
-                        top: calc(100% + 6px);  /* 6px debajo del ícono */
-                        left: 50%;
-                        transform: translateX(-50%) translateY(10px);
-                        opacity: 0;
-                        pointer-events: none;
-                        background-color: white;
-                        border-radius: 6px;
-                        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-                        padding: 4px 0;
-                        z-index: 100;
-                        padding-bottom: 10px;
-                        min-width: 120px;
-                        text-align: center;
-                        transition: opacity 0.25s ease, transform 0.25s ease;
-                        display: flex;
-                        align-items: center;
-                        }
-
-                        /* Mostrar el menú */
-                        .user-dropdown.show {
-                        transform: translateX(-50%) translateY(0);
-                        opacity: 1;
-                        pointer-events: auto;
-                        }
-
-                        /* Opción del menú */
-                        .logout-option {
-                        background: none;
-                        border: none;
-                        padding: 6px 12px;
-                        width: 100%;
-                        font-family: "JetBrains Mono", monospace;
-                        font-size: 14px;
-                        cursor: pointer;
-                        color: #333;
-                        transition: background-color 0.2s ease;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        }
-
-                        .logout-option:hover {
-                        background-color: #f2f2f2;
-                        }
-
-
-                    </style>
-                        
-                        
-
-                    <div class="banner_logo_foodcorp">
-                        <img src="{% static 'img/logos/logo-foodcorp2.png' %}" alt="">   
-                    </div>
+    
+            <!-- Usuario -->
+            {% if user.is_authenticated %}
+            <div class="user-menu-container">
+                <button type="button" class="logout-boton" id="userMenuToggle">
+                  <img src="{% static 'img/logos/account.png' %}" alt="Usuario" class="logout-icon">
+                </button>
+              
+                <div class="user-dropdown" id="userDropdown">
+                  <form id="logout-form" action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-option">Cerrar sesión</button>
+                  </form>
                 </div>
+              </div>
+            {% endif %}                        
+                <!-- Logo Foodcorp -->
+                <div class="banner_logo_foodcorp">
+                    <img src="{% static 'img/logos/logo-foodcorp2.png' %}" alt="Logo FoodCorp">
+                </div>
+            </div>
             {% endblock banner %}
 
             {% block content %}
             {% endblock content %}
 
         </div>
+        
     {% endblock body__principal %}
+
+
+
+
+
+      
 </body>
 
 
