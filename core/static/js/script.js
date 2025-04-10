@@ -63,8 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (clicado) {
       const url = clicado.getAttribute('onclick').match(/'(.*?)'/)[1];
       iframe.src = url;
+      clicado.classList.add('clicado');
       sessionStorage.setItem(`botonSeleccionado_${vistaKey}`, clicado.id);
       sessionStorage.setItem(`iframeSeleccionado_${vistaKey}`, url);
+      sessionStorage.setItem(`iframeText_${vistaKey}`, clicado.textContent.trim());
+      if (iframeToggle) iframeToggle.textContent = clicado.textContent.trim() + " ▾";
     }
   } else {
     clicado = document.getElementById(idGuardado);
@@ -150,4 +153,36 @@ document.addEventListener("DOMContentLoaded", function () {
       this.classList.add('activo');
     });
   });
+
+  // -------------------- SINCRONIZAR BOTÓN CON IFRAME ACTUAL --------------------
+  function sincronizarBotonConIframe() {
+    const iframeURL = new URL(iframe.src);
+    const baseIframePath = iframeURL.origin + iframeURL.pathname;
+  
+    let matched = false;
+  
+    botones.forEach(boton => {
+      const botonURLRaw = boton.getAttribute("onclick").match(/'(.*?)'/)?.[1];
+      const botonURL = new URL(botonURLRaw, window.location.origin);
+      const baseBotonPath = botonURL.origin + botonURL.pathname;
+  
+      if (baseIframePath === baseBotonPath) {
+        boton.classList.add("clicado");
+        matched = true;
+        sessionStorage.setItem(`botonSeleccionado_${vistaKey}`, boton.id);
+        if (iframeToggle) iframeToggle.textContent = boton.textContent.trim() + " ▾";
+      } else {
+        boton.classList.remove("clicado");
+      }
+    });
+  
+    if (!matched && iframeToggle) {
+      iframeToggle.textContent = "Contenido externo ▾";
+    }
+  }
+  
+
+  // Ejecutar sincronización al cargar y cada vez que cambia el iframe
+  sincronizarBotonConIframe();
+  iframe.addEventListener("load", sincronizarBotonConIframe);
 });

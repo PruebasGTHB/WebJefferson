@@ -499,14 +499,16 @@ html, body {
     }
   
 
+
     .banner_logo{
-        width: 120px;
-        height: 100%;
+      width: 160px;
+      height: 100%;
     }
     .banner_logo_foodcorp{
-        width: 100px;
+        width: 130px;
         height: 100%;
     }
+
     .superior__botones {
       width: 100%;
       justify-content: center;
@@ -581,11 +583,11 @@ html, body {
   
 
     .banner_logo{
-        width: 120px;
+        width: 160px;
         height: 100%;
     }
     .banner_logo_foodcorp{
-        width: 100px;
+        width: 130px;
         height: 100%;
     }
     .superior__botones {
@@ -622,10 +624,10 @@ html, body {
 
 
     
-  @media (max-height: 480px) {
+  @media (max-height: 600px) {
     .body_principal {
         display: grid;
-        grid-template-rows: 85px 1fr;
+        grid-template-rows: 95px 1fr;
         grid-template-areas:
             "contenedor__banner"
             "contenido__principal";
