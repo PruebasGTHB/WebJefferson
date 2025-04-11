@@ -55,10 +55,16 @@ html, body {
     justify-content: center;
     align-items: center;
 }
-.banner_logo img, .banner_logo_foodcorp img {
-    width: clamp(50%, 7vw, 70%);
+.banner_logo img{
+    width: clamp(50%, 100vw, 70%);
     height: auto;
     object-fit: contain;
+}
+
+.banner_logo_foodcorp img {
+  width: clamp(50%, 7vw, 70%);
+  height: auto;
+  object-fit: contain;
 }
 
 /* Menú */
@@ -134,11 +140,18 @@ html, body {
 }
 
 .banner_logo img,
-.banner_logo_foodcorp img,
 .logout-icon:hover {
-  transform: scale(1.05);
+  transform: scale(1.15);
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
 }
+
+
+
+.banner_logo_foodcorp img{
+  transform: scale(1.0);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+}
+
 
 /* Usuario */
 
@@ -596,6 +609,19 @@ html, body {
         width: 130px;
         height: 100%;
     }
+
+    .banner_logo img,
+    .logout-icon:hover {
+      transform: scale(1.15);
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+    }
+
+
+
+    .banner_logo_foodcorp img{
+      transform: scale(1.0);
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+    }
     .superior__botones {
       width: 90%;
       gap: 0.5rem;
@@ -630,7 +656,7 @@ html, body {
 
 
     
-  @media (max-height: 600px) {
+  @media (max-height: 620px) {
     .body_principal {
         display: grid;
         grid-template-rows: 95px 1fr;
