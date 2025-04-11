@@ -40,14 +40,14 @@
                 <a href="{% url 'ingresos_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'ingresos_usuario' %}activo{% endif %}">INGRESOS</a>
                 <a href="{% url 'constantes_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'constantes_usuario' %}activo{% endif %}">CONSTANTES</a>
                 <a href="{% url 'indicadores_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'indicadores_usuario' %}activo{% endif %}">SEGUIMIENTO</a>
-                <a href="{% url 'dashboards_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'dashboards_usuario' %}activo{% endif %}">DASHBOARDS</a>
+                {% comment %} <a href="{% url 'dashboards_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'dashboards_usuario' %}activo{% endif %}">DASHBOARDS</a> {% endcomment %}
                 <div class="dropdown-menu-container">
                     <button class="dropdown-toggle">Contenido ▾</button>
                     <div class="dropdown-links" id="menuDesplegable">
                       <a href="{% url 'ingresos_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'ingresos_usuario' %}activo{% endif %}">INGRESOS</a>
                       <a href="{% url 'constantes_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'constantes_usuario' %}activo{% endif %}">CONSTANTES</a>
                       <a href="{% url 'indicadores_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'indicadores_usuario' %}activo{% endif %}">SEGUIMIENTO</a>
-                      <a href="{% url 'dashboards_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'dashboards_usuario' %}activo{% endif %}">DASHBOARDS</a>
+                      {% comment %} <a href="{% url 'dashboards_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'dashboards_usuario' %}activo{% endif %}">DASHBOARDS</a> {% endcomment %}
                     </div>
                   </div>
             </div>
