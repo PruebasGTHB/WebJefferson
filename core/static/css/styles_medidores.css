@@ -1,0 +1,249 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+#contenido__principal__dashboards {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.contenido_inferior_dashboards {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to bottom, #d2d5dd, #b4b8c5);
+  align-items: center;
+  justify-content: center;
+}
+
+/* CONTENEDOR DE LOS MEDIDORES */
+.principal_dashboards {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+
+
+
+
+
+/* Panel general */
+.medidor-card {
+  background: rgba(0, 0, 0, 0.807);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.04);
+  color: white;
+  padding: 15px;
+  width: 175px;
+  position: relative;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.3s ease;
+}
+
+.medidor-card:hover {
+  transform: scale(1.03);
+}
+
+.medidor-card h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  background: linear-gradient(180deg, #fff8d3 0%, #b19755 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.ver-panel {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
+}
+
+.kWh, .kW {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 5px;
+  border-radius: 8px;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  gap: 6px;
+  min-width: 0;
+}
+
+.kWh .valor, .kW .valor {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  flex-grow: 1;               
+  max-width: 100%;             
+  display: inline-block;
+  cursor: default;
+  padding-right: 4px;    
+}
+
+.kWh .unidad, .kW .unidad {
+  flex-shrink: 0;
+  color: white;
+  margin-left: 8px;
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* LOADER Y MODAL */
+#grafanaModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor_modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  height: 90%;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+#grafanaIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.cerrarModal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* LOADER SPINNER */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(1px);
+  background-color: rgba(233, 233, 233, 0.756);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.energy-spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid transparent;
+  border-top: 6px solid #ffe066;
+  border-right: 6px solid #ffeb3b;
+  border-radius: 50%;
+  animation: energy-spin 1s linear infinite, pulse-glow 1.5s ease-in-out infinite;
+  box-shadow:
+    0 0 8px rgba(255, 238, 102, 0.5),
+    0 0 12px rgba(255, 238, 102, 0.2) inset;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent);
+  margin-bottom: 1rem;
+}
+
+@keyframes energy-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 8px rgba(255, 238, 102, 0.4),
+      0 0 12px rgba(255, 238, 102, 0.2) inset;
+  }
+  50% {
+    box-shadow:
+      0 0 14px rgba(255, 255, 120, 0.7),
+      0 0 20px rgba(255, 255, 100, 0.3) inset;
+  }
+}
+
+.loader-text {
+  font-size: 1.8rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  background: linear-gradient(180deg, #fff8d3 0%, #b19755 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+  animation: bounce 1.5s ease-in-out infinite;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}

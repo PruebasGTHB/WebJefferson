@@ -25,10 +25,16 @@ urlpatterns = [
          name='indicadores_usuario'),
     path('dashboards_view/', views.dashboards_usuario,
          name='dashboards_usuario'),
+    path('api/consumos/<str:medidor_id>/',
+         views.obtener_consumo_medidor, name='consumo_medidor'),
+
 
     # Rutas admin
     path('ingresos/', views.ingresos_admin, name='ingresos_admin'),
     path('constantes/', views.constantes_admin, name='constantes_admin'),
     path('indicadores/', views.indicadores_admin, name='indicadores_admin'),
     path('dashboards/', views.dashboards_admin, name='dashboards_admin'),
+    path('api/consumos/<str:medidor_id>/',
+         views.obtener_consumo_medidor, name='consumo_medidor'),
+
 ]

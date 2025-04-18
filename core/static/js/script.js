@@ -213,3 +213,56 @@ document.addEventListener("DOMContentLoaded", function () {
     marcarOpcionIframeActual();
   });
 });
+
+
+
+// Manejar apertura del modal al hacer clic en el ojo
+document.querySelectorAll('.ver-panel').forEach(btn => {
+  btn.addEventListener('click', () => {
+      const card = btn.closest('.medidor-card');
+      const grafanaUrl = card.getAttribute('data-grafana-url');
+      document.getElementById('grafanaIframe').src = grafanaUrl;
+      document.getElementById('grafanaModal').style.display = 'flex';
+  });
+});
+
+function cerrarModal() {
+  document.getElementById('grafanaModal').style.display = 'none';
+  document.getElementById('grafanaIframe').src = '';
+}
+
+
+function cerrarModal() {
+  document.getElementById('grafanaModal').style.display = 'none';
+  document.getElementById('grafanaIframe').src = '';
+  document.getElementById('loader').style.display = 'none';
+}
+
+document.querySelectorAll('.ver-panel').forEach(btn => {
+  btn.addEventListener('click', () => {
+      const card = btn.closest('.medidor-card');
+      const grafanaUrl = card.getAttribute('data-grafana-url');
+      const medidorNombre = card.querySelector('h3').textContent; // capturamos el nombre del medidor
+
+      const iframe = document.getElementById('grafanaIframe');
+      const modal = document.getElementById('grafanaModal');
+      const loader = document.getElementById('loader');
+      const loaderText = document.getElementById('loader-text');
+
+      //Cambiar texto del loader dinámicamente
+      loaderText.textContent = `${medidorNombre}`;
+
+      loader.style.display = 'flex';
+      modal.style.display = 'flex';
+      iframe.src = grafanaUrl;
+
+      iframe.onload = () => {
+          loader.style.display = 'none';
+      };
+  });
+});
+
+
+/* aplicar el color dinámico en HTML */
+
+

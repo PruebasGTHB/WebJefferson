@@ -245,6 +245,7 @@ html, body {
     overflow: hidden;
 }
 
+
 /* Sección inferior (botones + iframe) */
 .contenido_inferior {
     display: grid;

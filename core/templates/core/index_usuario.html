@@ -11,6 +11,7 @@
 
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles_medidores.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/script.js' %}" defer></script> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,14 +41,14 @@
                 <a href="{% url 'ingresos_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'ingresos_usuario' %}activo{% endif %}">INGRESOS</a>
                 <a href="{% url 'constantes_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'constantes_usuario' %}activo{% endif %}">CONSTANTES</a>
                 <a href="{% url 'indicadores_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'indicadores_usuario' %}activo{% endif %}">SEGUIMIENTO</a>
-                {% comment %} <a href="{% url 'dashboards_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'dashboards_usuario' %}activo{% endif %}">DASHBOARDS</a> {% endcomment %}
+                <a href="{% url 'dashboards_usuario' %}" class="menu-content {% if request.resolver_match.url_name == 'dashboards_usuario' %}activo{% endif %}">DASHBOARDS</a>
                 <div class="dropdown-menu-container">
                     <button class="dropdown-toggle">Contenido ▾</button>
                     <div class="dropdown-links" id="menuDesplegable">
                       <a href="{% url 'ingresos_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'ingresos_usuario' %}activo{% endif %}">INGRESOS</a>
                       <a href="{% url 'constantes_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'constantes_usuario' %}activo{% endif %}">CONSTANTES</a>
                       <a href="{% url 'indicadores_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'indicadores_usuario' %}activo{% endif %}">SEGUIMIENTO</a>
-                      {% comment %} <a href="{% url 'dashboards_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'dashboards_usuario' %}activo{% endif %}">DASHBOARDS</a> {% endcomment %}
+                      <a href="{% url 'dashboards_usuario' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'dashboards_usuario' %}activo{% endif %}">DASHBOARDS</a>
                     </div>
                   </div>
             </div>

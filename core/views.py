@@ -4,8 +4,14 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 
+from django.http import JsonResponse
+from .models import ConsumoEnergiaElectrica, ConsumoEnergiaTermica
+
+from django.db import connection
 
 # Verifica si el usuario es administrador
+
+
 def es_admin(user):
     return user.is_superuser
 
@@ -63,10 +69,52 @@ def indicadores_usuario(request):
 
 @login_required
 def dashboards_usuario(request):
-    return render(request, 'core/dashboards_usuario.html')
+    return render(request, 'core/dashboards_admin.html')
 
+
+@login_required
+def obtener_consumo_medidor(request, medidor_id):
+    energia_total = "--"
+    potencia_total = "--"
+
+    # --- 1. Datos de energía eléctrica ---
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                SELECT "{medidor_id}" 
+                FROM consumo_energia_electrica 
+                WHERE año = 2025 AND mes = 4
+                LIMIT 1
+            """)
+            row = cursor.fetchone()
+            if row and row[0] is not None:
+                energia_total = float(row[0])
+    except Exception as e:
+        print("⚠️ Error en energía eléctrica:", e)
+
+    # --- 2. Datos de energía térmica (GLP) ---
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT consumo_total_glp 
+                FROM consumo_energia_termica_tabla 
+                WHERE año = 2025 AND mes = 3
+                LIMIT 1
+            """)
+            row = cursor.fetchone()
+            if row and row[0] is not None:
+                potencia_total = float(row[0])
+    except Exception as e:
+        print("⚠️ Error en energía térmica:", e)
+
+    return JsonResponse({
+        "energia_total_kwh": energia_total,
+        "potencia_total_kw": potencia_total,
+    })
 
 # VISTAS ADMINISTRADOR
+
+
 @login_required
 @user_passes_test(es_admin, login_url='ingresos_usuario')
 def ingresos_admin(request):
@@ -89,3 +137,45 @@ def indicadores_admin(request):
 @user_passes_test(es_admin, login_url='ingresos_usuario')
 def dashboards_admin(request):
     return render(request, 'core/dashboards_admin.html')
+
+
+@login_required
+@login_required
+def obtener_consumo_medidor(request, medidor_id):
+    energia_total = "--"
+    potencia_total = "--"
+
+    # --- 1. Datos de energía eléctrica ---
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                SELECT "{medidor_id}" 
+                FROM consumo_energia_electrica 
+                WHERE año  = 2025 AND mes = 4
+                LIMIT 1
+            """)
+            row = cursor.fetchone()
+            if row and row[0] is not None:
+                energia_total = float(row[0])
+    except Exception as e:
+        print("⚠️ Error en energía eléctrica:", e)
+
+    # --- 2. Datos de energía térmica (GLP) ---
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT riles_vapor
+                FROM consumo_energia_termica_tabla 
+                WHERE año = 2025 AND mes = 3
+                LIMIT 1
+            """)
+            row = cursor.fetchone()
+            if row and row[0] is not None:
+                potencia_total = float(row[0])
+    except Exception as e:
+        print("⚠️ Error en energía térmica:", e)
+
+    return JsonResponse({
+        "energia_total_kwh": energia_total,
+        "potencia_total_kw": potencia_total,
+    })

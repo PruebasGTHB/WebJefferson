@@ -1,2 +1,164 @@
 {% extends "core/index_admin.html" %}
 {% load static %}
+
+{% block title %}Dashboards{% endblock title %}
+
+{% block content %}
+<div id="contenido__principal_dashboards" class="contenido__principal_dashboards">
+  <div class="contenido_inferior_dashboards">
+    <div class="principal_dashboards">
+
+      <!-- Medidor EM9 -->
+      <div class="medidor-card" data-medidor="em9" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+        <div class="ver-panel" onclick="abrirModal(this)">👁️</div>
+        <h3>EM9</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+      <!-- Medidor EM23 -->
+      <div class="medidor-card" data-medidor="em23" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+        <div class="ver-panel" onclick="abrirModal(this)">👁️</div>
+        <h3>EM23</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+      <!-- Medidor EM1 -->
+      <div class="medidor-card" data-medidor="em1" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+        <div class="ver-panel" onclick="abrirModal(this)">👁️</div>
+        <h3>EM1</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+      <!-- Medidor EM8 -->
+      <div class="medidor-card" data-medidor="em8" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+        <div class="ver-panel" onclick="abrirModal(this)">👁️</div>
+        <h3>EM8</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+            <!-- Medidor pem3_em20 -->
+      <div class="medidor-card" data-medidor="pem3_em20" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+        <div class="ver-panel" onclick="abrirModal(this)">👁️</div>
+        <h3>pem3_em20</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="grafanaModal">
+      <div class="contenedor_modal">
+        <div id="loader" class="spinner-overlay">
+          <div class="energy-spinner"></div>
+          <div id="loader-text" class="loader-text">FOODCORP</div>
+        </div>
+        <button class="cerrarModal" onclick="cerrarModal()">✖</button>
+        <iframe id="grafanaIframe" src="" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function aplicarColor(valor, elemento, tipo) {
+    let color = "white";
+    if (isNaN(valor)) {
+      color = "white";
+    } else if (valor < 0) {
+      color = "yellow";
+    } else if (valor === 0) {
+      color = "white";
+    } else if (valor >= 10000000) {
+      color = "red";
+    } else {
+      color = "#00ff88";
+    }
+
+    elemento.style.color = color;
+
+    const tipoUnidad = tipo === "energia" ? "KWH" : "KW";
+    const textoTooltip = `El valor de ${tipoUnidad} es ${valor}`;
+    elemento.setAttribute("title", textoTooltip);
+
+    const textoVisible = valor.toString().length > 6 ? valor.toString().slice(0, 6) + "…" : valor.toString();
+    elemento.textContent = textoVisible;
+  }
+
+  function actualizarMedidores() {
+    document.querySelectorAll('.medidor-card').forEach(card => {
+      const medidor = card.getAttribute('data-medidor');
+      fetch(`/api/consumos/${medidor}/`)
+        .then(res => res.json())
+        .then(data => {
+          const energiaSpan = card.querySelector('.energia_total');
+          const potenciaSpan = card.querySelector('.potencia_actual');
+
+          const energia = parseFloat(data.energia_total_kwh);
+          const potencia = parseFloat(data.potencia_total_kw);
+
+          aplicarColor(energia, energiaSpan, "energia");
+          aplicarColor(potencia, potenciaSpan, "potencia");
+        })
+        .catch(err => console.error(`Error actualizando ${medidor}:`, err));
+    });
+  }
+
+  function abrirModal(icon) {
+    const card = icon.closest('.medidor-card');
+    const url = card.getAttribute('data-grafana-url');
+    const modal = document.getElementById('grafanaModal');
+    const iframe = document.getElementById('grafanaIframe');
+
+    if (url && iframe && modal) {
+      iframe.src = url;
+      modal.style.display = "block";
+    }
+  }
+
+  function cerrarModal() {
+    const modal = document.getElementById('grafanaModal');
+    const iframe = document.getElementById('grafanaIframe');
+    if (modal && iframe) {
+      iframe.src = "";
+      modal.style.display = "none";
+    }
+  }
+
+  actualizarMedidores();
+  setInterval(actualizarMedidores, 60000);
+</script>
+{% endblock content %}

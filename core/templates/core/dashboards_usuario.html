@@ -1,2 +1,27 @@
-{% extends "core/index_usuario.html" %}
+{% extends "core/index_admin.html" %}
 {% load static %}
+
+
+{% block title %}Dashboards{% endblock title %}
+
+{% block content %}
+<div id="contenido__principal" class="contenido__principal">
+    <div class="contenido_inferior_dashboards">
+        <div class="principal__superior">
+ 
+        </div>  
+        <div class="principal__inferior">
+            <div class="inferior__tabla">
+                <iframe id="miIframe" class="d3"></iframe>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    function cambiarIframe(nuevaURL) {
+        document.getElementById("miIframe").src = nuevaURL;
+    }
+</script>
+{% endblock content %}
