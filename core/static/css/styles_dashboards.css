@@ -1,0 +1,101 @@
+
+
+
+.contenido_inferior_dashboards {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columnas iguales */
+    grid-template-rows: 1fr 1fr;    /* 2 filas iguales */
+    grid-template-areas: 
+        "dashboard1 dashboard4"
+        "dashboard2 dashboard3";
+        width: 100vw;  /* ocupar todo el ancho de la pantalla */
+        height: 100vh; /* ocupar todo el alto de la pantalla */
+    gap: 20px;
+    padding: 30px;
+    background: linear-gradient(to bottom, #d2d5dd, #b4b8c5);
+
+}
+
+
+
+
+
+.dashboard1 {
+    grid-area: dashboard1;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.dashboard2 {
+    grid-area: dashboard2;
+    width: 100%;
+    height: 100%;
+}
+
+.dashboard3 {
+    grid-area: dashboard3;
+    width: 100%;
+    height: 100%;
+}
+
+.dashboard4 {
+    grid-area: dashboard4;
+    width: 100%;
+    height: 100%;
+}
+
+
+.principal_dashboards iframe{
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+    transition: transform 0.2s ease-in-out;
+}
+
+
+
+.principal_dashboards iframe:hover{
+    transform: scale(1.01);
+}
+
+@media (max-width: 720px) {
+    .contenido_inferior_dashboards {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        grid-template-areas: 
+            "dashboard1"
+            "dashboard2"
+            "dashboard3"
+            "dashboard4";
+        height: auto; /* para que se adapte al contenido */
+    }
+}
+
+@media (max-width: 720px), (max-height: 720px) {
+    .contenido_inferior_dashboards {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas: 
+            "dashboard1"
+            "dashboard2"
+            "dashboard3"
+            "dashboard4";
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .dashboard1,
+    .dashboard2,
+    .dashboard3,
+    .dashboard4 {
+        height: auto; /* permite que cada bloque crezca según contenido */
+    }
+
+    .principal_dashboards iframe {
+        height: auto; /* se adapta a lo que necesite */
+        aspect-ratio: 16 / 9; /* opcional para mantener proporción */
+    }
+}

@@ -9,8 +9,8 @@ from .models import ConsumoEnergiaElectrica, ConsumoEnergiaTermica
 
 from django.db import connection
 
-# Verifica si el usuario es administrador
 
+# Verifica si el usuario es administrador
 
 def es_admin(user):
     return user.is_superuser
@@ -36,13 +36,19 @@ def login_view(request):
     return render(request, 'registration/login.html')
 
 
+@login_required
+def monitoreo(request):
+    return render(request, 'core/monitoreo.html')
+
+
 # Redirecciona al ingreso correcto según tipo de usuario
+
 @login_required
 def home_redirect(request):
     if request.user.is_superuser:
-        return redirect('ingresos_admin')
+        return redirect('menu')
     else:
-        return redirect('ingresos_usuario')
+        return redirect('menu_usuario')
 
 
 # Vista común para todos: el banner o layout general
@@ -52,6 +58,11 @@ def inicio_usuario(request):
 
 
 # VISTAS USUARIO
+@login_required
+def menu_usuario(request):
+    return render(request, 'registration/menu_usuario.html')
+
+
 @login_required
 def ingresos_usuario(request):
     return render(request, 'core/ingresos_usuario.html')
@@ -113,6 +124,12 @@ def obtener_consumo_medidor(request, medidor_id):
     })
 
 # VISTAS ADMINISTRADOR
+
+
+@login_required
+@user_passes_test(es_admin, login_url='menu')
+def menu(request):
+    return render(request, 'registration/menu.html')
 
 
 @login_required

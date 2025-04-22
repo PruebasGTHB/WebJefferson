@@ -168,6 +168,12 @@ html, body {
   display: inline-block;
 }
 
+.div_invisible{
+  position: relative;
+  display: inline-block;
+}
+
+
 .logout-boton {
   background: transparent;
   border: none;
@@ -199,6 +205,26 @@ html, body {
   border: 1px solid #e0e0e0; /* sutil, para elegancia */
 }
 
+.user-dropdown2 {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  min-width: 120px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 0.2rem 0;
+  z-index: 999;
+  text-align: center;
+  animation: fadeIn 0.2s ease-out;
+  border: 1px solid #e0e0e0; /* sutil, para elegancia */
+}
+
+.user-dropdown2.show {
+  display: block !important;
+}
 .user-dropdown.show {
   display: block !important;
 }

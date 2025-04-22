@@ -286,3 +286,277 @@ html, body {
         font-size: clamp(2em, 2.2em, 2.5em);
     }
 } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.background__fondo {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -100;
+}
+
+.glass-effect {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: brightness(0.9);
+  background: rgba(255, 255, 255, 0.02);
+  z-index: 0;
+}
+
+
+
+
+
+/* Fondo general */
+.background_menu {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  z-index: 0;
+  overflow: hidden;
+  }
+
+  .glass-effect_menu {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: brightness(0.9);
+    background: rgba(255, 255, 255, 0.02);
+    filter: blur(4px);
+    z-index: 0;
+  }
+  
+  /* Animación del fondo */
+  @keyframes gradientShift {
+    0% {
+      background-position: top;
+    }
+    100% {
+      background-position: bottom;
+    }
+  }
+  
+  /* Textura con partículas sutiles */
+  .background_menu::before,
+  .background_menu::after {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    animation: sparkleDrift 45s linear infinite;
+    opacity: 0.4;
+    z-index: 2;
+  }
+  
+  /* Movimiento de las partículas */
+  @keyframes sparkleDrift {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    100% {
+      transform: translate(20px, 40px) rotate(360deg);
+    }
+  }
+  
+  /* Glow detrás de las tarjetas */
+  .card_3d::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.07), transparent 60%);
+    filter: blur(80px);
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  
+  
+  
+  
+  
+  
+  /* Estructura central */
+  .content_menu {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .menu_principal_content {
+    position: relative;
+    width: 65%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 60vh;
+    align-items: center;
+    gap: 10vh;
+  }
+  
+
+
+
+
+
+
+
+
+/* Tarjeta 3D */
+.card_3d {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+    border-radius: 20px;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    will-change: transform;
+    animation: fadeAppear 0.6s ease-out both;
+    backface-visibility: hidden;
+    isolation: isolate;
+    border: none; /* Elimina cualquier borde visual */
+  }
+  
+  /* Hover efecto */
+  .card_3d:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.4),
+      inset 0 0 8px rgba(255, 255, 255, 0.03),
+      0 0 4px rgba(255, 255, 255, 0.04);
+  }
+  
+  /* Contenido interno */
+  .card_inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: inherit;
+    overflow: hidden;
+  }
+  
+  /* Imagen base */
+  .card_inner img.base_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    border: none;
+    border-radius: inherit;
+    transition: filter 0.4s ease, transform 0.4s ease;
+    will-change: filter, transform;
+    backface-visibility: hidden;
+  }
+  
+  /* Hover imagen */
+  .card_3d:hover .base_img {
+    filter: brightness(0.55) saturate(1.05);
+    transform: scale(1.015);
+  }
+  
+  /* Título */
+  .card_title {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    z-index: 3;
+    padding: 10px 22px;
+    border-radius: 16px;
+    font-family: 'Segoe UI', sans-serif;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    background: rgba(18, 18, 18, 0.45);
+    backdrop-filter: blur(10px);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    border: none;
+  }
+  
+  /* Título hover */
+  .card_3d:hover .card_title {
+    transform: translateY(-2px) scale(1.04);
+  }
+  
+  /* Texto oculto */
+  .hover_text {
+    position: absolute;
+    inset: 0;
+    padding: 36px 28px;
+    font-size: 1rem;
+    font-weight: 400;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.4s ease, visibility 0s linear 0.5s;
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 20px;
+    transform: scale(0.5);
+    text-wrap: balance;
+    border: none;
+  }
+  
+  /* Hover texto */
+  .card_3d:hover .hover_text {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+  
+  /* Animación inicial */
+  /* @keyframes fadeAppear {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  } */
+  

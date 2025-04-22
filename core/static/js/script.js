@@ -134,6 +134,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 1000);
   }
 
+
+
+
+  // -------------------- LOGOUT MENU2 --------------------
+  const logoutToggle2 = document.getElementById("userMenuToggle2");
+  const logoutMenu2 = document.getElementById("userDropdown2");
+
+  if (logoutToggle2 && logoutMenu2) {
+    logoutToggle2.addEventListener("click", function (e) {
+      e.stopPropagation();
+      logoutMenu2.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!logoutMenu2.contains(e.target) && e.target !== logoutToggle2) {
+        logoutMenu2.classList.remove("show");
+      }
+    });
+  }
+
   // -------------------- LOGOUT MENU --------------------
   const logoutToggle = document.getElementById("userMenuToggle");
   const logoutMenu = document.getElementById("userDropdown");
@@ -214,8 +234,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-
-
 // Manejar apertura del modal al hacer clic en el ojo
 document.querySelectorAll('.ver-panel').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -261,8 +279,3 @@ document.querySelectorAll('.ver-panel').forEach(btn => {
       };
   });
 });
-
-
-/* aplicar el color dinámico en HTML */
-
-

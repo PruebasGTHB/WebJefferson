@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menú</title>
+  <link rel="stylesheet" href="{% static '../static/css/styles_login.css' %}" />
+  <link rel="icon" href="{% static 'img/logos/LOGO2+ALFA.png' %}" sizes="64x64" type="image/png">
+  <link rel="preload" href="{% static 'img/menu/img_flotante_izq2.jpg' %}" as="image">
+  <link rel="preload" href="{% static 'img/menu/img_flotante_der2.png' %}" as="image">
+</head>
+<body>
+  <div class="background_menu">
+    <div class="content_menu">
+      <div class="menu_principal_content">
+
+        <!-- Tarjeta Izquierda -->
+        <div class="card_3d">
+          <a href="{% url 'ingresos_admin' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Gestión de Energía</h2>
+              <img src="{% static 'img/menu/img_flotante_izq2.jpg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Registrar, visualizar y comparar consumos eléctricos.
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Tarjeta Derecha -->
+        <div class="card_3d">
+          <a href="#">
+            <div class="card_inner">
+              <h2 class="card_title">Monitoreo</h2>
+              <img src="{% static 'img/menu/img_flotante_der2.png' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Visualizar en tiempo real el consumo energético por empalme y submedidores.
+              </div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,220 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monitoreo</title>
+  <link rel="stylesheet" href="{% static '../static/css/styles_medidores.css' %}" />
+  <link rel="icon" href="{% static 'img/logos/LOGO2+ALFA.png' %}" sizes="64x64" type="image/png">
+  <script src="{% static 'js/script_monitoreo.js' %}" defer></script>
+
+  
+  <!-- GSAP + Draggable -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+
+  <!-- Panzoom -->
+  <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
+
+  <!-- leader-line -->
+  <script src="https://cdn.jsdelivr.net/npm/leader-line"></script>
+
+</head>
+<body>
+
+  <div id="canvas-wrapper">
+
+
+    <div id="canvas">
+
+
+
+
+      <!-- Medidor em4 -->
+      <div class="medidor-card" data-medidor="" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>Empalme 1: Planta Harina</h3>
+
+
+      </div>
+      <!-- Medidor EM3 -->
+      <div class="medidor-card" data-medidor="em3" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>EM3</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+      <!-- Medidor EM2 -->
+      <div class="medidor-card" data-medidor="em2" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>EM2</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+      <!-- Medidor EM1 -->
+      <div class="medidor-card" data-medidor="em1" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/383297c90b72445bbd85f269ff7934a8">
+
+        <h3>EM1</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+      <!-- Medidor EM8 -->
+      <div class="medidor-card" data-medidor="em8" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>EM8</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+      <!-- Medidor em4 -->
+      <div class="medidor-card" data-medidor="em4" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>em4</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+      <!-- Medidor em39-->
+      <div class="medidor-card" data-medidor="em39" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>em39</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+
+      <!-- Medidor em41 -->
+      <div class="medidor-card" data-medidor="em41" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>em41</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+
+      <!-- Medidor em5 -->
+      <div class="medidor-card" data-medidor="em5" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>em5</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+
+      <!-- Medidor em6 -->
+      <div class="medidor-card" data-medidor="em6" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>em6</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+
+
+
+
+      <!-- Medidor em7 -->
+      <div class="medidor-card" data-medidor="em7" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>em7</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+
+
+
+
+
+      <!-- Medidor em40 -->
+      <div class="medidor-card" data-medidor="em40" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
+
+        <h3>em40</h3>
+        <div class="kWh">
+          🔄 <span class="valor energia_total" data-tooltip="">--</span>
+          <div class="unidad">kWh</div>
+        </div>
+        <div class="kW">
+          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          <div class="unidad">kW</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="grafanaModal">
+    <div class="contenedor_modal">
+      <div id="loader" class="spinner-overlay">
+        <div class="energy-spinner"></div>
+        <div id="loader-text" class="loader-text">FOODCORP</div>
+      </div>
+      <button class="cerrarModal" onclick="cerrarModal()">✖</button>
+      <iframe id="grafanaIframe" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+</body>
+</html>
