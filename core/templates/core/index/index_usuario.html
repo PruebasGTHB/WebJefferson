@@ -34,7 +34,18 @@
             </div>
 
             
-            <div class="div_invisible"></div> 
+            <div class="div_invisible">
+              <button type="button" class="logout-boton" id="userMenuToggle2">
+                <img src="{% static 'img/logos/retroceder.png' %}" alt="Usuario" class="logout-icon">
+              </button>
+            
+              <div class="user-dropdown2" id="userDropdown2">
+                <form id="logout-form" action="{% url 'menu_view' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="logout-option">VOLVER AL MENÚ</button>
+                </form>
+              </div>
+            </div> 
 
             <!-- Menú principal (enlaces) -->
             <div class="banner_menu">
@@ -59,7 +70,7 @@
             {% if user.is_authenticated %}
             <div class="user-menu-container">
                 <button type="button" class="logout-boton" id="userMenuToggle">
-                  <img src="{% static 'img/logos/account.png' %}" alt="Usuario" class="logout-icon">
+                  <img src="{% static 'img/logos/account2.png' %}" alt="Usuario" class="logout-icon">
                 </button>
               
                 <div class="user-dropdown" id="userDropdown">

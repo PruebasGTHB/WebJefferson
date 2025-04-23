@@ -22,7 +22,7 @@ urlpatterns = [
     path('monitoreo/', views.monitoreo, name='monitoreo'),
 
     # Rutas usuario
-    path('menu_view/', views.menu_usuario, name='menu_usuario'),
+    path('menu_view/', views.menu_usuario, name='menu_view'),
     path('ingresos_view/', views.ingresos_usuario, name='ingresos_usuario'),
     path('constantes_view/', views.constantes_usuario,
          name='constantes_usuario'),

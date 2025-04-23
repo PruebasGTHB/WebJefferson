@@ -48,7 +48,7 @@ def home_redirect(request):
     if request.user.is_superuser:
         return redirect('menu')
     else:
-        return redirect('menu_usuario')
+        return redirect('menu_view')
 
 
 # Vista común para todos: el banner o layout general
