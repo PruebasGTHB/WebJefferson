@@ -1,0 +1,35 @@
+ 1.⁠ ⁠Energía
+Monitoreo integral del consumo de energía eléctrica y térmica en la planta.
+
+ 2.⁠ ⁠Gestión de Energía
+Seguimiento del Sistema de Gestión de Energía (SGEn) conforme a la norma ISO 50.001. 
+
+ 3.⁠ ⁠Agua Industrial
+Gestión del uso de agua en procesos industriales tales como bocatomas, emisarios y sistemas de distribución de agua industrial. 
+
+ 4.⁠ ⁠Refrigeración
+Monitoreo de sistemas de refrigeración, incluyendo compresores, torres de enfriamiento, chillers, evaporadores e intercambiadores de calor. Evaluación del rendimiento mediante el cálculo del COP.
+
+ 5.⁠ ⁠Plantas Térmicas
+Supervisión de plantas térmicas enfocada en el consumo de combustibles, producción de vapor o agua caliente, eficiencia energética y calidad de la combustión. Incluye control de emisiones (material particulado), detección de humos visibles y cumplimiento del Decreto Supremo N°10.
+
+ 6.⁠ ⁠Aire Comprimido, Ventiladores y Bombas
+Monitoreo de sistemas de aire comprimido, considerando flujos de aire, detección de fugas, consumo eléctrico, alertas de rendimiento, consumos específicos, eficiencia energética en bombas y ventiladores
+
+ 7.⁠ ⁠Sistema de Extracción
+Supervisión de sistemas de extracción de vahos, ventilación industrial y transporte neumático. Se controlan variables como flujos, presiones y temperaturas para asegurar condiciones operativas seguras y eficientes.
+
+ 8.⁠ ⁠Barcos
+Monitoreo del consumo de diésel en embarcaciones utilizadas en operaciones industriales. Incluye control de niveles de estanques, eficiencia energética de motores y generadores, distancia recorrida y ubicación georreferenciada.
+
+ 9.⁠ ⁠Pozos y Derechos de agua
+Supervisión continua de pozos de captación de agua, asegurando el cumplimiento de la normativa de la DGA. Se monitorean caudales instantáneos, volúmenes acumulados (totalizadores) y niveles freáticos (dinámicos y estáticos).
+
+10.⁠ ⁠Olores
+Monitoreo de emisiones de olores conforme al marco normativo vigente. 
+
+11.⁠ ⁠Manejo de stock
+Monitoreo de combustibles líquidos (diésel), aceites, control de niveles de estanques, stocks, solidos y gaseosos, balances, entre otros.
+
+12.⁠ ⁠Otros Sistemas
+Visualización y gestión de variables generales de proceso mediante integración con sistemas SCADA, alertas personalizadas y monitoreo continuo.
