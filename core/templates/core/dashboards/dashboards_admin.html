@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Energía</title>
+
+    <link rel="icon" href="{% static 'img/logos/LOGO2+ALFA.png' %}" sizes="64x64" type="image/png">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles_medidores.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles_dashboards.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/script.js' %}" defer></script> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">   
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="body_principal_dashboards">
+    <div id="contenedor__banner" class="contenedor__banner">
+
+      <!-- Logo -->
+      <div class="banner_logo">
+          <img src="{% static 'img/logos/logo_ingero.png' %}" alt="Logo Ingero">
+      </div>
+
+      <div class="div_invisible">
+        <button type="button" class="logout-boton" id="userMenuToggle2">
+          <img src="{% static 'img/logos/retroceder.png' %}" alt="Usuario" class="logout-icon">
+        </button>
+        <div class="user-dropdown2" id="userDropdown2">
+          <form id="logout-form" action="{% url 'menu' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-option">VOLVER AL MENÚ</button>
+          </form>
+        </div>
+      </div> 
+
+      <!-- Menú principal -->
+      <div class="banner_menu">
+        <a href="{% url 'ingresos_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'ingresos_admin' %}activo{% endif %}">INGRESOS</a>
+        <a href="{% url 'constantes_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'constantes_admin' %}activo{% endif %}">CONSTANTES</a>
+        <a href="{% url 'indicadores_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'indicadores_admin' %}activo{% endif %}">SEGUIMIENTO</a>
+        <a href="{% url 'dashboards_admin' %}" class="menu-content {% if request.resolver_match.url_name == 'dashboards_admin' %}activo{% endif %}">DASHBOARDS</a>
+        <div class="dropdown-menu-container">
+          <button class="dropdown-toggle">Contenido ▾</button>
+          <div class="dropdown-links" id="menuDesplegable">
+            <a href="{% url 'ingresos_admin' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'ingresos_admin' %}activo{% endif %}">INGRESOS</a>
+            <a href="{% url 'constantes_admin' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'constantes_admin' %}activo{% endif %}">CONSTANTES</a>
+            <a href="{% url 'indicadores_admin' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'indicadores_admin' %}activo{% endif %}">SEGUIMIENTO</a>
+            <a href="{% url 'dashboards_admin' %}" class="menu-content-2 {% if request.resolver_match.url_name == 'dashboards_admin' %}activo{% endif %}">DASHBOARDS</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Usuario -->
+      {% if user.is_authenticated %}
+      <div class="user-menu-container">
+        <button type="button" class="logout-boton" id="userMenuToggle">
+          <img src="{% static 'img/logos/account2.png' %}" alt="Usuario" class="logout-icon">
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <form id="logout-form" action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-option">Cerrar sesión</button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Logo Foodcorp -->
+      <div class="banner_logo_foodcorp">
+        <img src="{% static 'img/logos/logo-foodcorp2.png' %}" alt="Logo FoodCorp">
+      </div>
+
+    </div> <!-- CIERRE contenedor__banner -->
+
+    <div id="contenido__principal_dashboards" class="contenido__principal_dashboards">
+      <div class="contenido_inferior_dashboards">
+        <div class="principal_dashboards dahboard1">
+          <iframe src="https://foodcorp.sgen.ingero.cloud:3000/d-solo/eejlywtn4llhcd/pestac3b1-a-dashboard?orgId=1&from=1640995200000&to=1740787200000&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo"></iframe>
+        </div>
+        <div class="principal_dashboards dashboard2">
+          <iframe src="https://foodcorp.sgen.ingero.cloud:3000/d-solo/eejlywtn4llhcd/pestac3b1-a-dashboard?orgId=1&from=1640995200000&to=1740787200000&timezone=browser&theme=light&panelId=2&__feature.dashboardSceneSolo"></iframe>
+        </div>
+        <div class="principal_dashboards dashboard3">
+          <iframe src="https://foodcorp.sgen.ingero.cloud:3000/d-solo/eejm11gme60w0d/pestac3b1-a-dashboard-2?orgId=1&from=1701399600000&to=1745265698000&timezone=browser&theme=light&panelId=2&__feature.dashboardSceneSolo"></iframe>
+        </div>
+        <div class="principal_dashboards dashboard4">
+          <iframe src="https://foodcorp.sgen.ingero.cloud:3000/d-solo/eejm11gme60w0d/pestac3b1-a-dashboard-2?orgId=1&from=1701399600000&to=1745265698000&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo"></iframe>
+        </div>
+        <div class="principal_dashboards dashboard5">
+          <iframe src="https://foodcorp.sgen.ingero.cloud:3000/d-solo/eejm11gme60w0d/pestac3b1-a-dashboard-2?orgId=1&from=1701399600000&to=1745265698000&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo"></iframe>
+        </div>
+        <div class="principal_dashboards dashboard6">
+          <iframe src="https://foodcorp.sgen.ingero.cloud:3000/d-solo/eejm11gme60w0d/pestac3b1-a-dashboard-2?orgId=1&from=1701399600000&to=1745265698000&timezone=browser&theme=light&panelId=1&__feature.dashboardSceneSolo"></iframe>
+        </div>
+      </div> <!-- CIERRE contenido_inferior_dashboards -->
+    </div> <!-- CIERRE contenido__principal_dashboards -->
+
+  </div> <!-- CIERRE body_principal_dashboards -->
+</body>
+</html>

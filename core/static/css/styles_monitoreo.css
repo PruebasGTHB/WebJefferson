@@ -1,6 +1,7 @@
 /* === CSS ADAPTADO PARA GSAP Y PANZOOM === */
 * {
   margin: 0;
+  
 
 }
 
@@ -8,7 +9,27 @@
 html, body {
   margin: 0;
   height: 100%;
+  overflow: hidden;
 }
+
+
+.valor iframe {
+  width: 120px;
+  height: 30px; /* Ajustalo como quieras */
+  border: none;
+  padding-top: 3px;
+
+  border-radius: 4px;
+  transform-origin: top left;
+  border: none;
+  overflow: hidden;
+  transform: scale(1.1);       /* reduce visualmente */
+  clip-path: inset(5px 5px 5px 5px round 4px);  /* recorta bordes internos */
+  pointer-events:none;
+}
+
+
+
 #canvas-wrapper {
   width: 100%;
   height: 100vh;
@@ -23,7 +44,7 @@ html, body {
   position: relative;
   width: 10000px;
   height: 10000px;
-  background: transparent;
+  background: linear-gradient(#d0d4df, #c0c4cf); /* fondo gris suave */
   user-select: none;
   touch-action: none;
 }
@@ -128,6 +149,28 @@ html, body {
   font-size: 18px;
 }
 
+.icon-chip {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: #555;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.icon-chip.blue {
+  background-color: #2196f3; /* Azul brillante */
+}
+
+.icon-chip.gray {
+  background-color: #2196f3; /* Gris claro */
+}
+
+
 .kWh, .kW {
   display: flex;
   align-items: center;
@@ -139,8 +182,9 @@ html, body {
   color: #ffffff;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   width: 100%;
-  gap: 6px;
+  gap: 2px;
   min-width: 0;
+
 }
 
 .kWh .valor, .kW .valor {
@@ -165,6 +209,7 @@ html, body {
   margin-left: 8px;
   text-align: right;
   font-size: 0.9rem;
+  padding-top: 5px;
 }
 
 /* === MODAL & LOADER === */

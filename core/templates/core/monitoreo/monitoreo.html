@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Monitoreo</title>
-  <link rel="stylesheet" href="{% static '../static/css/styles_medidores.css' %}" />
+  <link rel="stylesheet" href="{% static '../static/css/styles_monitoreo.css' %}" />
   <link rel="icon" href="{% static 'img/logos/LOGO2+ALFA.png' %}" sizes="64x64" type="image/png">
   <script src="{% static 'js/script_monitoreo.js' %}" defer></script>
 
@@ -23,8 +23,9 @@
 </head>
 <body>
 
-  <div id="canvas-wrapper">
 
+  <div id="canvas-wrapper">
+    
 
     <div id="canvas">
 
@@ -33,14 +34,13 @@
 
       <!-- Medidor em4 -->
       <div class="medidor-card" data-medidor="" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
-
         <h3>Empalme 1: Planta Harina</h3>
 
 
       </div>
       <!-- Medidor EM3 -->
       <div class="medidor-card" data-medidor="em3" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
-
+        <div class="icon-chip blue">C</div>
         <h3>EM3</h3>
         <div class="kWh">
           🔄 <span class="valor energia_total" data-tooltip="">--</span>
@@ -54,7 +54,7 @@
 
       <!-- Medidor EM2 -->
       <div class="medidor-card" data-medidor="em2" data-x="0" data-y="0" data-grafana-url="https://foodcorp.sgen.ingero.cloud:3000/public-dashboards/c1244ac2b91e4bfcbff8c776d046692b">
-
+        <span class="icon-chip gray">M</span>
         <h3>EM2</h3>
         <div class="kWh">
           🔄 <span class="valor energia_total" data-tooltip="">--</span>
@@ -117,7 +117,7 @@
           <div class="unidad">kWh</div>
         </div>
         <div class="kW">
-          ⚡ <span class="valor potencia_actual" data-tooltip="">--</span>
+          ⚡ <span class="valor potencia_actual2" data-tooltip=""><iframe src="https://foodcorp.sgen.ingero.cloud:3000/d-solo/aejpgns3dkuf4e/new-dashboard?orgId=1&timezone=browser&theme=dark&panelId=1&__feature.dashboardSceneSolo"></iframe></span>
           <div class="unidad">kW</div>
         </div>
       </div>
@@ -216,5 +216,8 @@
       <iframe id="grafanaIframe" src="" frameborder="0"></iframe>
     </div>
   </div>
+
+
+
 </body>
 </html>

@@ -33,12 +33,12 @@ def login_view(request):
         else:
             messages.error(request, 'Usuario o contraseña incorrectos')
 
-    return render(request, 'registration/login.html')
+    return render(request, 'core/registration/login.html')
 
 
 @login_required
 def monitoreo(request):
-    return render(request, 'core/monitoreo.html')
+    return render(request, 'core/monitoreo/monitoreo.html')
 
 
 # Redirecciona al ingreso correcto según tipo de usuario
@@ -54,33 +54,33 @@ def home_redirect(request):
 # Vista común para todos: el banner o layout general
 @login_required
 def inicio_usuario(request):
-    return render(request, 'core/index_usuario.html')
+    return render(request, 'core/index/index_usuario.html')
 
 
 # VISTAS USUARIO
 @login_required
 def menu_usuario(request):
-    return render(request, 'registration/menu_usuario.html')
+    return render(request, 'core/menu/menu_usuario.html')
 
 
 @login_required
 def ingresos_usuario(request):
-    return render(request, 'core/ingresos_usuario.html')
+    return render(request, 'core/ingresos/ingresos_usuario.html')
 
 
 @login_required
 def constantes_usuario(request):
-    return render(request, 'core/constantes_usuario.html')
+    return render(request, 'core/constantes/constantes_usuario.html')
 
 
 @login_required
 def indicadores_usuario(request):
-    return render(request, 'core/indicadores_usuario.html')
+    return render(request, 'core/indicadores/indicadores_usuario.html')
 
 
 @login_required
 def dashboards_usuario(request):
-    return render(request, 'core/dashboards_admin.html')
+    return render(request, 'core/dashboards/dashboards_usuario.html')
 
 
 @login_required
@@ -129,31 +129,31 @@ def obtener_consumo_medidor(request, medidor_id):
 @login_required
 @user_passes_test(es_admin, login_url='menu')
 def menu(request):
-    return render(request, 'registration/menu.html')
+    return render(request, 'core/menu/menu.html')
 
 
 @login_required
 @user_passes_test(es_admin, login_url='ingresos_usuario')
 def ingresos_admin(request):
-    return render(request, 'core/ingresos_admin.html')
+    return render(request, 'core/ingresos/ingresos_admin.html')
 
 
 @login_required
 @user_passes_test(es_admin, login_url='ingresos_usuario')
 def constantes_admin(request):
-    return render(request, 'core/constantes_admin.html')
+    return render(request, 'core/constantes/constantes_admin.html')
 
 
 @login_required
 @user_passes_test(es_admin, login_url='ingresos_usuario')
 def indicadores_admin(request):
-    return render(request, 'core/indicadores_admin.html')
+    return render(request, 'core/indicadores/indicadores_admin.html')
 
 
 @login_required
 @user_passes_test(es_admin, login_url='ingresos_usuario')
 def dashboards_admin(request):
-    return render(request, 'core/dashboards_admin.html')
+    return render(request, 'core/dashboards/dashboards_admin.html')
 
 
 @login_required

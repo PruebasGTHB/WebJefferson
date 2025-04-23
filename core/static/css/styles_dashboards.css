@@ -1,17 +1,42 @@
 
 
 
+.body_principal_dashboards{
+    display: grid;
+    grid-template-rows: 15vh 1fr;
+    grid-template-areas:
+        "contenedor__banner"
+        "contenido__principal_dashboards";
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(0deg, rgba(192,198,207,1) 64%, rgba(108,114,121,1) 100%);
+  }
+
+
+
+
+.contenido__principal_dashboards{
+    grid-area: contenido__principal_dashboards;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .contenido_inferior_dashboards {
     display: grid;
     grid-template-columns: 1fr 1fr; /* 2 columnas iguales */
-    grid-template-rows: 1fr 1fr;    /* 2 filas iguales */
+    grid-template-rows: 20rem 20rem 20rem;    /* 3 filas iguales */
     grid-template-areas: 
         "dashboard1 dashboard4"
-        "dashboard2 dashboard3";
-        width: 100vw;  /* ocupar todo el ancho de la pantalla */
-        height: 100vh; /* ocupar todo el alto de la pantalla */
-    gap: 20px;
-    padding: 30px;
+        "dashboard2 dashboard3"
+        "dashboard5 dashboard6";
+    width: 100vw;  /* ocupar todo el ancho de la pantalla */
+    height: auto; /* ocupar todo el alto de la pantalla */
+    gap: 10px;
+    padding: 15px 30px;
     background: linear-gradient(to bottom, #d2d5dd, #b4b8c5);
 
 }
@@ -45,6 +70,18 @@
     width: 100%;
     height: 100%;
 }
+.dashboard5 {
+    grid-area: dashboard5;
+    width: 100%;
+    height: 100%;
+}
+
+.dashboard6 {
+    grid-area: dashboard6;
+    width: 100%;
+    height: 100%;
+}
+
 
 
 .principal_dashboards iframe{
@@ -69,7 +106,9 @@
             "dashboard1"
             "dashboard2"
             "dashboard3"
-            "dashboard4";
+            "dashboard4"
+            "dashboard5"
+            "dashboard6";
         height: auto; /* para que se adapte al contenido */
     }
 }
@@ -82,7 +121,9 @@
             "dashboard1"
             "dashboard2"
             "dashboard3"
-            "dashboard4";
+            "dashboard4"
+            "dashboard5"
+            "dashboard6";
         height: auto;
         overflow-y: auto;
     }
