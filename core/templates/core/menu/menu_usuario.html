@@ -21,68 +21,132 @@
         <div class="card_3d">
           <a href="{% url 'ingresos_admin' %}">
             <div class="card_inner">
-              <h2 class="card_title">Gestión de Energía</h2>
-              <img src="{% static 'img/menu/img_flotante_izq2.jpg' %}" alt="Base" class="base_img">
+              <h2 class="card_title">Energía</h2>
+              <img src="{% static 'img/menu/1Energía.jpg' %}" alt="Base" class="base_img">
               <div class="hover_text">
-                Registrar, visualizar y comparar consumos eléctricos.
+                Monitoreo integral del consumo de energía eléctrica y térmica en la planta.
               </div>
             </div>
           </a>
         </div>
         <div class="card_3d">
-          <a href="{% url 'ingresos_admin' %}">
+          <!-- <a href="{% url 'monitoreo' %}"> -->
             <div class="card_inner">
               <h2 class="card_title">Gestión de Energía</h2>
-              <img src="{% static 'img/menu/img_flotante_izq2.jpg' %}" alt="Base" class="base_img">
+              <img src="{% static 'img/menu/2Gestión de Energía.jpg' %}" alt="Base" class="base_img">
               <div class="hover_text">
-                Registrar, visualizar y comparar consumos eléctricos.
+                Seguimiento del Sistema de Gestión de Energía (SGEn) conforme a la norma ISO 50.001. 
               </div>
             </div>
           </a>
         </div>
-        <div class="card_3d">
-          <a href="{% url 'ingresos_admin' %}">
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
             <div class="card_inner">
-              <h2 class="card_title">Gestión de Energía</h2>
-              <img src="{% static 'img/menu/img_flotante_izq2.jpg' %}" alt="Base" class="base_img">
+              <h2 class="card_title">Agua Industrial</h2>
+              <img src="{% static 'img/menu/3Agua Industrial.jpg' %}" alt="Base" class="base_img">
               <div class="hover_text">
-                Registrar, visualizar y comparar consumos eléctricos.
+                Gestión del uso de agua en procesos industriales tales como bocatomas, emisarios y sistemas de distribución de agua industrial. 
               </div>
             </div>
           </a>
         </div>
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Refrigeración</h2>
+              <img src="{% static 'img/menu/4Refrigeración.jpeg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Monitoreo de sistemas de refrigeración, incluyendo compresores, torres de enfriamiento, chillers, evaporadores e intercambiadores de calor. Evaluación del rendimiento mediante el cálculo del COP.
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Plantas Térmicas</h2>
+              <img src="{% static 'img/menu/5Plantas Térmicas.jpeg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Supervisión de plantas térmicas enfocada en el consumo de combustibles, producción de vapor o agua caliente, eficiencia energética y calidad de la combustión. Incluye control de emisiones (material particulado), detección de humos visibles y cumplimiento del Decreto Supremo N°10.
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Aire Comprimido Ventiladores y Bombas</h2>
+              <img src="{% static 'img/menu/6Aire Comprimido Ventiladores y Bombas.jpg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Monitoreo de sistemas de aire comprimido, considerando flujos de aire, detección de fugas, consumo eléctrico, alertas de rendimiento, consumos específicos, eficiencia energética en bombas y ventiladores.
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Sistema de Extracción</h2>
+              <img src="{% static 'img/menu/7Sistema de Extracción.jpg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Supervisión de sistemas de extracción de vahos, ventilación industrial y transporte neumático. Se controlan variables como flujos, presiones y temperaturas para asegurar condiciones operativas seguras y eficientes.
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Barcos</h2>
+              <img src="{% static 'img/menu/8Barcos.jpeg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Monitoreo del consumo de diésel en embarcaciones utilizadas en operaciones industriales. Incluye control de niveles de estanques, eficiencia energética de motores y generadores, distancia recorrida y ubicación georreferenciada.
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Pozos y Derechos de agua</h2>
+              <img src="{% static 'img/menu/9Pozos y Derechos de agua.jpeg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Supervisión continua de pozos de captación de agua, asegurando el cumplimiento de la normativa de la DGA. Se monitorean caudales instantáneos, volúmenes acumulados (totalizadores) y niveles freáticos (dinámicos y estáticos).
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Olores</h2>
+              <img src="{% static 'img/menu/10Olores.jpg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Monitoreo de emisiones de olores conforme al marco normativo vigente. 
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card_3d disabled">
+          <a href="{% url 'monitoreo' %}">
+            <div class="card_inner">
+              <h2 class="card_title">Manejo de stock</h2>
+              <img src="{% static 'img/menu/11Manejo de stock.jpeg' %}" alt="Base" class="base_img">
+              <div class="hover_text">
+                Monitoreo de combustibles líquidos (diésel), aceites, control de niveles de estanques, stocks, solidos y gaseosos, balances, entre otros.
 
-
-        <!-- Tarjetas abajo-->
-        <div class="card_3d">
-          <a href="{% url 'monitoreo' %}">
-            <div class="card_inner">
-              <h2 class="card_title">Monitoreo</h2>
-              <img src="{% static 'img/menu/img_flotante_der2.png' %}" alt="Base" class="base_img">
-              <div class="hover_text">
-                Visualizar el consumo energético por empalme y submedidores.
               </div>
             </div>
           </a>
         </div>
-        <div class="card_3d">
+        <div class="card_3d disabled">
           <a href="{% url 'monitoreo' %}">
             <div class="card_inner">
-              <h2 class="card_title">Monitoreo</h2>
-              <img src="{% static 'img/menu/img_flotante_der2.png' %}" alt="Base" class="base_img">
+              <h2 class="card_title">Otros Sistemas</h2>
+              <img src="{% static 'img/menu/12Otros Sistemas.jpeg' %}" alt="Base" class="base_img">
               <div class="hover_text">
-                Visualizar el consumo energético por empalme y submedidores.
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="card_3d">
-          <a href="{% url 'monitoreo' %}">
-            <div class="card_inner">
-              <h2 class="card_title">Monitoreo</h2>
-              <img src="{% static 'img/menu/img_flotante_der2.png' %}" alt="Base" class="base_img">
-              <div class="hover_text">
-                Visualizar el consumo energético por empalme y submedidores.
+                Visualización y gestión de variables generales de proceso mediante integración con sistemas SCADA, alertas personalizadas y monitoreo continuo.
               </div>
             </div>
           </a>
