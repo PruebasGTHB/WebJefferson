@@ -40,6 +40,10 @@ html, body {
   touch-action: none;
   background: linear-gradient(#d0d4df, #c0c4cf); /* fondo gris suave */
 }
+
+#canvas-wrapper:active {
+  cursor: grabbing;
+}
 #canvas {
   position: relative;
   width: 10000px;
@@ -48,6 +52,8 @@ html, body {
   user-select: none;
   touch-action: none;
 }
+
+
 
 /* Estilos de las tarjetas medidor */
 .medidor-card {
