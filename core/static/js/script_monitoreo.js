@@ -13,7 +13,7 @@ window.onload = function () {
     canvas: true,
     contain: false,
     disablePan: false,
-    disableZoom: false
+    disableZoom: true
   });
 
   canvasWrapper.addEventListener("wheel", e => panzoom.zoomWithWheel(e, { step: 0.08 }));
