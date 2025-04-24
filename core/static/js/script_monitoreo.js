@@ -1,4 +1,4 @@
-// === MONITOREO FUNCIONAL CON LOADER FOODCORP ===
+// === MONITOREO FUNCIONAL CON LOADER Y MODALES RESTAURADOS ===
 window.onload = function () {
   gsap.registerPlugin(Draggable);
 
@@ -6,8 +6,6 @@ window.onload = function () {
   const canvasWrapper = document.getElementById("canvas-wrapper");
   const conexiones = [];
   const csrftoken = document.querySelector('[name="csrf-token"]').content;
-
-  // Loader personalizado
   const loader = document.getElementById("loader-monitoreo");
   loader.style.display = "flex";
 
@@ -15,12 +13,10 @@ window.onload = function () {
     canvas: true,
     contain: false,
     disablePan: false,
-    disableZoom: false,
+    disableZoom: false
   });
 
-  canvasWrapper.addEventListener("wheel", e =>
-    panzoom.zoomWithWheel(e, { step: 0.08 })
-  );
+  canvasWrapper.addEventListener("wheel", e => panzoom.zoomWithWheel(e, { step: 0.08 }));
 
   function centrarCanvas() {
     const wrapperRect = canvasWrapper.getBoundingClientRect();
@@ -104,9 +100,7 @@ window.onload = function () {
       .then(res => res.json())
       .then(posiciones => {
         const mapa = {};
-        posiciones.forEach(p => {
-          mapa[p.medidor_id] = { x: p.x, y: p.y };
-        });
+        posiciones.forEach(p => { mapa[p.medidor_id] = { x: p.x, y: p.y }; });
         const cards = document.querySelectorAll('.medidor-card');
         const total = cards.length;
         const cardWidth = 175;
@@ -185,7 +179,7 @@ window.onload = function () {
       centrarCanvas();
       conectarMedidoresDesdeBD(() => {
         guardarConexionesActuales();
-        loader.style.display = 'none'; // Oculta loader al finalizar
+        loader.style.display = 'none';
       });
     }, 500);
   });
@@ -205,6 +199,32 @@ window.onload = function () {
       guardarConexionesActuales();
     }
   });
+
+  // Interacción modal
+  document.querySelectorAll('.medidor-card').forEach(card => {
+    card.addEventListener('dblclick', () => {
+      const grafanaUrl = card.getAttribute('data-grafana-url');
+      const medidorNombre = card.querySelector('h3').textContent;
+
+      const iframe = document.getElementById('grafanaIframe');
+      const modal = document.getElementById('grafanaModal');
+      const loaderModal = document.getElementById('loader');
+      const loaderText = document.getElementById('loader-text');
+
+      loaderText.textContent = medidorNombre;
+      loaderModal.style.display = 'flex';
+      modal.style.display = 'flex';
+      iframe.src = grafanaUrl;
+
+      iframe.onload = () => loaderModal.style.display = 'none';
+    });
+  });
+
+  window.cerrarModal = function () {
+    document.getElementById('grafanaModal').style.display = 'none';
+    document.getElementById('grafanaIframe').src = '';
+    document.getElementById('loader').style.display = 'none';
+  };
 
   actualizarMedidores();
   setInterval(actualizarMedidores, 60000);
