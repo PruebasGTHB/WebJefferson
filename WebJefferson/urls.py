@@ -7,7 +7,14 @@ urlpatterns = [
     # Ruta raíz redirige según tipo de usuario
     path('', views.home_redirect, name='home_redirect'),
 
+    path('api/posiciones/', views.obtener_posiciones),
+    path('api/guardar_posiciones/', views.guardar_posiciones),
 
+    path('api/conexiones/', views.obtener_conexiones),
+    path('api/guardar_conexiones/', views.guardar_conexiones),
+
+
+    path('api/consumos/<str:medidor_id>/', views.obtener_consumo_medidor),
 
 
     # Panel de administración Django

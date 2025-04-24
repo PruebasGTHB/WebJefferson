@@ -10,7 +10,60 @@ from .models import ConsumoEnergiaElectrica, ConsumoEnergiaTermica
 from django.db import connection
 
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import MedidorPosicion
+from .serializers import MedidorPosicionSerializer
+from .models import ConexionMedidores
+from .serializers import ConexionMedidoresSerializer
+from django.views.decorators.csrf import csrf_exempt
+
+
+@api_view(['GET'])
+@csrf_exempt
+def obtener_posiciones(request):
+    posiciones = MedidorPosicion.objects.all()
+    serializer = MedidorPosicionSerializer(posiciones, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@csrf_exempt
+def guardar_posiciones(request):
+    for item in request.data:
+        medidor_id = item.get('medidor_id')
+        x = item.get('x')
+        y = item.get('y')
+
+        if not medidor_id or x is None or y is None:
+            continue  # Evita registros vacíos o corruptos
+
+        MedidorPosicion.objects.update_or_create(
+            medidor_id=medidor_id,
+            defaults={'x': x, 'y': y}
+        )
+    return Response({'status': 'success'})
+
+
+@api_view(['GET'])
+@csrf_exempt
+def obtener_conexiones(request):
+    conexiones = ConexionMedidores.objects.all()
+    serializer = ConexionMedidoresSerializer(conexiones, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@csrf_exempt
+def guardar_conexiones(request):
+    ConexionMedidores.objects.all().delete()  # Opcional: borrar y reemplazar
+    for item in request.data:
+        ConexionMedidores.objects.create(**item)
+    return Response({'status': 'success'})
+
+
 # Verifica si el usuario es administrador
+
 
 def es_admin(user):
     return user.is_superuser

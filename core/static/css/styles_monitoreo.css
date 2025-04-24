@@ -350,3 +350,79 @@ html, body {
 .boton-conexion:hover {
   background: #555;
 }
+
+
+.medidor_sinmodal{
+  width: 250px;
+  /* pointer-events: none; */
+  
+}
+
+
+.medidor_sinmodal h3{
+  justify-content: center;
+  text-align: center;
+  
+}
+
+
+
+/* === CUSTOM LOADER STYLE FOR MONITOREO FOODCORP === */
+#loader-monitoreo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(4px);
+  background-color: rgba(30, 30, 30, 1);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.loader-bar-monitoreo {
+  width: 50%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loader-bar-monitoreo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, #ffe066, #ffde59);
+  animation: slide-monitoreo 1.2s infinite ease-in-out;
+}
+
+@keyframes slide-monitoreo {
+  0% { left: -40%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+.loader-brand-monitoreo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  background: linear-gradient(to right, #fff8d3, #b19755);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+  animation: flicker-monitoreo 2s infinite;
+  text-transform: uppercase;
+}
+
+@keyframes flicker-monitoreo {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
