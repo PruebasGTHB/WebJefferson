@@ -47,10 +47,11 @@ html, body {
 #canvas {
   position: relative;
   width: 10000px;
-  height: 10000px;
+  height: 4000px;
   background: linear-gradient(#d0d4df, #c0c4cf); /* fondo gris suave */
   user-select: none;
   touch-action: none;
+  transform-origin: 0 0;
 }
 
 
@@ -373,62 +374,131 @@ html, body {
 
 
 
-/* === CUSTOM LOADER STYLE FOR MONITOREO FOODCORP === */
-#loader-monitoreo {
+
+
+
+
+
+
+
+
+
+
+
+
+/* === Estilo del Sidebar === */
+#sidebar {
   position: fixed;
+  top: 0;
+  left: -220px; /* oculto */
+  width: 220px;
+  height: 100vh;
+  background: rgba(30, 30, 30, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 4px 0 12px rgba(0,0,0,0.3);
+  color: #f0f0f0;
+  font-family: 'Orbitron', sans-serif;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: left 0.3s ease;
+  z-index: 2000;
+}
+
+
+
+
+#sidebar:hover {
+  left: 0;
+}
+
+.menu-section h4 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #ffe066;
+}
+
+.menu-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-section ul li {
+  padding: 8px 5px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.menu-section ul li:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cerrar-sesion {
+  margin-top: 25vh;
+  text-align: center;
+}
+
+.cerrar-sesion button {
+  background: none;
+  border: 1px solid #ffe066;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #ffe066;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.cerrar-sesion button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-section ul li.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffe066;
+  font-weight: bold;
+}
+
+
+#loader-seccion {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  display: none;
+}
+
+.spinner-seccion {
+  width: 30px;
+  height: 30px;
+  border: 4px solid rgba(255,255,255,0.2);
+  border-top-color: #f9cf33;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+
+
+
+#overlay-canvas {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(4px);
-  background-color: rgba(30, 30, 30, 1);
-  z-index: 1100;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-}
-
-.loader-bar-monitoreo {
-  width: 50%;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  position: relative;
-}
-
-.loader-bar-monitoreo::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -40%;
-  width: 40%;
-  height: 100%;
-  background: linear-gradient(90deg, #ffe066, #ffde59);
-  animation: slide-monitoreo 1.2s infinite ease-in-out;
-}
-
-@keyframes slide-monitoreo {
-  0% { left: -40%; }
-  50% { left: 100%; }
-  100% { left: 100%; }
-}
-
-.loader-brand-monitoreo {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.5rem;
-  font-weight: bold;
-  background: linear-gradient(to right, #fff8d3, #b19755);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-  animation: flicker-monitoreo 2s infinite;
-  text-transform: uppercase;
-}
-
-@keyframes flicker-monitoreo {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  background: linear-gradient(#d0d4df, #c0c4cf);
+  z-index: 100;
+  pointer-events: none;
+  display: none;
 }

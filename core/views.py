@@ -22,7 +22,11 @@ from django.views.decorators.csrf import csrf_exempt
 @api_view(['GET'])
 @csrf_exempt
 def obtener_posiciones(request):
-    posiciones = MedidorPosicion.objects.all()
+    seccion = request.GET.get('seccion')
+    if seccion:
+        posiciones = MedidorPosicion.objects.filter(seccion=seccion)
+    else:
+        posiciones = MedidorPosicion.objects.all()
     serializer = MedidorPosicionSerializer(posiciones, many=True)
     return Response(serializer.data)
 
@@ -209,7 +213,6 @@ def dashboards_admin(request):
     return render(request, 'core/dashboards/dashboards_admin.html')
 
 
-@login_required
 @login_required
 def obtener_consumo_medidor(request, medidor_id):
     energia_total = "--"

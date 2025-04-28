@@ -1,4 +1,3 @@
-// === MONITOREO FUNCIONAL CON LOADER Y MODALES RESTAURADOS ===
 window.onload = function () {
   gsap.registerPlugin(Draggable);
 
@@ -9,34 +8,46 @@ window.onload = function () {
   const loader = document.getElementById("loader-monitoreo");
   loader.style.display = "flex";
 
-  const panzoom = Panzoom(canvas, {
-    canvas: true,
-    contain: false,
-    disablePan: false,
-    disableZoom: true
+  // const panzoom = Panzoom(canvas, {
+  //   canvas: true,
+  //   contain: false,
+  //   disablePan: false,
+  //   disableZoom: false
+  // });
+
+  let panEnCurso = false;
+  let zoomEnCurso = false;
+
+  // Detectar pan
+  canvasWrapper.addEventListener("pointerdown", () => { panEnCurso = true; });
+  canvasWrapper.addEventListener("pointerup", () => { panEnCurso = false; });
+  canvasWrapper.addEventListener("mouseleave", () => { panEnCurso = false; });
+
+  // Detectar zoom
+  canvasWrapper.addEventListener("wheel", e => {
+    zoomEnCurso = true;
+    panzoom.zoomWithWheel(e, { step: 0.08 });
+    setTimeout(() => { zoomEnCurso = false; }, 200); // corta después de 200ms sin scroll
   });
 
-  canvasWrapper.addEventListener("wheel", e => panzoom.zoomWithWheel(e, { step: 0.08 }));
-
   function centrarCanvas() {
-    const wrapperRect = canvasWrapper.getBoundingClientRect();
-    const canvasWidth = canvas.offsetWidth;
-    const canvasHeight = canvas.offsetHeight;
-    const scale = 1;
-    panzoom.zoom(scale, { animate: false });
     requestAnimationFrame(() => {
+      const wrapperRect = canvasWrapper.getBoundingClientRect();
+      const canvasWidth = canvas.offsetWidth;
+      const canvasHeight = canvas.offsetHeight;
       const panX = (wrapperRect.width / 2) - (canvasWidth / 2);
       const panY = (wrapperRect.height / 2) - (canvasHeight / 2);
       panzoom.pan(panX, panY);
+      actualizarConexiones();
     });
   }
 
   function aplicarColor(valor, elemento, tipo) {
     if (!elemento) return;
     let color = isNaN(valor) ? "white" :
-                valor < 0 ? "yellow" :
-                valor === 0 ? "white" :
-                valor >= 10000000 ? "red" : "#00ff88";
+      valor < 0 ? "yellow" :
+        valor === 0 ? "white" :
+          valor >= 10000000 ? "red" : "#00ff88";
     elemento.style.color = color;
     const tipoUnidad = tipo === "energia" ? "KWH" : "KW";
     elemento.setAttribute("title", `El valor de ${tipoUnidad} es ${valor}`);
@@ -174,50 +185,48 @@ window.onload = function () {
     conexiones.forEach(linea => linea.position());
   }
 
+  // ==== INICIO ====
   posicionarMedidoresCentrados(() => {
     setTimeout(() => {
       centrarCanvas();
+
+      Draggable.create(".medidor-card", {
+        type: "x,y",
+        bounds: "#canvas",
+        inertia: false,
+        onPress: function (e) {
+          panzoom.setOptions({ disablePan: true });
+          e.stopPropagation();
+        },
+        onDrag: actualizarConexiones,
+        onRelease: function () {
+          panzoom.setOptions({ disablePan: false });
+          guardarSoloUnMedidor(this.target);
+          guardarConexionesActuales();
+        }
+      });
+
+      document.querySelectorAll('.medidor-card').forEach(card => {
+        card.addEventListener('dblclick', () => {
+          const grafanaUrl = card.getAttribute('data-grafana-url');
+          const medidorNombre = card.querySelector('h3').textContent;
+          const iframe = document.getElementById('grafanaIframe');
+          const modal = document.getElementById('grafanaModal');
+          const loaderModal = document.getElementById('loader');
+          const loaderText = document.getElementById('loader-text');
+          loaderText.textContent = medidorNombre;
+          loaderModal.style.display = 'flex';
+          modal.style.display = 'flex';
+          iframe.src = grafanaUrl;
+          iframe.onload = () => loaderModal.style.display = 'none';
+        });
+      });
+
       conectarMedidoresDesdeBD(() => {
         guardarConexionesActuales();
         loader.style.display = 'none';
       });
     }, 500);
-  });
-
-  Draggable.create(".medidor-card", {
-    type: "x,y",
-    bounds: "#canvas",
-    inertia: false,
-    onPress: function (e) {
-      panzoom.setOptions({ disablePan: true });
-      e.stopPropagation();
-    },
-    onDrag: actualizarConexiones,
-    onRelease: function () {
-      panzoom.setOptions({ disablePan: false });
-      guardarSoloUnMedidor(this.target);
-      guardarConexionesActuales();
-    }
-  });
-
-  // Interacción modal
-  document.querySelectorAll('.medidor-card').forEach(card => {
-    card.addEventListener('dblclick', () => {
-      const grafanaUrl = card.getAttribute('data-grafana-url');
-      const medidorNombre = card.querySelector('h3').textContent;
-
-      const iframe = document.getElementById('grafanaIframe');
-      const modal = document.getElementById('grafanaModal');
-      const loaderModal = document.getElementById('loader');
-      const loaderText = document.getElementById('loader-text');
-
-      loaderText.textContent = medidorNombre;
-      loaderModal.style.display = 'flex';
-      modal.style.display = 'flex';
-      iframe.src = grafanaUrl;
-
-      iframe.onload = () => loaderModal.style.display = 'none';
-    });
   });
 
   window.cerrarModal = function () {
@@ -228,4 +237,13 @@ window.onload = function () {
 
   actualizarMedidores();
   setInterval(actualizarMedidores, 60000);
+
+  // 🔁 Loop constante solo si pan o zoom está activo
+  function bucleConexiones() {
+    if ((panEnCurso || zoomEnCurso) && window.LeaderLine && conexiones.length) {
+      conexiones.forEach(linea => linea.position());
+    }
+    requestAnimationFrame(bucleConexiones);
+  }
+  bucleConexiones();
 };
