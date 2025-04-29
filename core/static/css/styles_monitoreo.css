@@ -178,6 +178,19 @@ html, body {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 .kWh, .kW {
   display: flex;
   align-items: center;
@@ -202,7 +215,7 @@ html, body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: left;
+  text-align: center;
   flex-grow: 1;
   max-width: 100%;
   display: inline-block;
@@ -502,3 +515,10 @@ html, body {
   pointer-events: none;
   display: none;
 }
+
+
+
+
+
+
+

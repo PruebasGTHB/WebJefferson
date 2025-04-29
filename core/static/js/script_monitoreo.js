@@ -42,30 +42,10 @@ window.onload = function () {
     });
   }
 
-  function aplicarColor(valor, elemento, tipo) {
-    if (!elemento) return;
-    let color = isNaN(valor) ? "white" :
-      valor < 0 ? "yellow" :
-        valor === 0 ? "white" :
-          valor >= 10000000 ? "red" : "#00ff88";
-    elemento.style.color = color;
-    const tipoUnidad = tipo === "energia" ? "KWH" : "KW";
-    elemento.setAttribute("title", `El valor de ${tipoUnidad} es ${valor}`);
-    elemento.textContent = valor.toString().length > 6 ? valor.toString().slice(0, 6) + "…" : valor.toString();
-  }
 
-  function actualizarMedidores() {
-    document.querySelectorAll('.medidor-card').forEach(card => {
-      const medidor = card.getAttribute('data-medidor');
-      fetch(`/api/consumos/${medidor}/`)
-        .then(res => res.json())
-        .then(data => {
-          aplicarColor(parseFloat(data.energia_total_kwh), card.querySelector('.energia_total'), "energia");
-          aplicarColor(parseFloat(data.potencia_total_kw), card.querySelector('.potencia_actual'), "potencia");
-        })
-        .catch(err => console.error(`Error actualizando ${medidor}:`, err));
-    });
-  }
+
+
+  
 
   function guardarSoloUnMedidor(card) {
     const id = card.dataset.medidor;

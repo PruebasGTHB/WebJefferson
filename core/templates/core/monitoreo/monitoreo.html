@@ -150,6 +150,7 @@
       inicializarDrag();
       conectarMedidoresDesdeBD();
       configurarModales();
+      actualizarMedidores();
       setTimeout(centrarCanvas, 100);
     })
     .finally(() => {
@@ -296,8 +297,30 @@
   }
   
   function actualizarMedidores() {
-    // Tu código de actualizar medidores si lo tuvieras
+    document.querySelectorAll('.medidor-card').forEach(card => {
+      const medidorId = card.dataset.medidor;
+  
+      fetch(`/api/consumos/${medidorId}/`)  // 🚀 Llamamos a tu vista en Django
+        .then(response => response.json())
+        .then(data => {
+          const energiaElement = card.querySelector('.energia_total');
+          const potenciaElement = card.querySelector('.potencia_actual');
+  
+          if (energiaElement && data.energia_total_kwh !== undefined) {
+            energiaElement.textContent = data.energia_total_kwh;
+          }
+  
+          if (potenciaElement && data.potencia_total_kw !== undefined) {
+            potenciaElement.textContent = data.potencia_total_kw;
+          }
+        })
+        .catch(error => {
+          console.error(`Error al actualizar medidor ${medidorId}:`, error);
+        });
+    });
   }
+
+  
   
   function bucleConexiones() {
     requestAnimationFrame(bucleConexiones);
