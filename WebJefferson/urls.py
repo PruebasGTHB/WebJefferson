@@ -11,11 +11,18 @@ urlpatterns = [
     path('api/guardar_posiciones/', views.guardar_posiciones),
 
     path('api/conexiones/', views.obtener_conexiones),
-    path('api/guardar_conexiones/', views.guardar_conexiones),
+    path('api/guardar_conexiones/', views.guardar_conexiones_generico,
+         name='guardar_conexiones'),
+
 
 
     path('api/consumos/<str:medidor_id>/', views.obtener_consumo_medidor),
 
+    path('api/configuracion/', views.obtener_configuracion),
+
+
+    path('api/bloques/', views.obtener_bloques, name='obtener_bloques'),
+    path('api/guardar_bloques/', views.guardar_bloques, name='guardar_bloques'),
 
     # Panel de administración Django
     path('admin/', admin.site.urls),
@@ -38,7 +45,7 @@ urlpatterns = [
     path('dashboards_view/', views.dashboards_usuario,
          name='dashboards_usuario'),
     path('api/consumos/<str:medidor_id>/',
-         views.obtener_consumo_medidor, name='consumo_medidor'),
+         views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
 
 
     # Rutas admin
@@ -48,7 +55,7 @@ urlpatterns = [
     path('indicadores/', views.indicadores_admin, name='indicadores_admin'),
     path('dashboards/', views.dashboards_admin, name='dashboards_admin'),
     path('api/consumos/<str:medidor_id>/',
-         views.obtener_consumo_medidor, name='consumo_medidor'),
+         views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
 
 
 ]

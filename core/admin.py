@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import MedidorPosicion, ConexionMedidores
+from .models import MedidorPosicion, ConexionElemento, BloqueVisual, ConfiguracionInterfaz
+from .forms import BloqueVisualForm, ConexionElementoSimplificadoForm
+
+##########################################################################################################################################################################################################################
+##########################################################################################################################################################################################################################
 
 
 class MedidorPosicionAdmin(admin.ModelAdmin):
@@ -38,25 +42,75 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
     def desactivar_edicion(self, request, queryset):
         queryset.update(editable=False)
 
+##########################################################################################################################################################################################################################
+##########################################################################################################################################################################################################################
 
 
-class ConexionMedidoresAdmin(admin.ModelAdmin):
-    list_display = ('origen', 'destino', 'start_socket', 'end_socket')
-    list_filter = ('start_socket', 'end_socket')
-    search_fields = (
-        'origen__medidor_id',
-        'origen__titulo',
-        'destino__medidor_id',
-        'destino__titulo',
+class ConexionElementoAdmin(admin.ModelAdmin):
+    form = ConexionElementoSimplificadoForm
+
+    list_display = (
+        'mostrar_origen',
+        'mostrar_destino',
+        'start_socket',
+        'end_socket',
+        'estilo_linea',  # ✅ Añadido para mostrar el estilo en la tabla
     )
-    autocomplete_fields = ['origen', 'destino']
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        form.base_fields['start_socket'].required = False
-        form.base_fields['end_socket'].required = False
-        return form
+    def mostrar_origen(self, obj):
+        return str(obj.origen)
+
+    def mostrar_destino(self, obj):
+        return str(obj.destino)
 
 
+##########################################################################################################################################################################################################################
+##########################################################################################################################################################################################################################
+
+
+class BloqueVisualAdmin(admin.ModelAdmin):
+    form = BloqueVisualForm
+
+    list_display = ('div_id', 'seccion', 'x', 'y', 'width', 'height',
+                    'background', 'border_color', 'text_content', 'editable', 'updated_at')
+    list_filter = ('seccion', 'editable')
+    search_fields = ('div_id', 'seccion', 'background',
+                     'border_color', 'text_content')
+    ordering = ('seccion', 'div_id')
+    readonly_fields = ('updated_at',)
+
+    fieldsets = (
+        ('Identificación y Ubicación', {
+            'fields': ('div_id', 'seccion', 'x', 'y')
+        }),
+        ('Estilos del Div', {
+            'fields': ('width', 'height', 'background', 'border_color', 'border_width', 'border_radius', 'border_style', 'animate_class')
+        }),
+        ('Texto dentro del Div', {
+            'fields': ('text_content', 'text_color', 'font_size', 'text_align', 'text_vertical_align', 'font_weight', 'font_style', 'text_decoration')
+        }),
+        ('Configuración', {
+            'fields': ('editable',),
+        }),
+        ('Tiempos', {
+            'fields': ('updated_at',),
+            'classes': ('collapse',),
+        }),
+    )
+
+##########################################################################################################################################################################################################################
+##########################################################################################################################################################################################################################
+
+
+class ConfiguracionInterfazAdmin(admin.ModelAdmin):
+    list_display = ['mostrar_cuadricula']
+
+
+##########################################################################################################################################################################################################################
+##########################################################################################################################################################################################################################
+
+
+admin.site.register(BloqueVisual, BloqueVisualAdmin)
+admin.site.register(ConfiguracionInterfaz, ConfiguracionInterfazAdmin)
 admin.site.register(MedidorPosicion, MedidorPosicionAdmin)
-admin.site.register(ConexionMedidores, ConexionMedidoresAdmin)
+admin.site.register(ConexionElemento, ConexionElementoAdmin)
