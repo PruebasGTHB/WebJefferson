@@ -1,17 +1,11 @@
 # serializers.py
 from rest_framework import serializers
-from .models import MedidorPosicion, ConexionElemento, BloqueVisual
+from .models import MedidorPosicion, ConexionElemento
 
 
 class MedidorPosicionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedidorPosicion
-        fields = '__all__'
-
-
-class BloqueVisualSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BloqueVisual
         fields = '__all__'
 
 

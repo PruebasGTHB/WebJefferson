@@ -21,8 +21,7 @@ urlpatterns = [
     path('api/configuracion/', views.obtener_configuracion),
 
 
-    path('api/bloques/', views.obtener_bloques, name='obtener_bloques'),
-    path('api/guardar_bloques/', views.guardar_bloques, name='guardar_bloques'),
+
 
     # Panel de administración Django
     path('admin/', admin.site.urls),

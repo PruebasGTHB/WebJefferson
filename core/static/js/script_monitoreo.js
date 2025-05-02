@@ -1,5 +1,5 @@
 let panzoom, conexiones = [];
-  
+let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después del loader
   function cambiarCanvas(seccion) {
   const canvas = document.getElementById('canvas');
   const loader = document.getElementById('loader-seccion');
@@ -39,33 +39,160 @@ let panzoom, conexiones = [];
         card.dataset.medidor = med.medidor_id;
         card.dataset.editable = med.editable ? 'true' : 'false';
         card.dataset.seccion = med.seccion;
-
+        card.dataset.categoria = med.categoria_visual;
+      
         if (med.grafana_url) {
           card.dataset.grafanaUrl = med.grafana_url;
         }
+      
+        // === ✏️ CATEGORÍA TEXTO personalizada ===
+        if (med.categoria_visual === 'texto') {
+          const card = document.createElement('div');
+          card.className = 'medidor-card'; // 👈 Necesario para que se pueda mover
+          card.dataset.medidor = med.medidor_id;
+          card.dataset.editable = med.editable ? 'true' : 'false';
+          card.dataset.seccion = med.seccion;
+          card.dataset.categoria = 'texto'; // por si quieres filtrar después
+        
+          // ⚙️ Estilos personalizados
+          card.style.position = 'absolute';
+          card.style.width = med.width || '100px';
+          card.style.height = med.height || '100px';
+          card.style.background = med.background || 'transparent';
+          card.style.border = `${med.border_width || '0px'} ${med.border_style || 'solid'} ${med.border_color || '#000'}`;
+          card.style.borderRadius = med.border_radius || '0px';
+          card.style.display = 'flex';
+          card.style.flexDirection = 'column';
+          card.style.justifyContent = med.text_vertical_align || 'center';
+          card.style.alignItems = med.text_align === 'left'
+            ? 'flex-start'
+            : med.text_align === 'right'
+            ? 'flex-end'
+            : 'center';
+        
+          card.style.textAlign = med.text_align || 'center';
+          card.style.color = med.text_color || '#000';
+          card.style.fontSize = med.font_size || '16px';
+          card.style.fontWeight = med.font_weight || 'normal';
+          card.style.fontStyle = med.font_style || 'normal';
+          card.style.textDecoration = med.text_decoration || 'none';
+          card.style.padding = '5px';
+          card.style.boxShadow = 'none'; // ✅ quitar sombra
+          card.style.backgroundImage = 'none'; // ✅ quitar gradientes si existen
 
-        const chip = document.createElement(med.tipo === 'C' ? 'div' : 'span');
-        chip.className = `icon-chip ${med.tipo === 'C' ? 'blue' : 'gray'}`;
-        chip.textContent = med.tipo;
-        card.appendChild(chip);
+          card.style.backdropFilter = 'none';           // ❌ Elimina desenfoque
+          card.style.webkitBackdropFilter = 'none';     // ❌ Para compatibilidad con Safari
+          card.style.backgroundImage = 'none';          // ❌ Elimina gradientes heredados
+          card.style.background = 'transparent';        // ✅ Fondo realmente transparente
+          card.style.boxShadow = 'none';                // ❌ Quita sombra si existe
 
-        const h3 = document.createElement('h3');
-        h3.textContent = med.titulo || med.medidor_id;
-        card.appendChild(h3);
-
-        const kWh = document.createElement('div');
-        kWh.className = 'kWh';
-        kWh.innerHTML = `🔄 <span class="valor energia_total"></span><div class="unidad">kWh</div>`;
-        card.appendChild(kWh);
-
-        const kW = document.createElement('div');
-        kW.className = 'kW';
-        kW.innerHTML = `⚡ <span class="valor potencia_actual"></span><div class="unidad">kW</div>`;
-        card.appendChild(kW);
-
+        
+          if (med.text_content) card.innerHTML = med.text_content;
+          if (med.animate_class) card.classList.add(med.animate_class);
+        
+          canvas.appendChild(card);
+          gsap.set(card, { x: med.x ?? 0, y: med.y ?? 0 });
+        
+          return; // ⛔ importante para evitar continuar con lógica de medidores normales
+        }
+      
+        // === 🔷 TÍTULO ===
+        else if (med.categoria_visual === 'titulo') {
+          card.classList.add('tarjeta-navegacion');
+          card.style.backgroundColor = med.fondo_personalizado || '#1769c6';
+      
+          const icono = document.createElement('img');
+          icono.src = '../static/icons/titulo.png';
+          icono.alt = 'Ir a';
+          icono.className = 'icono-navegacion';
+      
+          const h3 = document.createElement('h3');
+          h3.textContent = med.titulo || med.medidor_id;
+      
+          if (med.color_titulo) h3.style.color = med.color_titulo;
+          if (med.tamano_titulo) h3.style.fontSize = med.tamano_titulo;
+          if (med.fuente_titulo) h3.style.fontFamily = med.fuente_titulo;
+          if (med.bold_titulo) h3.style.fontWeight = 'bold';
+      
+          if (med.alineacion_vertical) {
+            card.style.display = 'flex';
+            card.style.flexDirection = 'column';
+            card.style.justifyContent =
+              med.alineacion_vertical === 'top' ? 'flex-start' :
+              med.alineacion_vertical === 'bottom' ? 'flex-end' :
+              'center';
+          }
+      
+          const contenedor = document.createElement('div');
+          contenedor.className = 'titulo-con-icono';
+          contenedor.appendChild(icono);
+          contenedor.appendChild(h3);
+          card.appendChild(contenedor);
+      
+          if (med.seccion_destino) {
+            card.dataset.seccionDestino = med.seccion_destino;
+            card.ondblclick = () => cambiarCanvas(med.seccion_destino);
+          }
+        }
+      
+        // === ⚡ SOLO ENERGÍA o NORMAL ===
+        else {
+          const tipoValido = med.tipo && med.tipo !== '-' && med.tipo !== 'null' && med.tipo !== 'undefined';
+      
+          if (tipoValido) {
+            const chip = document.createElement(med.tipo === 'C' ? 'div' : 'span');
+            chip.className = `icon-chip ${med.tipo === 'C' ? 'blue' : 'gray'}`;
+            chip.textContent = med.tipo;
+      
+            if (med.tipo_descripcion?.trim()) {
+              pendingTooltips.push({ element: chip, content: med.tipo_descripcion });
+            }
+      
+            card.appendChild(chip);
+          }
+      
+          const h3 = document.createElement('h3');
+          h3.textContent = med.titulo || med.medidor_id;
+          h3.classList.add('titulo-medidor');
+      
+          if (med.mostrar_icono_estado) {
+            const icono = document.createElement('img');
+            const iconoTipo = med.tipo_icono_estado || 'check';
+            icono.src = `/static/icons/${iconoTipo}.png`;
+            icono.alt = iconoTipo;
+            icono.className = 'icono-estado_soloenergía';
+      
+            const tituloWrap = document.createElement('div');
+            tituloWrap.className = 'titulo-con-icono_soloenergía';
+            tituloWrap.appendChild(icono);
+            tituloWrap.appendChild(h3);
+            card.appendChild(tituloWrap);
+          } else {
+            card.appendChild(h3);
+          }
+      
+          const kWh = document.createElement('div');
+          kWh.className = 'kWh';
+          kWh.innerHTML = `🔄 <span class="valor energia_total"></span><div class="unidad">kWh</div>`;
+          card.appendChild(kWh);
+      
+          if (med.categoria_visual !== 'energia_sola') {
+            const kW = document.createElement('div');
+            kW.className = 'kW';
+            kW.innerHTML = `⚡ <span class="valor potencia_actual"></span><div class="unidad">kW</div>`;
+            card.appendChild(kW);
+          }
+        }
+      
         canvas.appendChild(card);
         gsap.set(card, { x: med.x ?? 0, y: med.y ?? 0 });
       });
+
+
+
+
+
+
 
 
 
@@ -132,7 +259,7 @@ let panzoom, conexiones = [];
             canvas.appendChild(div);
           });
 
-          inicializarDragBloques();
+
         });
 
 
@@ -145,10 +272,25 @@ let panzoom, conexiones = [];
       setTimeout(centrarCanvas, 100);
     })
     .finally(() => {
+      // ⏳ Espera que el loader desaparezca
       setTimeout(() => {
         loader.style.display = 'none';
         overlay.style.display = 'none';
-      }, 3000); // tiempo de gracia
+
+        // ✅ Ahora activamos todos los tooltips pendientes
+        pendingTooltips.forEach(({ element, content }) => {
+          tippy(element, {
+            content: content,
+            placement: 'top',
+            theme: 'mi-tema',
+            animation: 'shift-away',
+            delay: [0, 0],
+            arrow: true,
+          });
+        });
+
+        pendingTooltips = []; // 🧹 limpieza
+      }, 3000);
     });
 }
 
@@ -160,42 +302,7 @@ function bloquearSidebar(bloquear) {
   });
 }
 
-function inicializarDragBloques() {
-  if (Draggable.get(".bloque-visual")) {
-    Draggable.getAll().forEach(d => d.kill());
-  }
 
-  document.querySelectorAll('.bloque-visual').forEach(div => {
-    const editable = div.dataset.editable === 'true';
-    if (!editable) return;
-
-    Draggable.create(div, {
-      type: "x,y",
-      bounds: "#canvas",
-      inertia: false,
-
-      onPress: () => panzoom.setOptions({ disablePan: true }),
-
-      onDrag: function () {
-        if (snappingActivo) {
-          const snap = snapToGrid(this.x, this.y, 50); // 50 es el tamaño del grid
-          this.endX = snap.x;
-          this.endY = snap.y;
-          this.update();
-        }
-        actualizarConexiones();
-      },
-
-      onRelease: function () {
-        panzoom.setOptions({ disablePan: false });
-        guardarSoloUnBloque(this.target);
-      }
-    });
-
-    const d = Draggable.get(div);
-    if (d) d.update(true);
-  });
-}
 
 
 
@@ -230,7 +337,7 @@ function guardarSoloUnBloque(div) {
 
   let snappingActivo = false;
 
-  function snapToGrid(x, y, gridSize = 50) {
+  function snapToGrid(x, y, gridSize = 2) {
     return {
       x: Math.round(x / gridSize) * gridSize,
       y: Math.round(y / gridSize) * gridSize
@@ -282,12 +389,16 @@ function aplicarCuadriculaSiCorresponde() {
         },
   
         onDrag: function () {
+          const loaderVisible = document.getElementById('loader-seccion').style.display === 'block';
+          if (loaderVisible) return;
+        
           if (snappingActivo) {
-            const snap = snapToGrid(this.x, this.y, 50); // 50px de tamaño de grid
-            this.endX = snap.x;
-            this.endY = snap.y;
-            this.update(); // actualiza la posición visual
+            const snap = snapToGrid(this.x, this.y, 50);
+            this.x = snap.x;
+            this.y = snap.y;
+            this.update(); // 🔁 ajusta visualmente en cada pixel
           }
+        
           actualizarConexiones();
         },
   
@@ -417,7 +528,7 @@ function aplicarCuadriculaSiCorresponde() {
     { color: '#673ab7', size: 4, path: 'arc', endPlug: 'behind' },
   
     // === ⚡ ANIMADAS (15) ===
-    { color: '#e91e63', size: 4, path: 'grid', endPlug: 'arrow3', dash: { animation: true } }, // ani-pink-grid
+    { color: '#343534', size: 3, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-pink-grid
     { color: '#ff9800', size: 4, path: 'arc', endPlug: 'arrow2', dash: { animation: true } },  // ani-orange-arc
     { color: '#2196f3', size: 3, path: 'fluid', endPlug: 'disc', dash: { animation: true } },  // ani-blue-fluid
     { color: '#f44336', size: 5, path: 'straight', endPlug: 'behind', dash: { animation: true } }, // ani-red-straight
@@ -506,6 +617,7 @@ function aplicarCuadriculaSiCorresponde() {
 
   function actualizarMedidores() {
   document.querySelectorAll('.medidor-card').forEach(card => {
+    if (card.dataset.categoria === 'titulo') return; // ⛔ saltar títulos
     const medidorId = card.dataset.medidor;
 
     fetch(`/api/consumos/${medidorId}/`)  // 🚀 Llamamos a tu vista en Django
@@ -552,111 +664,42 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
   }
 }
 
-
-
-// function actualizarEstadoVisualMedidor(card, energia, potencia) {
-//   const energiaVal = energia === "--" ? 0 : parseFloat(energia);
-//   const potenciaVal = potencia === "--" ? 0 : parseFloat(potencia);
-
-//   const h3 = card.querySelector('h3');  // 🎯 Capturamos el h3 interno
-
-//   if (!h3) return; // Seguridad: si no existe, no falla
-
-//   if (energiaVal === 0 && potenciaVal === 0) {
-//     card.style.backgroundColor = "#a83232"; // 🔴 fondo rojo
-//     h3.style.background = "linear-gradient(180deg, #ffffff 0%, #ffffff 100%)"; // 🔥 Fondo rojo para el título
-//     h3.style.webkitBackgroundClip = "text";
-//     h3.style.webkitTextFillColor = "transparent";
-//   // } else if (energiaVal > 1000 || potenciaVal > 100) {
-//   //   card.style.backgroundColor = "#ffcc00"; // 🟡 fondo amarillo
-//   //   h3.style.background = "linear-gradient(180deg, #ffff99 0%, #cccc00 100%)"; // 🔥 Fondo amarillo para el título
-//   //   h3.style.webkitBackgroundClip = "text";
-//   //   h3.style.webkitTextFillColor = "transparent";
-//   } else {
-//     card.style.backgroundColor = "#11c414"; // 🟢 fondo verde
-//     h3.style.background = "linear-gradient(180deg, #000000 0%, #000000 100%)"; // 🔥 Fondo verde para el título
-//     h3.style.webkitBackgroundClip = "text";
-//     h3.style.webkitTextFillColor = "transparent";
-//   }
-// }
-
-
-
-
-
-
-
-  // function actualizarEstadoVisualMedidor(card, energia, potencia) {
-  //   if (energia === "--" || energia <= 0) {
-  //     card.style.backgroundColor = "#a83232"; // 🔴 rojo si apagado
-  //   } else {
-  //     card.style.backgroundColor = "#11c414"; // 🟢 verde si encendido
-  //   }
-  // }
-
-//   function actualizarEstadoVisualMedidor(card, energia, potencia) {
-//   if (potencia === "--" || potencia <= 0) {
-//     card.style.backgroundColor = "#a83232"; // 🔴 rojo si sin potencia
-//   } else {
-//     card.style.backgroundColor = "#32a852"; // 🟢 verde si activo
-//   }
-// }
-
-
-// function actualizarEstadoVisualMedidor(card, energia, potencia) {
-//   const energiaVal = energia === "--" ? 0 : parseFloat(energia);
-//   const potenciaVal = potencia === "--" ? 0 : parseFloat(potencia);
-//   const promedio = (energiaVal + potenciaVal) / 2;
-
-//   if (promedio > 0) {
-//     card.style.backgroundColor = "#32a852"; // 🟢 encendido
-//   } else {
-//     card.style.backgroundColor = "#a83232"; // 🔴 apagado
-//   }
-// }
-
-
-
-//   function actualizarEstadoVisualMedidor(card, energia, potencia) {
-//   const energiaVal = energia === "--" ? 0 : parseFloat(energia);
-//   const potenciaVal = potencia === "--" ? 0 : parseFloat(potencia);
-//   const promedio = (energiaVal + potenciaVal) / 2;
-
-
-
-//   if (energiaVal === 0 && potenciaVal === 0) {
-//     card.style.backgroundColor = "#a83232"; // 🔴 apagado
-//   } else if (energiaVal > 1000 || potenciaVal > 100) {
-//     card.style.backgroundColor = "#ffcc00"; // 🟡 alerta
-//   } else {
-//     card.style.backgroundColor = "#32a852"; // 🟢 encendido
-//   }
-// }
-  
-  
   function bucleConexiones() {
     if (window.LeaderLine && conexiones.length) {
       conexiones.forEach(linea => linea.position());
     }
     requestAnimationFrame(bucleConexiones); // 🚀 constante
   }
+
+
+
+
+  
     
   window.onload = () => {
     document.getElementById('loader-monitoreo').style.display = 'none';
+  
     panzoom = Panzoom(document.getElementById('canvas'), {
       canvas: true,
-      contain: false,
+      contain: 'outside',
       disablePan: false,
       disableZoom: false,
-      minScale: 0.8,
-      maxScale: 1.3,
-      startScale: 1
+      minScale: 0.5,     // 🔻 Qué tanto puedes alejar
+      maxScale: 1.5,     // 🔺 Qué tanto puedes acercar
+      startScale: 0.7    // 🎯 Escala con la que empieza
     });
+  
     const canvasWrapper = document.getElementById('canvas-wrapper');
     canvasWrapper.addEventListener('wheel', panzoom.zoomWithWheel);
-    
-
+  
+    // 🔄 Reiniciar zoom y pan al cargar la página
+    panzoom.zoom(0.7);  // Mismo que startScale
+    panzoom.pan(0, 0);  // Vista al origen
+  
     cambiarCanvas('Vista General Planta');
     aplicarCuadriculaSiCorresponde();
     bucleConexiones();
+    // setInterval(() => {
+    //   actualizarMedidores(); 
+    // }, 5000);
   };

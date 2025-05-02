@@ -14,16 +14,24 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import MedidorPosicion
 from .serializers import MedidorPosicionSerializer
-from .serializers import BloqueVisualSerializer
+
 from .models import ConexionElemento
-from .models import BloqueVisual
+
 from .serializers import ConexionElementoFrontendSerializer
 from django.views.decorators.csrf import csrf_exempt
+
+
+###########################################################################################################
+###########################################################################################################
 
 
 def obtener_configuracion(request):
     config = ConfiguracionInterfaz.objects.first()
     return JsonResponse({'mostrar_cuadricula': config.mostrar_cuadricula if config else False})
+
+
+###########################################################################################################
+###########################################################################################################
 
 
 def obtener_consumo_medidor(request, medidor_id):
@@ -68,6 +76,9 @@ def obtener_consumo_medidor(request, medidor_id):
         "potencia_total_kw": potencia_total,
     })
 
+###########################################################################################################
+###########################################################################################################
+
 
 @api_view(['GET'])
 @csrf_exempt
@@ -110,11 +121,24 @@ def guardar_posiciones(request):
     return Response({'status': 'success'})
 
 
+###########################################################################################################
+###########################################################################################################
+
+
 @api_view(['GET'])
-@csrf_exempt
 def obtener_conexiones(request):
-    conexiones = ConexionElemento.objects.all()
-    serializer = ConexionElementoFrontendSerializer(conexiones, many=True)
+    conexiones_validas = []
+
+    for conexion in ConexionElemento.objects.all():
+        try:
+            _ = conexion.origen  # fuerza la resolución del GenericFK
+            _ = conexion.destino
+            conexiones_validas.append(conexion)
+        except Exception:
+            continue  # salta conexiones con referencias inválidas
+
+    serializer = ConexionElementoFrontendSerializer(
+        conexiones_validas, many=True)
     return Response(serializer.data)
 
 
@@ -149,31 +173,12 @@ def guardar_conexiones_generico(request):
     return Response({'status': 'success'})
 
 
-@api_view(['GET'])
-def obtener_bloques(request):
-    seccion = request.GET.get('seccion')
-    if seccion:
-        bloques = BloqueVisual.objects.filter(seccion=seccion)
-    else:
-        bloques = BloqueVisual.objects.all()
-    serializer = BloqueVisualSerializer(bloques, many=True)
-    return Response(serializer.data)
+###########################################################################################################
+###########################################################################################################
 
 
-@api_view(['POST'])
-def guardar_bloques(request):
-    for item in request.data:
-        div_id = item.get('div_id')
-        if not div_id:
-            continue
-
-        bloque, _ = BloqueVisual.objects.get_or_create(div_id=div_id)
-        for key, value in item.items():
-            setattr(bloque, key, value)
-        bloque.save()
-
-    return Response({'status': 'success'})
-
+###########################################################################################################
+###########################################################################################################
 
 # Verifica si el usuario es administrador
 

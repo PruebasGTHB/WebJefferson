@@ -1,9 +1,8 @@
 from django import forms
-from .models import BloqueVisual
 from .widgets import ColorTextWidget
 from django import forms
 from django.contrib.contenttypes.models import ContentType
-from .models import ConexionElemento, MedidorPosicion, BloqueVisual
+from .models import ConexionElemento, MedidorPosicion
 from collections import defaultdict
 
 #################################################################################################################################################################
@@ -39,11 +38,6 @@ class ConexionElementoSimplificadoForm(forms.ModelForm):
             grupos[medidor.seccion].append(
                 (f"medidorposicion-{medidor.pk}", display))
 
-        for bloque in BloqueVisual.objects.all():
-            display = f"[BLOQUE] {bloque.div_id or '(sin ID)'}"
-            grupos[bloque.seccion].append(
-                (f"bloquevisual-{bloque.pk}", display))
-
         return [(seccion, opciones) for seccion, opciones in sorted(grupos.items())]
 
     def save(self, commit=True):
@@ -68,14 +62,16 @@ class ConexionElementoSimplificadoForm(forms.ModelForm):
 #################################################################################################################################################################
 
 
-class BloqueVisualForm(forms.ModelForm):
+class MedidorPosicionForm(forms.ModelForm):
     class Meta:
-        model = BloqueVisual
+        model = MedidorPosicion
         fields = '__all__'
         widgets = {
+            'fondo_personalizado': ColorTextWidget(),
+            'color_titulo': ColorTextWidget(),
+            'text_color': ColorTextWidget(),
             'background': ColorTextWidget(),
             'border_color': ColorTextWidget(),
-            'text_color': ColorTextWidget(),
         }
 
 #################################################################################################################################################################

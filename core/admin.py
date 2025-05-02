@@ -1,14 +1,18 @@
 from django.contrib import admin
-from .models import MedidorPosicion, ConexionElemento, BloqueVisual, ConfiguracionInterfaz
-from .forms import BloqueVisualForm, ConexionElementoSimplificadoForm
+from .models import MedidorPosicion, ConexionElemento, ConfiguracionInterfaz
+from .forms import MedidorPosicionForm, ConexionElementoSimplificadoForm
 
 ##########################################################################################################################################################################################################################
 ##########################################################################################################################################################################################################################
 
 
 class MedidorPosicionAdmin(admin.ModelAdmin):
-    list_display = ('medidor_id', 'seccion', 'tipo',
-                    'categoria_visual', 'titulo', 'x', 'y', 'editable', 'updated_at')
+    form = MedidorPosicionForm
+
+    list_display = (
+        'medidor_id', 'seccion', 'tipo', 'categoria_visual',
+        'titulo', 'x', 'y', 'editable', 'updated_at'
+    )
     list_filter = ('seccion', 'tipo', 'categoria_visual', 'editable')
     search_fields = ('medidor_id', 'titulo', 'seccion')
     ordering = ('seccion', 'medidor_id')
@@ -16,21 +20,45 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
     actions = ['activar_edicion', 'desactivar_edicion']
 
     fieldsets = (
-        ('Identificación', {
-            'fields': ('medidor_id', 'seccion', 'tipo', 'categoria_visual', 'titulo')
+        ('🧾 Datos Básicos', {
+            'fields': ('medidor_id', 'seccion', 'categoria_visual')
         }),
-        ('Posición en Canvas', {
+        ('📐 Posición en Canvas', {
             'fields': ('x', 'y')
         }),
-        ('Visualización de Datos', {
-            'fields': ('grafana_url',)  # ✅ Solo grafana_url
+        ('⚙️ Configuración de Medidor', {
+            'fields': ('titulo', 'tipo', 'tipo_descripcion', 'grafana_url'),
+            'classes': ('collapse',)
         }),
-        ('Configuración Especial', {
-            'fields': ('editable',),
+        ('🎨 Configuración de Título', {
+            'fields': (
+                'seccion_destino', 'fondo_personalizado', 'color_titulo',
+                'tamano_titulo', 'fuente_titulo', 'bold_titulo',
+                'alineacion_vertical',
+            ),
+            'classes': ('collapse',)
         }),
-        ('Tiempos', {
+        ('🔌 Configuración de Solo Energía', {
+            'fields': (
+                'tipo_icono_estado', 'mostrar_icono_estado'
+            ),
+            'classes': ('collapse',)
+        }),
+        ('🧱 Configuración de Texto', {
+            'fields': (
+                'width', 'height', 'background', 'border_color', 'border_width',
+                'border_radius', 'border_style', 'animate_class', 'text_content',
+                'text_color', 'font_size', 'text_align', 'text_vertical_align',
+                'font_weight', 'font_style', 'text_decoration',
+            ),
+            'classes': ('collapse',)
+        }),
+        ('🔧 Configuración Especial', {
+            'fields': ('editable',)
+        }),
+        ('⏱️ Tiempos', {
             'fields': ('updated_at',),
-            'classes': ('collapse',),
+            'classes': ('collapse',)
         }),
     )
 
@@ -41,6 +69,11 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
     @admin.action(description="🚫 Desactivar edición en los seleccionados")
     def desactivar_edicion(self, request, queryset):
         queryset.update(editable=False)
+
+    class Media:
+        # Si en el futuro necesitas JS personalizado, lo puedes dejar aquí
+        js = ('admin/admin_medidor_condiciones.js',)
+
 
 ##########################################################################################################################################################################################################################
 ##########################################################################################################################################################################################################################
@@ -68,36 +101,6 @@ class ConexionElementoAdmin(admin.ModelAdmin):
 ##########################################################################################################################################################################################################################
 
 
-class BloqueVisualAdmin(admin.ModelAdmin):
-    form = BloqueVisualForm
-
-    list_display = ('div_id', 'seccion', 'x', 'y', 'width', 'height',
-                    'background', 'border_color', 'text_content', 'editable', 'updated_at')
-    list_filter = ('seccion', 'editable')
-    search_fields = ('div_id', 'seccion', 'background',
-                     'border_color', 'text_content')
-    ordering = ('seccion', 'div_id')
-    readonly_fields = ('updated_at',)
-
-    fieldsets = (
-        ('Identificación y Ubicación', {
-            'fields': ('div_id', 'seccion', 'x', 'y')
-        }),
-        ('Estilos del Div', {
-            'fields': ('width', 'height', 'background', 'border_color', 'border_width', 'border_radius', 'border_style', 'animate_class')
-        }),
-        ('Texto dentro del Div', {
-            'fields': ('text_content', 'text_color', 'font_size', 'text_align', 'text_vertical_align', 'font_weight', 'font_style', 'text_decoration')
-        }),
-        ('Configuración', {
-            'fields': ('editable',),
-        }),
-        ('Tiempos', {
-            'fields': ('updated_at',),
-            'classes': ('collapse',),
-        }),
-    )
-
 ##########################################################################################################################################################################################################################
 ##########################################################################################################################################################################################################################
 
@@ -110,7 +113,6 @@ class ConfiguracionInterfazAdmin(admin.ModelAdmin):
 ##########################################################################################################################################################################################################################
 
 
-admin.site.register(BloqueVisual, BloqueVisualAdmin)
 admin.site.register(ConfiguracionInterfaz, ConfiguracionInterfazAdmin)
 admin.site.register(MedidorPosicion, MedidorPosicionAdmin)
 admin.site.register(ConexionElemento, ConexionElementoAdmin)
