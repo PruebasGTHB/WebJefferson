@@ -128,14 +128,14 @@ class MedidorPosicion(models.Model):
     )
     # Estilos generales para bloques
     width = models.CharField(max_length=10, blank=True,
-                             null=True, default='100px')
+                             null=True, default='25px')
     height = models.CharField(
-        max_length=10, blank=True, null=True, default='100px')
+        max_length=10, blank=True, null=True, default='25px')
     background = models.CharField(
         max_length=50, blank=True, null=True, default='transparent')
     border_color = models.CharField(max_length=50, blank=True, null=True)
     border_width = models.CharField(
-        max_length=10, blank=True, null=True, default='0px')
+        max_length=10, blank=True, null=True, default='1px')
     border_radius = models.CharField(
         max_length=10, blank=True, null=True, default='0px')
     border_style = models.CharField(
@@ -283,7 +283,7 @@ class ConexionElemento(models.Model):
     estilo_linea = models.CharField(
         max_length=30,
         choices=ESTILO_LINEA_CHOICES,
-        default='cyan-grid',
+        default='ani-pink-grid',
         blank=True,
         verbose_name="Estilo visual"
     )

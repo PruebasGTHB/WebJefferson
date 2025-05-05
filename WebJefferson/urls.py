@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from core import views
+from core import views_refrigeracion
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -20,8 +21,8 @@ urlpatterns = [
 
     path('api/configuracion/', views.obtener_configuracion),
 
-
-
+    # COMPARTIDAS
+    path('refrigeracion/', views.refrigeracion, name='refrigeracion'),
 
     # Panel de administración Django
     path('admin/', admin.site.urls),
@@ -56,5 +57,6 @@ urlpatterns = [
     path('api/consumos/<str:medidor_id>/',
          views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
 
+    path('api/demanda_refrigeracion/', views_refrigeracion.demanda_refrigeracion),
 
 ]

@@ -33,7 +33,7 @@ html, body {
 }
 #canvas {
   position: relative;
-  width: 10000px;
+  width: 15000px;
   height: 4000px;
   background: transparent;
   user-select: none;
@@ -617,3 +617,14 @@ html, body {
   outline: 2px dashed yellow;
 }
   
+
+
+
+
+
+
+
+#canvas {
+  transform-origin: 0 0;
+  isolation: isolate;  /* 👈 Esto aísla z-index y stacking context */
+}

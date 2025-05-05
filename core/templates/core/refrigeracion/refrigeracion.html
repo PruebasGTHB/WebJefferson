@@ -1,0 +1,130 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refrigeración - Compresores y Túneles</title>
+  <link rel="stylesheet" href="{% static '../static/css/styles_refrigeracion.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{% static '../static/js/refrigeracion.js' %}" defer></script>
+</head>
+<body>
+    <header class="header">
+      <h1>DASHBOARD FOODCORP COMPRESORES Y TÚNELES AMONÍACO</h1>
+    </header>
+  
+    <section class="panel-seleccion">
+      <div class="bloque">
+        <h3>SELECCIONAR COMPRESORES:</h3>
+        <div class="chips" id="compresores-chips">
+          <button class="chip selected">C1</button>
+          <button class="chip selected">C2</button>
+          <button class="chip selected">C3</button>
+          <button class="chip selected">C4</button>
+          <button class="chip selected">C5</button>
+          <button class="chip selected">C6</button>
+          <button class="chip selected">C7</button>
+          <button class="chip selected">C8</button>
+        </div>
+      </div>
+      <div class="bloque">
+        <h3>SELECCIONAR TÚNELES:</h3>
+        <div class="chips" id="tuneles-chips">
+          <button class="chip selected">T1</button>
+          <button class="chip selected">T2</button>
+          <button class="chip selected">T3</button>
+          <button class="chip selected">T4</button>
+          <button class="chip selected">T5</button>
+          <button class="chip selected">T6</button>
+          <button class="chip selected">T7</button>
+          <button class="chip selected">T8</button>
+          <button class="chip selected">T9</button>
+          <button class="chip selected">T10</button>
+        </div>
+      </div>
+      <div class="bloque filtros">
+        <label>FILTRO INICIO: <input type="date" id="filtro-inicio" value="2025-01-01"/></label>
+        <label>FILTRO TÉRMINO: <input type="date" id="filtro-fin" value="2025-02-27"/></label>
+        <button class="btn-descarga">DESCARGAR DATOS</button>
+      </div>
+    </section>
+  
+    <main class="dashboard-grid">
+      <!-- COLUMNA IZQUIERDA - COMPRESORES -->
+      <section class="dashboard-col">
+        <div class="tabla-grafico">
+          <div class="tabla">
+            <h4>VOLTAJE COMPRESORES [V]</h4>
+            <table>
+              <thead><tr><th>TAG</th><th>Min</th><th>Max</th><th>Promedio</th></tr></thead>
+              <tbody id="voltaje-comp-tabla"></tbody>
+            </table>
+          </div>
+          <div class="grafico" id="voltaje-comp-grafico"></div>
+        </div>
+  
+        <div class="tabla-grafico">
+          <div class="tabla">
+            <h4>AMPERAJE COMPRESORES [A]</h4>
+            <table>
+              <thead><tr><th>TAG</th><th>Min</th><th>Max</th><th>Promedio</th></tr></thead>
+              <tbody id="amperaje-comp-tabla"></tbody>
+            </table>
+          </div>
+          <div class="grafico" id="amperaje-comp-grafico"></div>
+        </div>
+  
+        <div class="tabla-grafico">
+          <div class="tabla">
+            <h4>DEMANDA COMPRESORES [kW]</h4>
+            <table>
+              <thead><tr><th>TAG</th><th>Min</th><th>Max</th><th>Promedio</th></tr></thead>
+              <tbody id="demanda-comp-tabla"></tbody>
+            </table>
+          </div>
+          <div class="grafico" id="demanda-comp-grafico"></div>
+        </div>
+      </section>
+  
+      <!-- COLUMNA DERECHA - TÚNELES -->
+      <section class="dashboard-col">
+        <div class="tabla-grafico">
+          <div class="tabla">
+            <h4>VOLTAJE TÚNELES [V]</h4>
+            <table>
+              <thead><tr><th>TAG</th><th>Min</th><th>Max</th><th>Promedio</th></tr></thead>
+              <tbody id="voltaje-tun-tabla"></tbody>
+            </table>
+          </div>
+          <div class="grafico" id="voltaje-tun-grafico"></div>
+        </div>
+  
+        <div class="tabla-grafico">
+          <div class="tabla">
+            <h4>AMPERAJE TÚNELES [A]</h4>
+            <table>
+              <thead><tr><th>TAG</th><th>Min</th><th>Max</th><th>Promedio</th></tr></thead>
+              <tbody id="amperaje-tun-tabla"></tbody>
+            </table>
+          </div>
+          <div class="grafico" id="amperaje-tun-grafico"></div>
+        </div>
+  
+        <div class="tabla-grafico">
+          <div class="tabla">
+            <h4>DEMANDA TÚNELES [kW]</h4>
+            <table>
+              <thead><tr><th>TAG</th><th>Min</th><th>Max</th><th>Promedio</th></tr></thead>
+              <tbody id="demanda-tun-tabla"></tbody>
+            </table>
+          </div>
+          <div class="grafico" id="demanda-tun-grafico"></div>
+        </div>
+      </section>
+    </main>
+  
+    <script src="refrigeracion.js"></script>
+  </body>
+  </html>

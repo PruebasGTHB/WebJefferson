@@ -254,6 +254,12 @@ def dashboards_usuario(request):
     return render(request, 'core/dashboards/dashboards_usuario.html')
 
 
+# COMPARTIDAS
+@login_required
+def refrigeracion(request):
+    return render(request, 'core/refrigeracion/refrigeracion.html')
+
+
 # VISTAS ADMINISTRADOR
 
 

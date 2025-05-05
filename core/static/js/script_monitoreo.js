@@ -56,10 +56,10 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
         
           // ⚙️ Estilos personalizados
           card.style.position = 'absolute';
-          card.style.width = med.width || '100px';
-          card.style.height = med.height || '100px';
+          card.style.width = med.width || '25px';
+          card.style.height = med.height || '25px';
           card.style.background = med.background || 'transparent';
-          card.style.border = `${med.border_width || '0px'} ${med.border_style || 'solid'} ${med.border_color || '#000'}`;
+          card.style.border = `${med.border_width || '1px'} ${med.border_style || 'solid'} ${med.border_color || '#000'}`;
           card.style.borderRadius = med.border_radius || '0px';
           card.style.display = 'flex';
           card.style.flexDirection = 'column';
@@ -695,7 +695,7 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     // 🔄 Reiniciar zoom y pan al cargar la página
     panzoom.zoom(0.7);  // Mismo que startScale
     panzoom.pan(0, 0);  // Vista al origen
-  
+    conectarMedidoresDesdeBD();
     cambiarCanvas('Vista General Planta');
     aplicarCuadriculaSiCorresponde();
     bucleConexiones();
