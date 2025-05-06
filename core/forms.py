@@ -10,35 +10,61 @@ from collections import defaultdict
 
 
 class ConexionElementoSimplificadoForm(forms.ModelForm):
+
+    SECCION_CHOICES = MedidorPosicion.SECCION_CHOICES
+
+    seccion_ui = forms.ChoiceField(
+        label='Sección',
+        choices=SECCION_CHOICES,
+        required=False
+    )
+
     origen_ui = forms.ChoiceField(label='Origen')
     destino_ui = forms.ChoiceField(label='Destino')
 
     class Meta:
         model = ConexionElemento
-        fields = ['origen_ui', 'destino_ui', 'start_socket',
-                  'end_socket', 'estilo_linea', 'descripcion']
+        fields = ['seccion_ui', 'origen_ui', 'destino_ui',
+                  'start_socket', 'end_socket', 'estilo_linea', 'descripcion']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['origen_ui'].choices = self._build_grouped_choices()
-        self.fields['destino_ui'].choices = self._build_grouped_choices()
+        seccion_seleccionada = None
 
-        if self.instance.pk:
-            origen_model = self.instance.origen_content_type.model
-            destino_model = self.instance.destino_content_type.model
-            self.fields['origen_ui'].initial = f"{origen_model}-{self.instance.origen_object_id}"
-            self.fields['destino_ui'].initial = f"{destino_model}-{self.instance.destino_object_id}"
+        if self.data.get('seccion_ui'):
+            seccion_seleccionada = self.data.get('seccion_ui')
+        elif self.initial.get('seccion_ui'):
+            seccion_seleccionada = self.initial['seccion_ui']
 
-    def _build_grouped_choices(self):
+        self.fields['origen_ui'].choices = self._build_grouped_choices(
+            seccion_seleccionada)
+        self.fields['destino_ui'].choices = self._build_grouped_choices(
+            seccion_seleccionada)
+
+    def _build_grouped_choices(self, seccion=None):
         grupos = defaultdict(list)
 
-        for medidor in MedidorPosicion.objects.all():
-            display = f"[MEDIDOR] {medidor.medidor_id or '(sin ID)'}"
-            grupos[medidor.seccion].append(
-                (f"medidorposicion-{medidor.pk}", display))
+        queryset = MedidorPosicion.objects.all()
+        if seccion:
+            queryset = queryset.filter(seccion=seccion)
 
-        return [(seccion, opciones) for seccion, opciones in sorted(grupos.items())]
+        for medidor in queryset.order_by('seccion', 'medidor_id'):
+            grupo = medidor.seccion
+            nombre = medidor.medidor_id or "(sin ID)"
+            tipo = dict(MedidorPosicion.MEDIDOR_TIPO_CHOICES).get(
+                medidor.tipo, 'Sin tipo')
+            categoria = dict(MedidorPosicion.CATEGORIA_CHOICES).get(
+                medidor.categoria_visual, 'Otro')
+            etiqueta = f"[{categoria.capitalize()}] {nombre} ({tipo})"
+            grupos[grupo].append((f"medidorposicion-{medidor.pk}", etiqueta))
+
+        grupos_ordenados = []
+        for seccion, elementos in sorted(grupos.items()):
+            elementos.sort(key=lambda x: x[1])
+            grupos_ordenados.append((seccion, elementos))
+
+        return grupos_ordenados
 
     def save(self, commit=True):
         instance = super().save(commit=False)

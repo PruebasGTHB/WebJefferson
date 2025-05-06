@@ -199,6 +199,10 @@ class ConexionElementoAdmin(admin.ModelAdmin):
     def mostrar_destino(self, obj):
         return str(obj.destino)
 
+    class Media:
+        # 🔁 Esto permite la recarga automática al cambiar sección
+        js = ('admin/conexion_filtro_seccion.js',)
+
 
 class ConfiguracionInterfazAdmin(admin.ModelAdmin):
     list_display = ['mostrar_cuadricula']
