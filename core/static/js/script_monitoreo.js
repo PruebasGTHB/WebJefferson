@@ -753,7 +753,7 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
       contain: 'outside',
       disablePan: false,
       disableZoom: false,
-      minScale: 0.49,
+      minScale: 0.45,
       maxScale: 1.2,
     });
   
@@ -770,6 +770,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('Flota');
+    cambiarCanvas('Planta Harina');
   };
   

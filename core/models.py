@@ -65,7 +65,7 @@ class MedidorPosicion(models.Model):
         ('Empalme 1 Planta Harina', 'Empalme 1 Planta Harina'),
         ('Empalme 2 Planta Congelado', 'Empalme 2 Planta Congelado'),
         ('Empalme 3 Pontón Tor', 'Empalme 3 Pontón Tor'),
-        ('General Flota', 'General Flota'),
+        ('General', 'General'),
         ('Sala de Calderas', 'Sala de Calderas'),
         ('Planta Harina', 'Planta Harina'),
         ('Planta Congelado', 'Planta Congelado'),
@@ -87,13 +87,13 @@ class MedidorPosicion(models.Model):
         'top', 'Arriba'), ('center', 'Centro'), ('bottom', 'Abajo')], default='center')
 
     medidor_id = models.CharField(max_length=50, blank=True, null=True)
-    x = models.FloatField(default=10300.0000)
-    y = models.FloatField(default=5526.5644)
+    x = models.FloatField(default=13800.0000)
+    y = models.FloatField(default=5531.0000)
 
     seccion = models.CharField(
         max_length=100,
         choices=SECCION_CHOICES,
-        default='Flota',
+        default='Planta Harina',
     )
 
     tipo = models.CharField(
@@ -128,11 +128,11 @@ class MedidorPosicion(models.Model):
     )
     # Estilos generales para bloques
     width = models.CharField(max_length=10, blank=True,
-                             null=True, default='200px')
+                             null=True, default='300px')
     height = models.CharField(
         max_length=10, blank=True, null=True, default='50px')
     background = models.CharField(
-        max_length=50, blank=True, null=True, default='transparent')
+        max_length=50, blank=True, null=True, default='white')
     border_color = models.CharField(max_length=50, blank=True, null=True)
     border_width = models.CharField(
         max_length=10, blank=True, null=True, default='1px')
@@ -174,7 +174,7 @@ class MedidorPosicion(models.Model):
         blank=True,
         null=True,
         choices=[('start', 'Arriba'), ('center', 'Centro'), ('end', 'Abajo')],
-        default='center'
+        default='start'
     )
     font_weight = models.CharField(
         max_length=20,
