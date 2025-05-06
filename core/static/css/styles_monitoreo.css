@@ -33,7 +33,7 @@ html, body {
 }
 #canvas {
   position: relative;
-  width: 20000px;
+  width: 25000px;
   height: 10000px;
   background: transparent;
   user-select: none;

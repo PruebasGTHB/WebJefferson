@@ -535,7 +535,7 @@ function aplicarCuadriculaSiCorresponde() {
     // Establece el zoom primero de forma explícita
     panzoom.zoom(zoomDeseado);
   
-    const canvasCenterX = 20000 / 2;
+    const canvasCenterX = 25000 / 2;
     const canvasCenterY = 10000 / 2;
   
     const wrapperRect = wrapper.getBoundingClientRect();
@@ -595,8 +595,8 @@ function aplicarCuadriculaSiCorresponde() {
   
     // === ⚡ ANIMADAS (15) ===
     { color: '#bec1be', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-pink-grid
-    { color: '#ff9800', size: 2, path: 'arc', endPlug: 'arrow2', dash: { animation: true } },  // ani-orange-arc
-    { color: '#2196f3', size: 2, path: 'fluid', endPlug: 'disc', dash: { animation: true } },  // ani-blue-fluid
+    { color: '#f79b40', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } },  // ani-orange-arc
+    { color: '#1f7cce', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } },  // ani-blue-fluid
     { color: '#f44336', size: 2, path: 'straight', endPlug: 'behind', dash: { animation: true } }, // ani-red-straight
     { color: '#009688', size: 2, path: 'magnet', endPlug: 'square', dash: { animation: true } },   // ani-teal-magnet
     { color: '#3f51b5', size: 2, path: 'grid', endPlug: 'arrow1', dash: { animation: true } },     // ani-indigo-dash
@@ -753,7 +753,7 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
       contain: 'outside',
       disablePan: false,
       disableZoom: false,
-      minScale: 0.45,
+      minScale: 0.49,
       maxScale: 1.2,
     });
   
@@ -770,6 +770,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('General Flota');
+    cambiarCanvas('Flota');
   };
   

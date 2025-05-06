@@ -93,7 +93,7 @@ class MedidorPosicion(models.Model):
     seccion = models.CharField(
         max_length=100,
         choices=SECCION_CHOICES,
-        default='General Flota',
+        default='Flota',
     )
 
     tipo = models.CharField(
@@ -113,7 +113,7 @@ class MedidorPosicion(models.Model):
     categoria_visual = models.CharField(
         max_length=50,
         choices=CATEGORIA_CHOICES,
-        default='energia_sola',
+        default='texto',
         blank=True,
     )
 
@@ -263,9 +263,9 @@ class ConexionElemento(models.Model):
         ('amber-path', 'Ámbar Camino'),
 
         # Animadas
-        ('ani-pink-grid', '🌀 Rosado Animado Grid'),
-        ('ani-orange-arc', '🌀 Naranja Animado Arco'),
-        ('ani-blue-fluid', '🌀 Azul Animado Fluido'),
+        ('ani-pink-grid', '🌀 Gris Animado Grid'),
+        ('ani-orange-arc', '🌀 Naranja Animado Grid'),
+        ('ani-blue-fluid', '🌀 Azul Animado Grid'),
         ('ani-red-straight', '🌀 Rojo Animado Recto'),
         ('ani-teal-magnet', '🌀 Teal Magneto'),
         ('ani-indigo-dash', '🌀 Índigo Dash'),
