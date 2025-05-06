@@ -25,7 +25,7 @@ html, body {
   cursor: grab !important;
   user-select: none;
   touch-action: none;
-  background: linear-gradient(#d0d4df, #ffffff); /* fondo gris suave */
+  background: linear-gradient(#f2f2f2, #ffffff); /* fondo gris suave */
 }
 
 #canvas-wrapper:active {
@@ -33,8 +33,8 @@ html, body {
 }
 #canvas {
   position: relative;
-  width: 15000px;
-  height: 5000px;
+  width: 20000px;
+  height: 10000px;
   background: transparent;
   user-select: none;
   touch-action: none;

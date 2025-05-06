@@ -530,13 +530,13 @@ function aplicarCuadriculaSiCorresponde() {
   
   function centrarCanvasRobusto() {
     const wrapper = document.getElementById('canvas-wrapper');
-    const zoomDeseado = 0.6;
+    const zoomDeseado = 0.5;
   
     // Establece el zoom primero de forma explícita
     panzoom.zoom(zoomDeseado);
   
-    const canvasCenterX = 15000 / 2;
-    const canvasCenterY = 5000 / 2;
+    const canvasCenterX = 20000 / 2;
+    const canvasCenterY = 10000 / 2;
   
     const wrapperRect = wrapper.getBoundingClientRect();
     const scale = panzoom.getScale();
@@ -753,7 +753,7 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
       contain: 'outside',
       disablePan: false,
       disableZoom: false,
-      minScale: 0.6,
+      minScale: 0.45,
       maxScale: 1.2,
     });
   
