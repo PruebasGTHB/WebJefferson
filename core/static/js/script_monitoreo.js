@@ -594,21 +594,21 @@ function aplicarCuadriculaSiCorresponde() {
     { color: '#673ab7', size: 4, path: 'arc', endPlug: 'behind' },
   
     // === ⚡ ANIMADAS (15) ===
-    { color: '#343534', size: 3, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-pink-grid
-    { color: '#ff9800', size: 4, path: 'arc', endPlug: 'arrow2', dash: { animation: true } },  // ani-orange-arc
-    { color: '#2196f3', size: 3, path: 'fluid', endPlug: 'disc', dash: { animation: true } },  // ani-blue-fluid
-    { color: '#f44336', size: 5, path: 'straight', endPlug: 'behind', dash: { animation: true } }, // ani-red-straight
-    { color: '#009688', size: 4, path: 'magnet', endPlug: 'square', dash: { animation: true } },   // ani-teal-magnet
-    { color: '#3f51b5', size: 3, path: 'grid', endPlug: 'arrow1', dash: { animation: true } },     // ani-indigo-dash
-    { color: '#ffeb3b', size: 4, path: 'arc', endPlug: 'disc', dash: { animation: true } },        // ani-yellow-blink
-    { color: '#00ffff', size: 5, path: 'fluid', endPlug: 'arrow3', dash: { animation: true } },    // ani-cyan-fade
-    { color: '#4caf50', size: 3, path: 'grid', endPlug: 'dot', dash: { animation: true } },        // ani-green-pulse
-    { color: '#9c27b0', size: 4, path: 'arc', endPlug: 'arrow1', dash: { animation: true } },      // ani-violet-spark
-    { color: '#795548', size: 5, path: 'fluid', endPlug: 'square', dash: { animation: true } },    // ani-brown-glow
-    { color: '#607d8b', size: 4, path: 'arc', endPlug: 'behind', dash: { animation: true } },      // ani-charcoal-arc
-    { color: '#880e4f', size: 3, path: 'fluid', endPlug: 'arrow3', dash: { animation: true } },    // ani-maroon-fluid
-    { color: '#f5f5dc', size: 4, path: 'magnet', endPlug: 'disc', dash: { animation: true } },     // ani-beige-magnet
-    { color: '#001f3f', size: 4, path: 'arc', endPlug: 'arrow2', dash: { animation: true } },      // ani-navy-curve
+    { color: '#bec1be', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-pink-grid
+    { color: '#ff9800', size: 2, path: 'arc', endPlug: 'arrow2', dash: { animation: true } },  // ani-orange-arc
+    { color: '#2196f3', size: 2, path: 'fluid', endPlug: 'disc', dash: { animation: true } },  // ani-blue-fluid
+    { color: '#f44336', size: 2, path: 'straight', endPlug: 'behind', dash: { animation: true } }, // ani-red-straight
+    { color: '#009688', size: 2, path: 'magnet', endPlug: 'square', dash: { animation: true } },   // ani-teal-magnet
+    { color: '#3f51b5', size: 2, path: 'grid', endPlug: 'arrow1', dash: { animation: true } },     // ani-indigo-dash
+    { color: '#ffeb3b', size: 2, path: 'arc', endPlug: 'disc', dash: { animation: true } },        // ani-yellow-blink
+    { color: '#00ffff', size: 2, path: 'fluid', endPlug: 'arrow3', dash: { animation: true } },    // ani-cyan-fade
+    { color: '#4caf50', size: 2, path: 'grid', endPlug: 'dot', dash: { animation: true } },        // ani-green-pulse
+    { color: '#9c27b0', size: 2, path: 'arc', endPlug: 'arrow1', dash: { animation: true } },      // ani-violet-spark
+    { color: '#795548', size: 2, path: 'fluid', endPlug: 'square', dash: { animation: true } },    // ani-brown-glow
+    { color: '#607d8b', size: 2, path: 'arc', endPlug: 'behind', dash: { animation: true } },      // ani-charcoal-arc
+    { color: '#880e4f', size: 2, path: 'fluid', endPlug: 'arrow3', dash: { animation: true } },    // ani-maroon-fluid
+    { color: '#f5f5dc', size: 2, path: 'magnet', endPlug: 'disc', dash: { animation: true } },     // ani-beige-magnet
+    { color: '#001f3f', size: 2, path: 'arc', endPlug: 'arrow2', dash: { animation: true } },      // ani-navy-curve
   ];
   
   const estilosConexionesMap = {
@@ -770,6 +770,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('Vista General Planta');
+    cambiarCanvas('General Flota');
   };
   

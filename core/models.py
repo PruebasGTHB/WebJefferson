@@ -87,13 +87,13 @@ class MedidorPosicion(models.Model):
         'top', 'Arriba'), ('center', 'Centro'), ('bottom', 'Abajo')], default='center')
 
     medidor_id = models.CharField(max_length=50, blank=True, null=True)
-    x = models.FloatField(default=3500.8814)
-    y = models.FloatField(default=1661.5644)
+    x = models.FloatField(default=10300.0000)
+    y = models.FloatField(default=5526.5644)
 
     seccion = models.CharField(
         max_length=100,
         choices=SECCION_CHOICES,
-        default='Vista General Planta',
+        default='General Flota',
     )
 
     tipo = models.CharField(
@@ -113,7 +113,7 @@ class MedidorPosicion(models.Model):
     categoria_visual = models.CharField(
         max_length=50,
         choices=CATEGORIA_CHOICES,
-        default='texto',
+        default='energia_sola',
         blank=True,
     )
 
