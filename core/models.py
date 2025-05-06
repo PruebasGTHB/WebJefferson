@@ -87,8 +87,8 @@ class MedidorPosicion(models.Model):
         'top', 'Arriba'), ('center', 'Centro'), ('bottom', 'Abajo')], default='center')
 
     medidor_id = models.CharField(max_length=50, blank=True, null=True)
-    x = models.FloatField(default=3230.5546)
-    y = models.FloatField(default=1520.8001)
+    x = models.FloatField(default=3500.8814)
+    y = models.FloatField(default=1661.5644)
 
     seccion = models.CharField(
         max_length=100,
@@ -137,7 +137,7 @@ class MedidorPosicion(models.Model):
     border_width = models.CharField(
         max_length=10, blank=True, null=True, default='1px')
     border_radius = models.CharField(
-        max_length=10, blank=True, null=True, default='0px')
+        max_length=10, blank=True, null=True, default='5px')
     border_style = models.CharField(
         max_length=20,
         blank=True,
@@ -181,7 +181,7 @@ class MedidorPosicion(models.Model):
         blank=True,
         null=True,
         choices=[('normal', 'Normal'), ('bold', 'Negrita')],
-        default='normal'
+        default='bold'
     )
     font_style = models.CharField(
         max_length=20,

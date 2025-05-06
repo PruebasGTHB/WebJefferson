@@ -28,11 +28,15 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
   }
 
   canvas.innerHTML = '';
-  
+
+
+  panzoom.zoom(1); 
+  panzoom.pan(0, 0);
 
 
 
-  // canvas.innerHTML = '';
+
+  canvas.innerHTML = '';
 
   fetch(`/api/posiciones/?seccion=${encodeURIComponent(seccion)}`)
     .then(res => res.json())
@@ -87,8 +91,9 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
           card.style.backdropFilter = 'none';           // ❌ Elimina desenfoque
           card.style.webkitBackdropFilter = 'none';     // ❌ Para compatibilidad con Safari
           card.style.backgroundImage = 'none';          // ❌ Elimina gradientes heredados
-          card.style.background = 'transparent';        // ✅ Fondo realmente transparente
+          // card.style.background = 'transparent';        // ✅ Fondo realmente transparente
           card.style.boxShadow = 'none';                // ❌ Quita sombra si existe
+          card.style.background.opacity = '0.1';
 
         
           if (med.text_content) card.innerHTML = med.text_content;
@@ -275,12 +280,13 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
       actualizarMedidores();
 
       
-       // ⏳ Esperar a que DOM termine de renderizar, luego centrar
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          centrarCanvas();
-        });
-      }, 100);
+      // // Asegura centrado después de terminar de añadir TODOS los nodos al DOM
+      // requestAnimationFrame(() => {
+      //   requestAnimationFrame(() => {
+      //     centrarCanvasRobusto(); // ✅ Esperamos 2 frames
+      //   });
+      // });
+
       
 
 
@@ -306,7 +312,14 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
         });
 
         pendingTooltips = []; // 🧹 limpieza
-      }, 3000);
+        
+          // ✅ Ahora sí centramos al final de TODO
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            centrarCanvasRobusto();
+          });
+        });
+      }, 5000);
     });
 }
 
@@ -508,29 +521,56 @@ function aplicarCuadriculaSiCorresponde() {
     window.location.href = '/menu';
   }
   
-  function centrarCanvas() {
+
+
+
+
+
+
+  
+  function centrarCanvasRobusto() {
     const wrapper = document.getElementById('canvas-wrapper');
-    const canvas = document.getElementById('canvas');
+    const zoomDeseado = 0.6;
   
-    requestAnimationFrame(() => {
-      const wrapperRect = wrapper.getBoundingClientRect();
+    // Establece el zoom primero de forma explícita
+    panzoom.zoom(zoomDeseado);
   
-      const zoomDeseado = 0.6;
-      panzoom.zoom(zoomDeseado); // ✅ Primero aplicar el zoom deseado
+    const canvasCenterX = 15000 / 2;
+    const canvasCenterY = 5000 / 2;
   
-      const scale = panzoom.getScale();
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const scale = panzoom.getScale();
   
-      const canvasWidth = canvas.scrollWidth;
-      const canvasHeight = canvas.scrollHeight;
+    // Cálculo de pan para centrar (x, y) relativo al nuevo scale
+    const panX = wrapperRect.width / 2 - canvasCenterX * scale;
+    const panY = wrapperRect.height / 2 - canvasCenterY * scale;
   
-      const panX = (wrapperRect.width / 2 - canvasWidth * scale / 2);
-      const panY = (wrapperRect.height / 2 - canvasHeight * scale / 2);
+    // Usa pan() por separado, NO setTransform()
+    panzoom.pan(panX, panY);
   
-      panzoom.pan(panX, panY); // ✅ Luego centrar el canvas en base al nuevo zoom
-  
-      console.log('🎯 Canvas centrado en:', { panX, panY, scale, canvasWidth, canvasHeight });
-    });
+    console.log("🎯 Canvas centrado", { zoom: zoomDeseado, panX, panY });
   }
+  
+  
+  
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   
   
@@ -705,24 +745,31 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
   window.onload = () => {
     document.getElementById('loader-monitoreo').style.display = 'none';
   
-    panzoom = Panzoom(document.getElementById('canvas'), {
-      canvas: true,
+    const canvas = document.getElementById('canvas');
+    const canvasWrapper = document.getElementById('canvas-wrapper');
+  
+    panzoom = Panzoom(canvas, {
+      canvas: false,
       contain: 'outside',
       disablePan: false,
       disableZoom: false,
-      minScale: 0.5,     // 🔻 Qué tanto puedes alejar
-      maxScale: 1.2,     // 🔺 Qué tanto puedes acercar
+      minScale: 0.6,
+      maxScale: 1.2,
     });
   
-    const canvasWrapper = document.getElementById('canvas-wrapper');
     canvasWrapper.addEventListener('wheel', panzoom.zoomWithWheel);
   
-
-
-    cambiarCanvas('Vista General Planta');
+    // 👇 Usa MutationObserver en lugar de panzoom.on()
+    const observer = new MutationObserver(() => {
+      actualizarConexiones();
+    });
+  
+    observer.observe(canvas, {
+      attributes: true,
+      attributeFilter: ['style'],
+    });
+  
     aplicarCuadriculaSiCorresponde();
-    bucleConexiones();
-    // setInterval(() => {
-    //   actualizarMedidores(); 
-    // }, 5000);
+    cambiarCanvas('Vista General Planta');
   };
+  
