@@ -6,6 +6,8 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
   const overlay = document.getElementById('overlay-canvas');
   const sidebar = document.getElementById('sidebar');
 
+  
+
   // 🚨 Si el loader está visible, no permitimos cambiar sección
   if (loader.style.display === 'block') {
     console.log('⏳ Esperando carga, no se puede cambiar sección todavía.');
@@ -24,11 +26,13 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
     conexiones.forEach(linea => linea.remove());
     conexiones = [];
   }
-  canvas.innerHTML = '';
-  panzoom.zoom(1);  // 🔥 Resetea el zoom a 1 al cambiar de sección
-
 
   canvas.innerHTML = '';
+  
+
+
+
+  // canvas.innerHTML = '';
 
   fetch(`/api/posiciones/?seccion=${encodeURIComponent(seccion)}`)
     .then(res => res.json())
@@ -264,13 +268,25 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
 
 
 
-
+        
       inicializarDrag();
       conectarMedidoresDesdeBD();
       configurarModales();
       actualizarMedidores();
-      setTimeout(centrarCanvas, 100);
+
+      
+       // ⏳ Esperar a que DOM termine de renderizar, luego centrar
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          centrarCanvas();
+        });
+      }, 100);
+      
+
+
     })
+
+      
     .finally(() => {
       // ⏳ Espera que el loader desaparezca
       setTimeout(() => {
@@ -498,15 +514,25 @@ function aplicarCuadriculaSiCorresponde() {
   
     requestAnimationFrame(() => {
       const wrapperRect = wrapper.getBoundingClientRect();
-      const canvasRect = canvas.getBoundingClientRect();
   
-      const scale = panzoom.getScale(); // 🔍 Respetamos el scale actual
-      const panX = (wrapperRect.width / 2 - canvas.offsetWidth / 2 * scale);
-      const panY = (wrapperRect.height / 2 - canvas.offsetHeight / 2 * scale);
+      const zoomDeseado = 0.6;
+      panzoom.zoom(zoomDeseado); // ✅ Primero aplicar el zoom deseado
   
-      panzoom.pan(panX, panY); // ✅ Solo pan, sin modificar escala ni transform
+      const scale = panzoom.getScale();
+  
+      const canvasWidth = canvas.scrollWidth;
+      const canvasHeight = canvas.scrollHeight;
+  
+      const panX = (wrapperRect.width / 2 - canvasWidth * scale / 2);
+      const panY = (wrapperRect.height / 2 - canvasHeight * scale / 2);
+  
+      panzoom.pan(panX, panY); // ✅ Luego centrar el canvas en base al nuevo zoom
+  
+      console.log('🎯 Canvas centrado en:', { panX, panY, scale, canvasWidth, canvasHeight });
     });
   }
+  
+  
   
   // Arreglo con estilos predefinidos de conexiones personalizadas
   const estilosConexiones = [
@@ -685,17 +711,14 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
       disablePan: false,
       disableZoom: false,
       minScale: 0.5,     // 🔻 Qué tanto puedes alejar
-      maxScale: 1.5,     // 🔺 Qué tanto puedes acercar
-      startScale: 0.7    // 🎯 Escala con la que empieza
+      maxScale: 1.2,     // 🔺 Qué tanto puedes acercar
     });
   
     const canvasWrapper = document.getElementById('canvas-wrapper');
     canvasWrapper.addEventListener('wheel', panzoom.zoomWithWheel);
   
-    // 🔄 Reiniciar zoom y pan al cargar la página
-    panzoom.zoom(0.7);  // Mismo que startScale
-    panzoom.pan(0, 0);  // Vista al origen
-    conectarMedidoresDesdeBD();
+
+
     cambiarCanvas('Vista General Planta');
     aplicarCuadriculaSiCorresponde();
     bucleConexiones();

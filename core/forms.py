@@ -76,3 +76,27 @@ class MedidorPosicionForm(forms.ModelForm):
 
 #################################################################################################################################################################
 #################################################################################################################################################################
+
+
+class DuplicarMedidoresForm(forms.Form):
+    nueva_seccion = forms.ChoiceField(
+        choices=MedidorPosicion.SECCION_CHOICES,
+        label='Sección destino',
+    )
+
+
+#################################################################################################################################################################
+#################################################################################################################################################################
+
+
+class AjustarCoordenadasForm(forms.Form):
+    delta_x = forms.CharField(label="Δ X")
+    delta_y = forms.CharField(label="Δ Y")
+
+    def clean_delta_x(self):
+        valor = self.cleaned_data['delta_x'].replace(',', '.')
+        return float(valor)
+
+    def clean_delta_y(self):
+        valor = self.cleaned_data['delta_y'].replace(',', '.')
+        return float(valor)

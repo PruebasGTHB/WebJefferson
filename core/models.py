@@ -113,7 +113,7 @@ class MedidorPosicion(models.Model):
     categoria_visual = models.CharField(
         max_length=50,
         choices=CATEGORIA_CHOICES,
-        default='medidor',
+        default='texto',
         blank=True,
     )
 
@@ -128,9 +128,9 @@ class MedidorPosicion(models.Model):
     )
     # Estilos generales para bloques
     width = models.CharField(max_length=10, blank=True,
-                             null=True, default='25px')
+                             null=True, default='200px')
     height = models.CharField(
-        max_length=10, blank=True, null=True, default='25px')
+        max_length=10, blank=True, null=True, default='50px')
     background = models.CharField(
         max_length=50, blank=True, null=True, default='transparent')
     border_color = models.CharField(max_length=50, blank=True, null=True)

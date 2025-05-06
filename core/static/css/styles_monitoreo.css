@@ -25,7 +25,7 @@ html, body {
   cursor: grab !important;
   user-select: none;
   touch-action: none;
-  background: linear-gradient(#d0d4df, #c0c4cf); /* fondo gris suave */
+  background: linear-gradient(#d0d4df, #ffffff); /* fondo gris suave */
 }
 
 #canvas-wrapper:active {
@@ -34,7 +34,7 @@ html, body {
 #canvas {
   position: relative;
   width: 15000px;
-  height: 4000px;
+  height: 5000px;
   background: transparent;
   user-select: none;
   touch-action: none;
@@ -628,3 +628,7 @@ html, body {
   transform-origin: 0 0;
   isolation: isolate;  /* 👈 Esto aísla z-index y stacking context */
 }
+
+
+
+

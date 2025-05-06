@@ -21,6 +21,56 @@ from .serializers import ConexionElementoFrontendSerializer
 from django.views.decorators.csrf import csrf_exempt
 
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import MedidorPosicion
+from .forms import DuplicarMedidoresForm
+
+
+import re
+from django.http import JsonResponse
+from django.db import connection
+
+###########################################################################################################
+###########################################################################################################
+
+
+def duplicar_medidores_view(request):
+    if request.method == 'POST':
+        form = DuplicarMedidoresForm(request.POST)
+        if form.is_valid():
+            nueva_seccion = form.cleaned_data['nueva_seccion']
+            selected_ids = request.POST.getlist('_selected_action')
+
+            if not selected_ids:
+                messages.warning(request, "No se seleccionó ningún medidor.")
+                return redirect('admin:core_medidorposicion_changelist')
+
+            medidores = MedidorPosicion.objects.filter(id__in=selected_ids)
+
+            nuevos = []
+            for m in medidores:
+                m.pk = None  # Para crear un nuevo objeto
+                m.seccion = nueva_seccion
+                m.save()
+                nuevos.append(m)
+
+            messages.success(
+                request, f"✅ {len(nuevos)} medidor(es) duplicados en '{nueva_seccion}'.")
+            return redirect('admin:core_medidorposicion_changelist')
+    else:
+        # GET: mostrar formulario
+        selected_ids = request.GET.getlist('_selected_action')
+        medidores = MedidorPosicion.objects.filter(id__in=selected_ids)
+        form = DuplicarMedidoresForm()
+        context = {
+            'form': form,
+            'medidores': medidores,
+            'ids': selected_ids,
+        }
+        return render(request, 'core/duplicar_medidores/duplicar_medidores_form.html', context)
+
+
 ###########################################################################################################
 ###########################################################################################################
 
@@ -35,9 +85,15 @@ def obtener_configuracion(request):
 
 
 def obtener_consumo_medidor(request, medidor_id):
-
     energia_total = "--"
     potencia_total = "--"
+
+    # --- Validar medidor_id con regex ---
+    if not re.match(r'^(em\d+|pem3_em\d+|pem6_em\d+)$', medidor_id):
+        return JsonResponse({
+            "energia_total_kwh": energia_total,
+            "potencia_total_kw": potencia_total,
+        })
 
     # --- 1. Datos de energía eléctrica ---
     try:
@@ -45,14 +101,13 @@ def obtener_consumo_medidor(request, medidor_id):
             cursor.execute(f'''
                 SELECT "{medidor_id}" 
                 FROM energia_electrica 
-                WHERE año = 2025 AND mes = 4
+                WHERE año = 2025 AND mes = 5
                 LIMIT 1
             ''')
             row = cursor.fetchone()
             if row and row[0] is not None:
                 energia_total = float(row[0])
-    except Exception as e:
-        # ⚡ No imprimir el error, solo lo ignoramos
+    except Exception:
         pass
 
     # --- 2. Datos de potencia activa ---
@@ -61,21 +116,19 @@ def obtener_consumo_medidor(request, medidor_id):
             cursor.execute(f'''
                 SELECT "{medidor_id}" 
                 FROM potencia_activa 
-                WHERE año = 2025 AND mes = 4
+                WHERE año = 2025 AND mes = 5
                 LIMIT 1
             ''')
             row = cursor.fetchone()
             if row and row[0] is not None:
                 potencia_total = float(row[0])
-    except Exception as e:
-        # ⚡ No imprimir el error, solo lo ignoramos
+    except Exception:
         pass
 
     return JsonResponse({
         "energia_total_kwh": energia_total,
         "potencia_total_kw": potencia_total,
     })
-
 ###########################################################################################################
 ###########################################################################################################
 

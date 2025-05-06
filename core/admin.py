@@ -1,9 +1,16 @@
-from django.contrib import admin
-from .models import MedidorPosicion, ConexionElemento, ConfiguracionInterfaz
-from .forms import MedidorPosicionForm, ConexionElementoSimplificadoForm
+from django.contrib import admin, messages
+from django.shortcuts import render, redirect
+from django.urls import path
+from django.http import HttpResponseRedirect
+from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 
-##########################################################################################################################################################################################################################
-##########################################################################################################################################################################################################################
+from .models import MedidorPosicion, ConexionElemento, ConfiguracionInterfaz
+from .forms import (
+    MedidorPosicionForm,
+    ConexionElementoSimplificadoForm,
+    DuplicarMedidoresForm,
+    AjustarCoordenadasForm,
+)
 
 
 class MedidorPosicionAdmin(admin.ModelAdmin):
@@ -17,7 +24,13 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
     search_fields = ('medidor_id', 'titulo', 'seccion')
     ordering = ('seccion', 'medidor_id')
     readonly_fields = ('updated_at',)
-    actions = ['activar_edicion', 'desactivar_edicion']
+
+    actions = [
+        'ajustar_coordenadas',
+        'activar_edicion',
+        'desactivar_edicion',
+        'duplicar_medidores',
+    ]
 
     fieldsets = (
         ('🧾 Datos Básicos', {
@@ -39,9 +52,7 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
         ('🔌 Configuración de Solo Energía', {
-            'fields': (
-                'tipo_icono_estado', 'mostrar_icono_estado'
-            ),
+            'fields': ('tipo_icono_estado', 'mostrar_icono_estado'),
             'classes': ('collapse',)
         }),
         ('🧱 Configuración de Texto', {
@@ -62,6 +73,55 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
         }),
     )
 
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('duplicar/', self.admin_site.admin_view(self.duplicar_medidores_view),
+                 name='duplicar_medidores'),
+            path('ajustar-coordenadas/', self.admin_site.admin_view(
+                self.ajustar_coordenadas_view), name='ajustar_coordenadas'),
+        ]
+        return custom_urls + urls
+
+    @admin.action(description="📍 Ajustar coordenadas de posición")
+    def ajustar_coordenadas(self, request, queryset):
+        selected = request.POST.getlist(ACTION_CHECKBOX_NAME)
+        if not selected:
+            self.message_user(
+                request, "⚠️ No se seleccionó ningún medidor.", level=messages.WARNING)
+            return redirect('admin:core_medidorposicion_changelist')
+
+        selected_params = '&'.join(f'_selected_action={pk}' for pk in selected)
+        return HttpResponseRedirect(f"/admin/core/medidorposicion/ajustar-coordenadas/?{selected_params}")
+
+    def ajustar_coordenadas_view(self, request):
+        selected_ids = request.GET.getlist('_selected_action')
+        medidores = MedidorPosicion.objects.filter(id__in=selected_ids)
+
+        if request.method == 'POST':
+            form = AjustarCoordenadasForm(request.POST)
+            if form.is_valid():
+                dx = form.cleaned_data['delta_x']
+                dy = form.cleaned_data['delta_y']
+
+                for m in medidores:
+                    m.x += dx
+                    m.y += dy
+                    m.save()
+
+                self.message_user(
+                    request, f"✅ Coordenadas actualizadas en {len(medidores)} medidor(es).", level=messages.SUCCESS)
+                return redirect('admin:core_medidorposicion_changelist')
+        else:
+            form = AjustarCoordenadasForm()
+
+        context = dict(
+            self.admin_site.each_context(request),
+            form=form,
+            medidores=medidores,
+        )
+        return render(request, 'core/ajustar_coordenadas_form/ajustar_coordenadas_form.html', context)
+
     @admin.action(description="✅ Activar edición en los seleccionados")
     def activar_edicion(self, request, queryset):
         queryset.update(editable=True)
@@ -70,24 +130,67 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
     def desactivar_edicion(self, request, queryset):
         queryset.update(editable=False)
 
+    @admin.action(description="📄 Duplicar en otra sección")
+    def duplicar_medidores(self, request, queryset):
+        selected = request.POST.getlist(ACTION_CHECKBOX_NAME)
+        if not selected:
+            self.message_user(
+                request, "⚠️ No se seleccionó ningún medidor.", level=messages.WARNING)
+            return redirect('admin:core_medidorposicion_changelist')
+
+        selected_params = '&'.join(f'_selected_action={pk}' for pk in selected)
+        return redirect(f"/admin/core/medidorposicion/duplicar/?{selected_params}")
+
+    def duplicar_medidores_view(self, request):
+        if request.method == 'POST':
+            form = DuplicarMedidoresForm(request.POST)
+            if form.is_valid():
+                nueva_seccion = form.cleaned_data['nueva_seccion']
+                selected_ids = request.POST.getlist('_selected_action')
+                if not selected_ids:
+                    self.message_user(
+                        request, "⚠️ No se seleccionó ningún medidor.", level=messages.WARNING)
+                    return redirect('admin:core_medidorposicion_changelist')
+
+                medidores = MedidorPosicion.objects.filter(id__in=selected_ids)
+                duplicados = 0
+
+                for m in medidores:
+                    m.pk = None
+                    m.seccion = nueva_seccion
+                    m.save()
+                    duplicados += 1
+
+                self.message_user(
+                    request, f"✅ Se duplicaron {duplicados} medidor(es) en '{nueva_seccion}'.", level=messages.SUCCESS)
+                return redirect('admin:core_medidorposicion_changelist')
+        else:
+            selected_ids = request.GET.getlist('_selected_action')
+            medidores = MedidorPosicion.objects.filter(id__in=selected_ids)
+            form = DuplicarMedidoresForm()
+
+        context = dict(
+            self.admin_site.each_context(request),
+            form=form,
+            medidores=medidores,
+        )
+        return render(request, 'core/duplicar_medidores/duplicar_medidores_form.html', context)
+
     class Media:
-        # Si en el futuro necesitas JS personalizado, lo puedes dejar aquí
         js = ('admin/admin_medidor_condiciones.js',)
 
 
-##########################################################################################################################################################################################################################
-##########################################################################################################################################################################################################################
+admin.site.register(MedidorPosicion, MedidorPosicionAdmin)
 
 
 class ConexionElementoAdmin(admin.ModelAdmin):
     form = ConexionElementoSimplificadoForm
-
     list_display = (
         'mostrar_origen',
         'mostrar_destino',
         'start_socket',
         'end_socket',
-        'estilo_linea',  # ✅ Añadido para mostrar el estilo en la tabla
+        'estilo_linea',
     )
 
     def mostrar_origen(self, obj):
@@ -97,22 +200,9 @@ class ConexionElementoAdmin(admin.ModelAdmin):
         return str(obj.destino)
 
 
-##########################################################################################################################################################################################################################
-##########################################################################################################################################################################################################################
-
-
-##########################################################################################################################################################################################################################
-##########################################################################################################################################################################################################################
-
-
 class ConfiguracionInterfazAdmin(admin.ModelAdmin):
     list_display = ['mostrar_cuadricula']
 
 
-##########################################################################################################################################################################################################################
-##########################################################################################################################################################################################################################
-
-
-admin.site.register(ConfiguracionInterfaz, ConfiguracionInterfazAdmin)
-admin.site.register(MedidorPosicion, MedidorPosicionAdmin)
 admin.site.register(ConexionElemento, ConexionElementoAdmin)
+admin.site.register(ConfiguracionInterfaz, ConfiguracionInterfazAdmin)

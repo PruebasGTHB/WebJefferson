@@ -24,6 +24,10 @@ urlpatterns = [
     # COMPARTIDAS
     path('refrigeracion/', views.refrigeracion, name='refrigeracion'),
 
+    # DUPLICAR MEDIDORES
+    path('admin/core/medidorposicion/duplicar/',
+         views.duplicar_medidores_view, name='duplicar_medidores'),
+
     # Panel de administración Django
     path('admin/', admin.site.urls),
 
@@ -58,5 +62,6 @@ urlpatterns = [
          views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
 
     path('api/demanda_refrigeracion/', views_refrigeracion.demanda_refrigeracion),
+
 
 ]

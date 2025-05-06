@@ -1,0 +1,26 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>Duplicar medidores en otra sección</h1>
+
+  <p><strong>Vas a duplicar {{ medidores|length }} medidor(es).</strong></p>
+
+  <form method="post" style="margin-top: 20px;">
+    {% csrf_token %}
+
+    <div class="form-row">
+      {{ form.nueva_seccion.label_tag }} {{ form.nueva_seccion }}
+    </div>
+
+    {# Aquí renderizamos cada ID seleccionado como input hidden independiente #}
+    {% for id in ids %}
+      <input type="hidden" name="_selected_action" value="{{ id }}">
+    {% endfor %}
+
+    <div class="submit-row" style="margin-top: 20px;">
+      <input type="submit" value="✅ Duplicar ahora" class="default">
+      <a href="{% url 'admin:core_medidorposicion_changelist' %}">Cancelar</a>
+    </div>
+  </form>
+{% endblock %}
