@@ -30,6 +30,67 @@ from .forms import DuplicarMedidoresForm
 import re
 from django.http import JsonResponse
 from django.db import connection
+from django.db.models import Q
+
+
+@api_view(['GET'])
+def obtener_conexiones(request):
+    seccion = request.query_params.get('seccion')
+    if not seccion:
+        return Response([], status=400)
+
+    medidores = MedidorPosicion.objects.filter(
+        seccion=seccion).values_list('id', flat=True)
+    medidor_ids = set(str(mid) for mid in medidores)
+
+    conexiones_validas = []
+
+    for conexion in ConexionElemento.objects.all():
+        try:
+            if (
+                (conexion.origen_object_id in medidor_ids and getattr(conexion.origen, 'seccion', None) == seccion) or
+                (conexion.destino_object_id in medidor_ids and getattr(
+                    conexion.destino, 'seccion', None) == seccion)
+            ):
+                conexiones_validas.append(conexion)
+        except Exception:
+            continue
+
+    serializer = ConexionElementoFrontendSerializer(
+        conexiones_validas, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def guardar_conexiones_generico(request):
+    from .models import ConexionElemento
+    from django.contrib.contenttypes.models import ContentType
+
+    ConexionElemento.objects.all().delete()  # opcional: limpiar antes de guardar
+
+    for item in request.data:
+        # 'medidorposicion' o 'bloquevisual'
+        origen_tipo = item.get('origen_tipo')
+        destino_tipo = item.get('destino_tipo')
+        origen_id = item.get('origen_id')
+        destino_id = item.get('destino_id')
+
+        # Buscar ContentTypes
+        origen_ct = ContentType.objects.get(model=origen_tipo)
+        destino_ct = ContentType.objects.get(model=destino_tipo)
+
+        ConexionElemento.objects.create(
+            origen_content_type=origen_ct,
+            origen_object_id=origen_id,
+            destino_content_type=destino_ct,
+            destino_object_id=destino_id,
+            start_socket=item.get('start_socket', 'bottom'),
+            end_socket=item.get('end_socket', 'top'),
+            descripcion=item.get('descripcion')
+        )
+
+    return Response({'status': 'success'})
+
 
 ###########################################################################################################
 ###########################################################################################################
@@ -176,54 +237,6 @@ def guardar_posiciones(request):
 
 ###########################################################################################################
 ###########################################################################################################
-
-
-@api_view(['GET'])
-def obtener_conexiones(request):
-    conexiones_validas = []
-
-    for conexion in ConexionElemento.objects.all():
-        try:
-            _ = conexion.origen  # fuerza la resolución del GenericFK
-            _ = conexion.destino
-            conexiones_validas.append(conexion)
-        except Exception:
-            continue  # salta conexiones con referencias inválidas
-
-    serializer = ConexionElementoFrontendSerializer(
-        conexiones_validas, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-def guardar_conexiones_generico(request):
-    from .models import ConexionElemento
-    from django.contrib.contenttypes.models import ContentType
-
-    ConexionElemento.objects.all().delete()  # opcional: limpiar antes de guardar
-
-    for item in request.data:
-        # 'medidorposicion' o 'bloquevisual'
-        origen_tipo = item.get('origen_tipo')
-        destino_tipo = item.get('destino_tipo')
-        origen_id = item.get('origen_id')
-        destino_id = item.get('destino_id')
-
-        # Buscar ContentTypes
-        origen_ct = ContentType.objects.get(model=origen_tipo)
-        destino_ct = ContentType.objects.get(model=destino_tipo)
-
-        ConexionElemento.objects.create(
-            origen_content_type=origen_ct,
-            origen_object_id=origen_id,
-            destino_content_type=destino_ct,
-            destino_object_id=destino_id,
-            start_socket=item.get('start_socket', 'bottom'),
-            end_socket=item.get('end_socket', 'top'),
-            descripcion=item.get('descripcion')
-        )
-
-    return Response({'status': 'success'})
 
 
 ###########################################################################################################

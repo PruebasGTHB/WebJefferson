@@ -1,6 +1,8 @@
+let seccionActual = 'Planta Congelado';
 let panzoom, conexiones = [];
 let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después del loader
   function cambiarCanvas(seccion) {
+  seccionActual = seccion;
   const canvas = document.getElementById('canvas');
   const loader = document.getElementById('loader-seccion');
   const overlay = document.getElementById('overlay-canvas');
@@ -646,7 +648,7 @@ function aplicarCuadriculaSiCorresponde() {
   let estiloSeleccionado = 0;
 
   function conectarMedidoresDesdeBD() {
-      fetch('/api/conexiones/')
+      fetch(`/api/conexiones/?seccion=${encodeURIComponent(seccionActual)}`)
       .then(res => res.json())
       .then(conexionesConfig => {
         conexionesConfig.forEach(({ origen_id, destino_id, start_socket, end_socket, seccion, estilo_linea }) => {
@@ -770,6 +772,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('Planta Harina');
+    cambiarCanvas('Planta Congelado');
   };
   
