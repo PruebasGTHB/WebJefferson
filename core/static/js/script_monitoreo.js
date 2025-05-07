@@ -577,8 +577,8 @@ function aplicarCuadriculaSiCorresponde() {
   // Arreglo con estilos predefinidos de conexiones personalizadas
   const estilosConexiones = [
     // === 🧊 ESTÁTICOS (15) ===
-    { color: '#00ffff', size: 4, path: 'grid', endPlug: 'arrow3' },     // cyan-grid
-    { color: '#f44336', size: 5, path: 'straight', endPlug: 'arrow2' }, // red-straight
+    { color: '#1f7cce', size: 2, path: 'grid', endPlug: 'behind' },     // cyan-grid
+    { color: '#faee5d', size: 2, path: 'grid', endPlug: 'behind' }, // red-straight
     { color: '#4caf50', size: 3, path: 'fluid', endPlug: 'arrow1' },    // green-fluid
     { color: '#ff9800', size: 6, path: 'arc', endPlug: 'arrow3' },      // orange-arc
     { color: '#3f51b5', size: 4, path: 'magnet', endPlug: 'disc' },     // blue-magnet
@@ -597,9 +597,9 @@ function aplicarCuadriculaSiCorresponde() {
     { color: '#bec1be', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-pink-grid
     { color: '#f79b40', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } },  // ani-orange-arc
     { color: '#1f7cce', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } },  // ani-blue-fluid
-    { color: '#f44336', size: 2, path: 'straight', endPlug: 'behind', dash: { animation: true } }, // ani-red-straight
-    { color: '#009688', size: 2, path: 'magnet', endPlug: 'square', dash: { animation: true } },   // ani-teal-magnet
-    { color: '#3f51b5', size: 2, path: 'grid', endPlug: 'arrow1', dash: { animation: true } },     // ani-indigo-dash
+    { color: '#ff0000', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-red-straight
+    { color: '#3aff00', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } },   // ani-teal-magnet
+    { color: '#ffec00', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } },     // ani-indigo-dash
     { color: '#ffeb3b', size: 2, path: 'arc', endPlug: 'disc', dash: { animation: true } },        // ani-yellow-blink
     { color: '#00ffff', size: 2, path: 'fluid', endPlug: 'arrow3', dash: { animation: true } },    // ani-cyan-fade
     { color: '#4caf50', size: 2, path: 'grid', endPlug: 'dot', dash: { animation: true } },        // ani-green-pulse
@@ -612,8 +612,8 @@ function aplicarCuadriculaSiCorresponde() {
   ];
   
   const estilosConexionesMap = {
-    "cyan-grid": estilosConexiones[0],
-    "red-straight": estilosConexiones[1],
+    "azul-solido": estilosConexiones[0],
+    "yellow-straight": estilosConexiones[1],
     "green-fluid": estilosConexiones[2],
     "orange-arc": estilosConexiones[3],
     "blue-magnet": estilosConexiones[4],
@@ -627,8 +627,8 @@ function aplicarCuadriculaSiCorresponde() {
     "ani-orange-arc": estilosConexiones[16],
     "ani-blue-fluid": estilosConexiones[17],
     "ani-red-straight": estilosConexiones[18],
-    "ani-teal-magnet": estilosConexiones[19],
-    "ani-indigo-dash": estilosConexiones[20],
+    "ani-green-magnet": estilosConexiones[19],
+    "ani-yellow-dash": estilosConexiones[20],
     "ani-yellow-blink": estilosConexiones[21],
     "ani-cyan-fade": estilosConexiones[22],
     "ani-green-pulse": estilosConexiones[23],

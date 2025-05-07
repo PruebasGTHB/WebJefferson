@@ -4,6 +4,10 @@ from django.urls import path
 from django.http import HttpResponseRedirect
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 
+
+from django.utils.html import format_html
+
+
 from .models import MedidorPosicion, ConexionElemento, ConfiguracionInterfaz
 from .forms import (
     MedidorPosicionForm,
@@ -185,13 +189,18 @@ admin.site.register(MedidorPosicion, MedidorPosicionAdmin)
 
 class ConexionElementoAdmin(admin.ModelAdmin):
     form = ConexionElementoSimplificadoForm
+
     list_display = (
         'mostrar_origen',
+        'seccion_origen',
         'mostrar_destino',
+        'seccion_destino',
         'start_socket',
         'end_socket',
-        'estilo_linea',
+        'estilo_linea_coloreado',
     )
+
+    search_fields = ['descripcion', 'origen_object_id', 'destino_object_id']
 
     def mostrar_origen(self, obj):
         return str(obj.origen)
@@ -199,9 +208,37 @@ class ConexionElementoAdmin(admin.ModelAdmin):
     def mostrar_destino(self, obj):
         return str(obj.destino)
 
+    def seccion_origen(self, obj):
+        return getattr(obj.origen, 'seccion', '—')
+
+    def seccion_destino(self, obj):
+        return getattr(obj.destino, 'seccion', '—')
+
+    def estilo_linea_coloreado(self, obj):
+        nombre = obj.get_estilo_linea_display()
+        color = "cyan" if "cyan" in obj.estilo_linea else "white"
+        return format_html('<span style="color:{};">{}</span>', color, nombre)
+
+    estilo_linea_coloreado.short_description = 'Estilo visual'
+
     class Media:
-        # 🔁 Esto permite la recarga automática al cambiar sección
         js = ('admin/conexion_filtro_seccion.js',)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+
+        class FormWithRequest(form):
+            def __new__(cls2, *args, **kwargs2):
+                kwargs2['request'] = request
+                return form(*args, **kwargs2)
+        return FormWithRequest
+
+    def response_add(self, request, obj, post_url_continue=None):
+        seccion = request.POST.get('seccion_ui')
+        response = super().response_add(request, obj, post_url_continue)
+        if "_addanother" in request.POST and seccion:
+            response['Location'] += f'?seccion_ui={seccion}'
+        return response
 
 
 class ConfiguracionInterfazAdmin(admin.ModelAdmin):

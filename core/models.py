@@ -217,6 +217,7 @@ class MedidorPosicion(models.Model):
 
 
 class ConexionElemento(models.Model):
+
     SOCKET_OPTIONS = [
         ('top', 'Arriba'),
         ('bottom', 'Abajo'),
@@ -251,8 +252,8 @@ class ConexionElemento(models.Model):
     )
 
     ESTILO_LINEA_CHOICES = [
-        ('cyan-grid', 'Cian Grid'),
-        ('red-straight', 'Rojo Recto'),
+        ('azul-solido', 'Azul-solido'),
+        ('yellow-straight', 'Amarillo Solido'),
         ('green-fluid', 'Verde Fluido'),
         ('orange-arc', 'Naranja Arco'),
         ('blue-magnet', 'Azul Magneto'),
@@ -266,9 +267,9 @@ class ConexionElemento(models.Model):
         ('ani-pink-grid', '🌀 Gris Animado Grid'),
         ('ani-orange-arc', '🌀 Naranja Animado Grid'),
         ('ani-blue-fluid', '🌀 Azul Animado Grid'),
-        ('ani-red-straight', '🌀 Rojo Animado Recto'),
-        ('ani-teal-magnet', '🌀 Teal Magneto'),
-        ('ani-indigo-dash', '🌀 Índigo Dash'),
+        ('ani-red-straight', '🌀 Rojo Animado Grid'),
+        ('ani-green-magnet', '🌀 Verde Animado Grid'),
+        ('ani-yellow-dash', '🌀 Amarillo Animado Grid'),
         ('ani-yellow-blink', '🌀 Amarillo Blink'),
         ('ani-cyan-fade', '🌀 Cian Fade'),
         ('ani-green-pulse', '🌀 Verde Pulso'),

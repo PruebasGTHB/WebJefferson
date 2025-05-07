@@ -10,7 +10,6 @@ from collections import defaultdict
 
 
 class ConexionElementoSimplificadoForm(forms.ModelForm):
-
     SECCION_CHOICES = MedidorPosicion.SECCION_CHOICES
 
     seccion_ui = forms.ChoiceField(
@@ -24,23 +23,56 @@ class ConexionElementoSimplificadoForm(forms.ModelForm):
 
     class Meta:
         model = ConexionElemento
-        fields = ['seccion_ui', 'origen_ui', 'destino_ui',
-                  'start_socket', 'end_socket', 'estilo_linea', 'descripcion']
+        fields = [
+            'seccion_ui',
+            'origen_ui',
+            'destino_ui',
+            'start_socket',
+            'end_socket',
+            'estilo_linea',
+            'descripcion'
+        ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, request=None, **kwargs):
+        self.request = request
+        data = kwargs.get('data')
+        self._recarga_por_seccion = False
+
+        if data and data.get('_recarga_por_seccion') == '1':
+            self._recarga_por_seccion = True
+            data = data.copy()
+            data['origen_ui'] = ''
+            data['destino_ui'] = ''
+            kwargs['data'] = data
+
         super().__init__(*args, **kwargs)
 
+        # Determinar sección seleccionada con prioridad: POST > initial > GET
         seccion_seleccionada = None
-
         if self.data.get('seccion_ui'):
             seccion_seleccionada = self.data.get('seccion_ui')
+            self.initial['seccion_ui'] = seccion_seleccionada
         elif self.initial.get('seccion_ui'):
             seccion_seleccionada = self.initial['seccion_ui']
+        elif self.instance.pk and hasattr(self.instance.origen, 'seccion'):
+            seccion_seleccionada = self.instance.origen.seccion
+            self.initial['seccion_ui'] = seccion_seleccionada
+        elif self.request and self.request.GET.get('seccion_ui'):
+            seccion_seleccionada = self.request.GET.get('seccion_ui')
+            self.initial['seccion_ui'] = seccion_seleccionada
 
+        # Construir opciones
         self.fields['origen_ui'].choices = self._build_grouped_choices(
             seccion_seleccionada)
         self.fields['destino_ui'].choices = self._build_grouped_choices(
             seccion_seleccionada)
+
+        # Precargar valores al editar
+        if self.instance.pk:
+            origen_model = self.instance.origen_content_type.model
+            destino_model = self.instance.destino_content_type.model
+            self.fields['origen_ui'].initial = f"{origen_model}-{self.instance.origen_object_id}"
+            self.fields['destino_ui'].initial = f"{destino_model}-{self.instance.destino_object_id}"
 
     def _build_grouped_choices(self, seccion=None):
         grupos = defaultdict(list)
