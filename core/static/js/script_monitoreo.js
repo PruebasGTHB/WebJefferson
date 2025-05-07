@@ -95,7 +95,9 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
           card.style.backgroundImage = 'none';          // ❌ Elimina gradientes heredados
           // card.style.background = 'transparent';        // ✅ Fondo realmente transparente
           card.style.boxShadow = 'none';                // ❌ Quita sombra si existe
-          card.style.background.opacity = '0.1';
+          card.style.zIndex = '0';                // 👈 se posiciona al fondo
+          card.style.pointerEvents = 'none';      // 👈 no bloquea clics
+
 
         
           if (med.text_content) card.innerHTML = med.text_content;
@@ -321,7 +323,7 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
             centrarCanvasRobusto();
           });
         });
-      }, 5000);
+      }, 6000);
     });
 }
 
