@@ -149,3 +149,18 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============================
+# CONFIGURACIÓN DE INFLUXDB
+# ============================
+
+INFLUXDB_URL = "http://190.114.253.120:8086"
+INFLUXDB_TOKEN = "IM2K2piXYPqLzkvlAcbqCBmnd_prmJdA6P09YY_TgHQF7PiuOhl8Q_wgReYwjljsIa3TnWVPd_8biKytMq9_GQ=="
+INFLUXDB_ORG = "Ingero"
+
+# Buckets específicos para cada tipo
+INFLUXDB_BUCKET_COMPRESORES = "Compresores"
+INFLUXDB_BUCKET_TUNELES = "Tuneles"
+
+# Zona horaria para convertir los timestamps de Influx
+INFLUXDB_ZONE = "America/Santiago"

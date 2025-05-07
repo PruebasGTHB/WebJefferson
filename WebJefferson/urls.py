@@ -3,6 +3,9 @@ from django.urls import path
 from core import views
 from core import views_refrigeracion
 from django.contrib.auth.views import LogoutView
+from core.views_refrigeracion import datos_refrigeracion
+
+
 
 urlpatterns = [
     # Ruta raíz redirige según tipo de usuario
@@ -60,8 +63,6 @@ urlpatterns = [
     path('dashboards/', views.dashboards_admin, name='dashboards_admin'),
     path('api/consumos/<str:medidor_id>/',
          views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
-
-    path('api/demanda_refrigeracion/', views_refrigeracion.demanda_refrigeracion),
-
-
+     path('api/datos_refrigeracion/', datos_refrigeracion),
+    path('api/datos_refrigeracion/', views_refrigeracion.datos_refrigeracion),
 ]

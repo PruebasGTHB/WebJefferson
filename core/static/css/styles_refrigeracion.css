@@ -1,157 +1,168 @@
-/* Reset y tipografía */
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f8f8;
-    color: #111;
-  }
-  
-  /* Encabezado */
-  .header {
-    background-color: #0072ce;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-  }
-  
-  /* Panel de selección */
-  .panel-seleccion {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 20px 30px;
-    align-items: center;
-    background-color: #fff;
-    border-bottom: 2px solid #ccc;
-  }
-  
-  .bloque {
-    margin: 10px;
-  }
-  
-  .bloque h3 {
-    font-size: 16px;
-    margin-bottom: 8px;
-  }
-  
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-  }
-  
-  .chip {
-    padding: 6px 12px;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    background-color: #e4e4e4;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .chip.selected {
-    background-color: #ffcc00;
-    border-color: #e6b800;
-    font-weight: bold;
-  }
-  
-  .filtros label {
-    font-size: 14px;
-    margin-right: 10px;
-  }
-  
-  .filtros input[type="date"] {
-    margin-left: 5px;
-    margin-right: 15px;
-    padding: 3px 6px;
-    border-radius: 4px;
-    border: 1px solid #aaa;
-  }
-  
-  .btn-descarga {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .btn-descarga:hover {
-    background-color: #45a049;
-  }
-  
-  /* Dashboard */
-  .dashboard-grid {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 20px 30px;
-    gap: 30px;
-  }
-  
-  .dashboard-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  /* Tabla y gráfico lado a lado */
-  .tabla-grafico {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  
-  /* Tablas */
-  .tabla {
-    flex: 1;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    min-width: 280px;
-  }
-  
-  .tabla h4 {
-    font-size: 14px;
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
-  
-  .tabla table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-  
-  .tabla th,
-  .tabla td {
-    border: 1px solid #bbb;
-    padding: 4px 6px;
-    text-align: center;
-  }
-  
-  .tabla th {
-    background-color: #f0f0f0;
-    font-weight: bold;
-  }
-  
-  /* Contenedor del gráfico */
-  .grafico {
-    flex: 1.5;
-    min-height: 150px;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f8f8;
+  color: #111;
+}
+
+.header {
+  background-color: #0072ce;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.panel-seleccion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px 30px;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 2px solid #ccc;
+}
+
+.bloque {
+  margin: 10px;
+}
+
+.bloque h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip, .chip-action {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid #999;
+  background-color: #eee;
+}
+
+.chip.selected {
+  background-color: #ffcc00;
+  border-color: #e6b800;
+  font-weight: bold;
+}
+
+.chip-action {
+  font-weight: bold;
+  background-color: #ddd;
+  color: #333;
+}
+
+.chip-action:hover {
+  background-color: #bbb;
+}
+
+.filtros label {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.filtros input[type="date"] {
+  margin-left: 5px;
+  margin-right: 15px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+}
+
+.btn-descarga {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-descarga:hover {
+  background-color: #45a049;
+}
+
+.dashboard-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px 30px;
+  gap: 30px;
+}
+
+.dashboard-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.tabla-grafico {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.tabla {
+  flex: 1;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-width: 280px;
+}
+
+.tabla h4 {
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.tabla table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.tabla th,
+.tabla td {
+  border: 1px solid #bbb;
+  padding: 4px 6px;
+  text-align: center;
+}
+
+.tabla th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.grafico {
+  flex: 1.5;
+  min-height: 150px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.grafico canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  will-change: transform;
+  transform: translateZ(0);
+}

@@ -1,75 +1,123 @@
-from django.db import connection
 from django.http import JsonResponse
-from datetime import datetime
-from collections import defaultdict
+from django.views.decorators.csrf import csrf_exempt
+from influxdb_client import InfluxDBClient
+from django.conf import settings
+import pytz
+import traceback
 
+ZONA_LOCAL = pytz.timezone(settings.INFLUXDB_ZONE)
 
-from rest_framework.decorators import api_view
+@csrf_exempt
+def datos_refrigeracion(request):
+    try:
+        inicio = request.GET.get("inicio", "2025-01-01")
+        fin = request.GET.get("fin", "2025-01-31")
 
+        compresores = ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8"]
+        tuneles = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10"]
+        campos = {
+            "voltaje": "VOLTAJE_FASES_PROMEDIO",
+            "amperaje": "CORRIENTE_PROMEDIO",
+            "demanda": "POTENCIA_ACTIVA_TOTAL"
+        }
 
-@api_view(['GET'])
-def demanda_refrigeracion(request):
-    fecha_inicio = request.GET.get('inicio', '2025-01-01')
-    fecha_fin = request.GET.get('fin', '2025-02-27')
+        def metricas_por_tag(bucket, tag_key, tags, field):
+            resultados = []
+            with InfluxDBClient(
+                url=settings.INFLUXDB_URL,
+                token=settings.INFLUXDB_TOKEN,
+                org=settings.INFLUXDB_ORG
+            ) as client:
+                query_api = client.query_api()
+                for tag in tags:
+                    query = f'''
+                    from(bucket: "{bucket}")
+                      |> range(start: time(v: "{inicio}T00:00:00Z"), stop: time(v: "{fin}T23:59:59Z"))
+                      |> filter(fn: (r) =>
+                        r._measurement == "sensor_data" and
+                        r["_field"] == "{field}" and
+                        r["{tag_key}"] == "{tag}"
+                      )
+                      |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)
+                    '''
+                    tables = query_api.query(query)
+                    fechas = []
+                    valores = []
+                    for table in tables:
+                        for record in table.records:
+                            local_time = record.get_time().astimezone(ZONA_LOCAL).strftime("%Y-%m-%d %H:%M")
+                            fechas.append(local_time)
+                            valores.append(record.get_value())
+                    if valores:
+                        resultados.append({
+                            "tag": tag,
+                            "fechas": fechas,
+                            "valores": valores,
+                            "min": round(min(valores), 2),
+                            "max": round(max(valores), 2),
+                            "prom": round(sum(valores) / len(valores), 2)
+                        })
+            return resultados
 
-    compresores = ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8']
-    tuneles = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10']
+        def grafico_por_pivot(bucket, tag_key, field):
+            from pandas import DataFrame
+            query = f'''
+            from(bucket: "{bucket}")
+              |> range(start: time(v: "{inicio}T00:00:00Z"), stop: time(v: "{fin}T23:59:59Z"))
+              |> filter(fn: (r) =>
+                r._measurement == "sensor_data" and
+                r._field == "{field}"
+              )
+              |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)
+              |> pivot(rowKey: ["_time"], columnKey: ["{tag_key}"], valueColumn: "_value")
+            '''
 
-    def get_metric_data(tags, tabla, campo_valor):
-        resultados = []
-        for tag in tags:
-            with connection.cursor() as cursor:
-                cursor.execute(f'''
-                    SELECT fecha, {campo_valor}
-                    FROM {tabla}
-                    WHERE tag = %s
-                    AND fecha BETWEEN %s AND %s
-                    ORDER BY fecha
-                ''', [tag, fecha_inicio, fecha_fin])
+            with InfluxDBClient(
+                url=settings.INFLUXDB_URL,
+                token=settings.INFLUXDB_TOKEN,
+                org=settings.INFLUXDB_ORG
+            ) as client:
+                df = client.query_api().query_data_frame(query)
 
-                rows = cursor.fetchall()
-                valores = [float(r[1]) for r in rows if r[1] is not None]
-                fechas = [r[0].strftime('%Y-%m-%d %H:%M') for r in rows]
+            if df.empty:
+                return {"fechas": [], "series": []}
 
-                resultado = {
-                    'tag': tag,
-                    'fechas': fechas,
-                    'valores': valores,
-                    'min': round(min(valores), 2) if valores else 0,
-                    'max': round(max(valores), 2) if valores else 0,
-                    'prom': round(sum(valores) / len(valores), 2) if valores else 0,
-                }
-                resultados.append(resultado)
-        return resultados
+            df["_time"] = df["_time"].dt.tz_convert(ZONA_LOCAL)
+            fechas = df["_time"].dt.strftime("%Y-%m-%d %H:%M").tolist()
 
-    def agrupar_por_tag(metricas):
-        agrupados = defaultdict(dict)
-        for metrica in ['voltaje', 'amperaje', 'demanda']:
-            for dato in metricas[metrica]:
-                tag = dato['tag']
-                agrupados[tag]['tag'] = tag
-                agrupados[tag]['fechas'] = dato['fechas']
-                agrupados[tag][metrica] = {
-                    'valores': dato['valores'],
-                    'min': dato['min'],
-                    'max': dato['max'],
-                    'prom': dato['prom']
-                }
-        return list(agrupados.values())
+            columnas = [col for col in df.columns if col not in ["_start", "_stop", "_time", "result", "table"]]
+            series = []
+            for col in columnas:
+                valores = df[col].tolist()
+                if all(v is None for v in valores):
+                    continue
+                series.append({"nombre": col, "valores": valores})
 
-    metricas_comp = {
-        'voltaje': get_metric_data(compresores, 'log_refrigeracion', 'voltaje'),
-        'amperaje': get_metric_data(compresores, 'log_refrigeracion', 'amperaje'),
-        'demanda': get_metric_data(compresores, 'log_refrigeracion', 'demanda_kw'),
-    }
+            return {"fechas": fechas, "series": series}
 
-    metricas_tun = {
-        'voltaje': get_metric_data(tuneles, 'log_refrigeracion', 'voltaje'),
-        'amperaje': get_metric_data(tuneles, 'log_refrigeracion', 'amperaje'),
-        'demanda': get_metric_data(tuneles, 'log_refrigeracion', 'demanda_kw'),
-    }
+        metricas_comp = {
+            "voltaje": metricas_por_tag("Compresores", "topic", compresores, campos["voltaje"]),
+            "amperaje": metricas_por_tag("Compresores", "topic", compresores, campos["amperaje"]),
+            "demanda": metricas_por_tag("Compresores", "topic", compresores, campos["demanda"]),
+        }
 
-    return JsonResponse({
-        'compresores': agrupar_por_tag(metricas_comp),
-        'tuneles': agrupar_por_tag(metricas_tun),
-    }, safe=False)
+        metricas_tun = {
+            "voltaje": metricas_por_tag("Tuneles", "TAG", tuneles, campos["voltaje"]),
+            "amperaje": metricas_por_tag("Tuneles", "TAG", tuneles, campos["amperaje"]),
+            "demanda": metricas_por_tag("Tuneles", "TAG", tuneles, campos["demanda"]),
+        }
+
+        return JsonResponse({
+            "compresores": metricas_comp,
+            "tuneles": metricas_tun,
+            "grafico_voltaje_compresores": grafico_por_pivot("Compresores", "topic", campos["voltaje"]),
+            "grafico_amperaje_compresores": grafico_por_pivot("Compresores", "topic", campos["amperaje"]),
+            "grafico_demanda_compresores": grafico_por_pivot("Compresores", "topic", campos["demanda"]),
+            "grafico_voltaje_tuneles": grafico_por_pivot("Tuneles", "TAG", campos["voltaje"]),
+            "grafico_amperaje_tuneles": grafico_por_pivot("Tuneles", "TAG", campos["amperaje"]),
+            "grafico_demanda_tuneles": grafico_por_pivot("Tuneles", "TAG", campos["demanda"]),
+        }, safe=False)
+
+    except Exception as e:
+        print("❌ Error en datos_refrigeracion:", traceback.format_exc())
+        return JsonResponse({"error": str(e)}, status=500)
