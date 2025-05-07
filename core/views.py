@@ -144,19 +144,30 @@ def obtener_configuracion(request):
 ###########################################################################################################
 ###########################################################################################################
 
-
+@api_view(['GET'])
 def obtener_consumo_medidor(request, medidor_id):
+    seccion = request.GET.get('seccion')
     energia_total = "--"
     potencia_total = "--"
 
-    # --- Validar medidor_id con regex ---
-    if not re.match(r'^(em\d+|pem3_em\d+|pem6_em\d+)$', medidor_id):
+    # --- Validar medidor_id (insensible a mayúsculas) ---
+    if not re.match(r'^(em\d+|pem3_em\d+|pem6_em\d+)$', medidor_id.lower()):
         return JsonResponse({
             "energia_total_kwh": energia_total,
             "potencia_total_kw": potencia_total,
         })
 
-    # --- 1. Datos de energía eléctrica ---
+    # --- Validar si el medidor pertenece a la sección (si se envió) ---
+    if seccion:
+        existe = MedidorPosicion.objects.filter(
+            medidor_id=medidor_id, seccion=seccion).exists()
+        if not existe:
+            return JsonResponse({
+                "energia_total_kwh": energia_total,
+                "potencia_total_kw": potencia_total,
+            })
+
+    # --- 1. Energía eléctrica ---
     try:
         with connection.cursor() as cursor:
             cursor.execute(f'''
@@ -171,7 +182,7 @@ def obtener_consumo_medidor(request, medidor_id):
     except Exception:
         pass
 
-    # --- 2. Datos de potencia activa ---
+    # --- 2. Potencia activa ---
     try:
         with connection.cursor() as cursor:
             cursor.execute(f'''
@@ -190,19 +201,51 @@ def obtener_consumo_medidor(request, medidor_id):
         "energia_total_kwh": energia_total,
         "potencia_total_kw": potencia_total,
     })
+
+
 ###########################################################################################################
 ###########################################################################################################
 
 
+# @api_view(['GET'])
+# @csrf_exempt
+# def obtener_posiciones(request):
+#     seccion = request.GET.get('seccion')
+#     if seccion:
+#         posiciones = MedidorPosicion.objects.filter(seccion=seccion)
+#     else:
+#         posiciones = MedidorPosicion.objects.all()
+#     serializer = MedidorPosicionSerializer(posiciones, many=True)
+#     return Response(serializer.data)
+
+
+# SUPUESTA API MEJORA ABAJO
 @api_view(['GET'])
 @csrf_exempt
 def obtener_posiciones(request):
-    seccion = request.GET.get('seccion')
-    if seccion:
-        posiciones = MedidorPosicion.objects.filter(seccion=seccion)
-    else:
-        posiciones = MedidorPosicion.objects.all()
-    serializer = MedidorPosicionSerializer(posiciones, many=True)
+    seccion = request.query_params.get('seccion')
+    if not seccion:
+        return Response([], status=400)
+
+    # Solo los campos realmente usados por el frontend
+    campos_utilizados = [
+        'id', 'medidor_id', 'x', 'y', 'seccion', 'categoria_visual',
+        'tipo', 'tipo_descripcion', 'titulo', 'grafana_url',
+        'editable', 'width', 'height', 'background', 'border_color',
+        'border_width', 'border_radius', 'border_style', 'animate_class',
+        'text_content', 'text_color', 'font_size', 'text_align',
+        'text_vertical_align', 'font_weight', 'font_style', 'text_decoration',
+        'mostrar_icono_estado', 'tipo_icono_estado', 'fondo_personalizado',
+        'color_titulo', 'tamano_titulo', 'fuente_titulo', 'bold_titulo',
+        'alineacion_vertical', 'seccion_destino',
+    ]
+
+    # Optimizamos la consulta con only() para reducir carga de memoria
+    queryset = MedidorPosicion.objects.filter(
+        seccion=seccion
+    ).only(*campos_utilizados).order_by('categoria_visual')
+
+    serializer = MedidorPosicionSerializer(queryset, many=True)
     return Response(serializer.data)
 
 

@@ -774,6 +774,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('Planta Congelado');
+    cambiarCanvas('Vista General Planta');
   };
   
