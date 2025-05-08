@@ -112,8 +112,22 @@ function inicializarTarjetas() {
 }
 
 function inicializarFecha() {
-  document.getElementById("fecha-inicio").addEventListener("change", cargarDatos);
-  document.getElementById("fecha-fin").addEventListener("change", cargarDatos);
+  const hoy = new Date();
+  const hoyISO = hoy.toISOString().split("T")[0];
+
+  const inicioInput = document.getElementById("fecha-inicio");
+  const finInput = document.getElementById("fecha-fin");
+
+  if (inicioInput && !inicioInput.value) {
+    inicioInput.value = "2025-01-01"; // o cualquier fecha por defecto deseada
+  }
+
+  if (finInput) {
+    finInput.value = hoyISO;  // <---- Establece la fecha de fin como hoy
+  }
+
+  inicioInput.addEventListener("change", cargarDatos);
+  finInput.addEventListener("change", cargarDatos);
 }
 
 function cargarDatos() {
