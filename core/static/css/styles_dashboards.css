@@ -31,8 +31,8 @@
     grid-template-rows: 20rem 20rem 20rem;    /* 3 filas iguales */
     grid-template-areas: 
         "dashboard1 dashboard2"
-        "dashboard4 dashboard5"
-        "dashboard3 dashboard6";
+        "dashboard4 dashboard3"
+        "dashboard5 dashboard6";
     width: 100vw;  /* ocupar todo el ancho de la pantalla */
     height: auto; /* ocupar todo el alto de la pantalla */
     gap: 10px;
