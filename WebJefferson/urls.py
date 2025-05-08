@@ -6,6 +6,7 @@ from django.contrib.auth.views import LogoutView
 from core.views_refrigeracion import datos_refrigeracion
 
 
+
 urlpatterns = [
     # Ruta raíz redirige según tipo de usuario
     path('', views.home_redirect, name='home_redirect'),
@@ -50,8 +51,8 @@ urlpatterns = [
          name='indicadores_usuario'),
     path('dashboards_view/', views.dashboards_usuario,
          name='dashboards_usuario'),
-    #     path('api/consumos/<str:medidor_id>/',
-    #          views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
+    path('api/consumos/<str:medidor_id>/',
+         views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
 
 
     # Rutas admin
@@ -60,8 +61,10 @@ urlpatterns = [
     path('constantes/', views.constantes_admin, name='constantes_admin'),
     path('indicadores/', views.indicadores_admin, name='indicadores_admin'),
     path('dashboards/', views.dashboards_admin, name='dashboards_admin'),
-    #     path('api/consumos/<str:medidor_id>/',
-    #          views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
-    path('api/datos_refrigeracion/', datos_refrigeracion),
+    path('api/consumos/<str:medidor_id>/',
+         views.obtener_consumo_medidor, name='obtener_consumo_medidor'),
+     path('api/datos_refrigeracion/', datos_refrigeracion),
     path('api/datos_refrigeracion/', views_refrigeracion.datos_refrigeracion),
+    path('api/ultima_potencia/', views_refrigeracion.ultima_potencia),
+    path('api/descargar_datos/', views_refrigeracion.descargar_datos)
 ]
