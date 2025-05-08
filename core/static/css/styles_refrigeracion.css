@@ -31,7 +31,6 @@ html, body {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 20px 30px;
   align-items: flex-start;
   background-color: #ced1da;
   border-bottom: 2px solid #d1d9e6;
@@ -39,9 +38,10 @@ html, body {
 
 /* BLOQUES DENTRO DE SELECCIÓN */
 .bloque {
-  margin: 10px;
+  margin: 15px;
   flex: 1 1 45%;
   min-width: 0;
+
 }
 
 .filtro{
@@ -51,14 +51,14 @@ html, body {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: bold;
   margin-bottom: 8px;
 }
 
 .grupo-titulo h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 10px;
   font-weight: bold;
 }
 
@@ -72,14 +72,14 @@ html, body {
 
 
 .card-equipo {
-  width: 80px; /* más estrechas */
+  width: 60px; /* más estrechas */
   background-color: #f0f4f9;
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 4px;
   text-align: center;
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-  font-size: 11px;
+  font-size: 8px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -89,7 +89,7 @@ html, body {
 }
 
 .card-equipo .card-header {
-  font-size: 10px;
+  font-size: 8px;
   margin-bottom: 2px;
   color: black;
   line-height: 1.1;
@@ -113,12 +113,12 @@ html, body {
   background-color: #bababa;
   color: white;
   padding: 1px 4px;
-  font-size: 10px;
+  font-size: 7px;
   border-radius: 3px;
 }
 
 .card-equipo .modo {
-  font-size: 10px;
+  font-size: 8px;
   color: #1565c0;
   line-height: 1;
 }
@@ -146,7 +146,7 @@ html, body {
 
 /* FILTROS */
 .filtros label {
-  font-size: 14px;
+  font-size: 10px;
   margin-right: 10px;
   font-weight: bol;
 }
@@ -157,7 +157,7 @@ html, body {
   padding: 4px 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
-  font-size: 13px;
+  font-size: 10px;
 }
 
 .btn-descarga {
@@ -174,6 +174,7 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  font-size: 10px;
 }
 
 .btn-descarga:hover {
@@ -354,6 +355,35 @@ main.dashboard-grid {
   height: 20px;
   margin: 0;
   accent-color: #2acddf;
+}
+
+/* Scrollbar general para todos los contenedores con overflow */
+.bloque.filtros::-webkit-scrollbar,
+.card-grid::-webkit-scrollbar,
+.bloque::-webkit-scrollbar {
+  height: 6px;   /* Horizontal scrollbar */
+  width: 6px;    /* Vertical scrollbar (por si aplicara) */
+}
+
+.bloque.filtros::-webkit-scrollbar-track,
+.card-grid::-webkit-scrollbar-track,
+.bloque::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.bloque.filtros::-webkit-scrollbar-thumb,
+.card-grid::-webkit-scrollbar-thumb,
+.bloque::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.bloque.filtros::-webkit-scrollbar-thumb:hover,
+.card-grid::-webkit-scrollbar-thumb:hover,
+.bloque::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
 }
 
 .btn-x {
@@ -654,6 +684,7 @@ main.dashboard-grid {
     grid-template-columns: 1fr;
     text-align: center;
     gap: 10px;
+    height: 10vh;
   }
 
   .header-left,
@@ -688,17 +719,17 @@ main.dashboard-grid {
   }
 
   .card-equipo {
-    width: 65px;
-    font-size: 10px;
+    width: 60px;
+    font-size: 8px;
   }
 
   .card-equipo .card-header {
-    font-size: 9px;
+    font-size: 8px;
   }
 
   .card-equipo .potencia,
   .card-equipo .modo {
-    font-size: 9px;
+    font-size: 6px;
   }
 }
 
@@ -794,7 +825,48 @@ main.dashboard-grid {
     }
     
     .titulo-dashboard {
-      font-size: small;
+      font-size: 10px;
     }
+    .grupo-controles{
+      font-size: 10px;
+    }
+
+    .bloque.filtros {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 10px;
+  padding-bottom: 8px;
+  align-items: center;
+}
+
+/* Evita que los hijos se achiquen */
+.bloque.filtros > * {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-size: 8px;
+}
+
+.filtros input[type="date"] {
+  font-size: 10px;
+  padding: 2px 4px;
+  height: 15px;           /* más compacto */
+  width: 110px;           /* ajusta según tu diseño */
+  line-height: 1;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+.btn-descarga {
+  font-size: 10px;
+  width: 150px;
+
+}
+
+  .panel-seleccion {
+margin:0 ;
+
+  }
 
   }
