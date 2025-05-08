@@ -53,7 +53,8 @@ class MedidorPosicion(models.Model):
         ('medidor', 'Medidor'),
         ('titulo', 'Título'),
         ('energia_sola', 'Solo Energía'),
-        ('texto', 'Texto'),  # ✅ NUEVA categoría para bloques personalizables
+        ('texto', 'Texto'),
+        ('contenedor', 'Contenedor'),
     ]
     mostrar_icono_estado = models.BooleanField(default=False)
     # En caso quieras permitir variantes futuras
@@ -155,6 +156,11 @@ class MedidorPosicion(models.Model):
 
     # Texto interno
     text_content = models.TextField(blank=True, null=True)
+    z_index = models.IntegerField(
+        blank=True,
+        null=True,
+        help_text="Valor de z-index para controlar la superposición. Ej: 10, 100, etc."
+    )
 
     # Estilo de texto
     text_color = models.CharField(

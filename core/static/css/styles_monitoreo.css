@@ -387,85 +387,101 @@ html, body {
 
 
 
-
-
-/* === Estilo del Sidebar === */
+/* === Estilo Moderno del Sidebar === */
 #sidebar {
   position: fixed;
   top: 0;
-  left: -220px; /* oculto */
-  width: 220px;
+  left: -240px;
+  width: 240px;
   height: 100vh;
-  background: rgba(30, 30, 30, 0.95);
-  backdrop-filter: blur(6px);
-  box-shadow: 4px 0 12px rgba(0,0,0,0.3);
-  color: #f0f0f0;
+  /* background: linear-gradient(to bottom, #23272c, #3c4b56); */
+  background: linear-gradient(to bottom, #1e2a38, #4a5a6a);
+  border-right: 1px solid #d4dce1;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   font-family: 'Orbitron', sans-serif;
-  padding: 20px 10px;
+  padding: 25px 1px 25px 5px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
   transition: left 0.3s ease;
   z-index: 2000;
 }
-
-
-
 
 #sidebar:hover {
   left: 0;
 }
 
 .menu-section h4 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   margin-bottom: 10px;
-  color: #ffe066;
+  font-weight: 700;
+  color: #dc4f32;
+  border-bottom: 1px solid #d4dce1;
+  padding-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: "JetBrains Mono", monospace;
 }
 
 .menu-section ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  font-family: "JetBrains Mono", monospace;
 }
 
 .menu-section ul li {
-  padding: 8px 5px;
+  padding: 10px;
   cursor: pointer;
-  transition: background 0.2s ease;
   border-radius: 6px;
   font-size: 0.85rem;
+  color: #ffffff;
+  transition: background 0.3s ease, color 0.3s ease;
+  font-family: "JetBrains Mono", monospace;
 }
 
 .menu-section ul li:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(to top, #b2ebf2, #ffffff);
+  color: #dc4f32;
 }
 
+.menu-section ul li.active {
+  background: linear-gradient(to top, #88e4ee, #c1f5fa);
+  color: #cc0000;             /* texto rojo profesional */
+  font-weight: bold;
+}
+
+
 .cerrar-sesion {
-  margin-top: 25vh;
+  margin-top: 24vh;
   text-align: center;
 }
 
 .cerrar-sesion button {
-  background: none;
-  border: 1px solid #ffe066;
-  padding: 8px 12px;
-  border-radius: 8px;
-  color: #ffe066;
-  font-family: 'Orbitron', sans-serif;
+  background-color: transparent;
+  border: 1px solid #ff3b3b;
+  color: #ff3b3b;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", monospace;
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
 .cerrar-sesion button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 59, 59, 0.1);
 }
 
-.menu-section ul li.active {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffe066;
-  font-weight: bold;
-}
+
+
+
+
+
+
+
+
+
 
 
 #loader-seccion {

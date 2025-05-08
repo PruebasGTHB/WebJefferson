@@ -55,59 +55,26 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
           card.dataset.grafanaUrl = med.grafana_url;
         }
       
-        // === ✏️ CATEGORÍA TEXTO personalizada ===
-        if (med.categoria_visual === 'texto') {
+        if (med.categoria_visual === 'texto' || med.categoria_visual === 'contenedor') {
           const card = document.createElement('div');
-          card.className = 'medidor-card'; // 👈 Necesario para que se pueda mover
+          card.className = 'medidor-card';
           card.dataset.medidor = med.medidor_id;
           card.dataset.editable = med.editable ? 'true' : 'false';
           card.dataset.seccion = med.seccion;
-          card.dataset.categoria = 'texto'; // por si quieres filtrar después
+          card.dataset.categoria = med.categoria_visual;
         
-          // ⚙️ Estilos personalizados
-          card.style.position = 'absolute';
-          card.style.width = med.width || '25px';
-          card.style.height = med.height || '25px';
-          card.style.background = med.background || 'transparent';
-          card.style.border = `${med.border_width || '1px'} ${med.border_style || 'solid'} ${med.border_color || '#000'}`;
-          card.style.borderRadius = med.border_radius || '0px';
-          card.style.display = 'flex';
-          card.style.flexDirection = 'column';
-          card.style.justifyContent = med.text_vertical_align || 'center';
-          card.style.alignItems = med.text_align === 'left'
-            ? 'flex-start'
-            : med.text_align === 'right'
-            ? 'flex-end'
-            : 'center';
+          aplicarEstilosBase(card, med);
         
-          card.style.textAlign = med.text_align || 'center';
-          card.style.color = med.text_color || '#000';
-          card.style.fontSize = med.font_size || '16px';
-          card.style.fontWeight = med.font_weight || 'normal';
-          card.style.fontStyle = med.font_style || 'normal';
-          card.style.textDecoration = med.text_decoration || 'none';
-          card.style.padding = '5px';
-          card.style.boxShadow = 'none'; // ✅ quitar sombra
-          card.style.backgroundImage = 'none'; // ✅ quitar gradientes si existen
-
-          card.style.backdropFilter = 'none';           // ❌ Elimina desenfoque
-          card.style.webkitBackdropFilter = 'none';     // ❌ Para compatibilidad con Safari
-          card.style.backgroundImage = 'none';          // ❌ Elimina gradientes heredados
-          // card.style.background = 'transparent';        // ✅ Fondo realmente transparente
-          card.style.boxShadow = 'none';                // ❌ Quita sombra si existe
-          card.style.zIndex = '0';                // 👈 se posiciona al fondo
-          card.style.pointerEvents = 'none';      // 👈 no bloquea clics
-
-
-        
-          if (med.text_content) card.innerHTML = med.text_content;
-          if (med.animate_class) card.classList.add(med.animate_class);
+          if (med.categoria_visual === 'contenedor') {
+            card.style.zIndex = med.z_index ?? '-100';      // ✅ debajo de todo
+            card.style.pointerEvents = 'none';              // ✅ no captura clics
+          }
         
           canvas.appendChild(card);
           gsap.set(card, { x: med.x ?? 0, y: med.y ?? 0 });
-        
-          return; // ⛔ importante para evitar continuar con lógica de medidores normales
+          return; // Salida anticipada
         }
+        
       
         // === 🔷 TÍTULO ===
         else if (med.categoria_visual === 'titulo') {
@@ -326,6 +293,48 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
       }, 6000);
     });
 }
+
+
+
+
+
+
+function aplicarEstilosBase(card, med) {
+  card.style.position = 'absolute';
+  card.style.width = med.width || '25px';
+  card.style.height = med.height || '25px';
+  card.style.background = med.background || 'transparent';
+  card.style.border = `${med.border_width || '1px'} ${med.border_style || 'solid'} ${med.border_color || '#000'}`;
+  card.style.borderRadius = med.border_radius || '0px';
+  card.style.display = 'flex';
+  card.style.flexDirection = 'column';
+  card.style.justifyContent = med.text_vertical_align || 'center';
+  card.style.alignItems = med.text_align === 'left'
+    ? 'flex-start'
+    : med.text_align === 'right'
+    ? 'flex-end'
+    : 'center';
+
+  card.style.textAlign = med.text_align || 'center';
+  card.style.color = med.text_color || '#000';
+  card.style.fontSize = med.font_size || '16px';
+  card.style.fontWeight = med.font_weight || 'normal';
+  card.style.fontStyle = med.font_style || 'normal';
+  card.style.textDecoration = med.text_decoration || 'none';
+  card.style.padding = '5px';
+  card.style.boxShadow = 'none';
+  card.style.backgroundImage = 'none';
+  card.style.backdropFilter = 'none';
+  card.style.webkitBackdropFilter = 'none';
+
+  if (med.text_content) card.innerHTML = med.text_content;
+  if (med.animate_class) card.classList.add(med.animate_class);
+}
+
+
+
+
+
 
 
 function bloquearSidebar(bloquear) {
@@ -721,14 +730,14 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
 
   if (!h3) return; // Seguridad: si no existe, no falla
 
-  if (energiaVal === 0) {
-    card.style.backgroundColor = "#a83232"; // 🔴 fondo rojo
-    h3.style.background = "linear-gradient(180deg, #ffffff 0%, #ffffff 100%)"; // Fondo blanco para título
+  if (energiaVal > 0) {
+    card.style.backgroundColor = "#11c414"; // 🟢 fondo verde
+    h3.style.background = "linear-gradient(180deg, #000000 0%, #000000 100%)"; // Fondo negro para título
     h3.style.webkitBackgroundClip = "text";
     h3.style.webkitTextFillColor = "transparent";
   } else {
-    card.style.backgroundColor = "#11c414"; // 🟢 fondo verde
-    h3.style.background = "linear-gradient(180deg, #000000 0%, #000000 100%)"; // Fondo negro para título
+    card.style.backgroundColor = "#909090"; // 🔴 fondo gris
+    h3.style.background = "linear-gradient(180deg, #ffffff 0%, #ffffff 100%)"; // Fondo blanco para título
     h3.style.webkitBackgroundClip = "text";
     h3.style.webkitTextFillColor = "transparent";
   }
@@ -774,6 +783,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('Vista General Planta');
+    cambiarCanvas('Planta Congelado');
   };
   

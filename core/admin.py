@@ -62,7 +62,7 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
         ('🧱 Configuración de Texto', {
             'fields': (
                 'width', 'height', 'background', 'border_color', 'border_width',
-                'border_radius', 'border_style', 'animate_class', 'text_content',
+                'border_radius', 'border_style', 'animate_class', 'text_content', "z_index",
                 'text_color', 'font_size', 'text_align', 'text_vertical_align',
                 'font_weight', 'font_style', 'text_decoration',
             ),
