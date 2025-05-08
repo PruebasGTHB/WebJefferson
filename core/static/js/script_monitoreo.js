@@ -607,7 +607,7 @@ function aplicarCuadriculaSiCorresponde() {
     { color: '#673ab7', size: 4, path: 'arc', endPlug: 'behind' },
   
     // === ⚡ ANIMADAS (15) ===
-    { color: '#bec1be', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-pink-grid
+    { color: '#5c5c5c', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-pink-grid
     { color: '#f79b40', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } },  // ani-orange-arc
     { color: '#1f7cce', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } },  // ani-blue-fluid
     { color: '#ff0000', size: 2, path: 'grid', endPlug: 'behind', dash: { animation: true } }, // ani-red-straight
@@ -783,6 +783,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('Planta Congelado');
+    cambiarCanvas('Vista General Planta');
   };
   
