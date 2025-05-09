@@ -696,31 +696,22 @@ function aplicarCuadriculaSiCorresponde() {
 
   
 
-function actualizarMedidores(seccionActual) {
-  // Cancelar peticiones anteriores si aún están activas
-  if (abortController) {
-    abortController.abort();
-  }
-
-  abortController = new AbortController();
-  const signal = abortController.signal;
-
+function actualizarMedidores() {
   document.querySelectorAll('.medidor-card').forEach(card => {
     const categoria = card.dataset.categoria;
-    const seccion = card.dataset.seccion;
 
+    // ⛔️ Ignorar si no es medidor o energia_sola
     if (!['medidor', 'energia_sola'].includes(categoria)) return;
-    if (seccion !== seccionActual) return;
 
     const medidorId = card.dataset.medidor;
 
-    fetch(`/api/consumos/${medidorId}/?seccion=${encodeURIComponent(seccionActual)}`, { signal })
+    fetch(`/api/consumos/${medidorId}/`)
       .then(response => {
         if (!response.ok || response.status === 204) return null;
         return response.json();
       })
       .then(data => {
-        if (!data) return;
+        if (!data) return; // nada que hacer si el backend respondió vacío o 204
 
         const energiaElement = card.querySelector('.energia_total');
         const potenciaElement = card.querySelector('.potencia_actual');
@@ -736,14 +727,11 @@ function actualizarMedidores(seccionActual) {
         actualizarEstadoVisualMedidor(card, data.energia_total_kwh, data.potencia_total_kw);
       })
       .catch(error => {
-        if (error.name === 'AbortError') {
-          console.log(`Petición cancelada al cambiar de sección (${medidorId})`);
-        } else {
-          console.error(`Error al actualizar medidor ${medidorId}:`, error);
-        }
+        console.error(`Error al actualizar medidor ${medidorId}:`, error);
       });
   });
 }
+
 
 
 
