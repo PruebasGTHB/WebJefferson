@@ -1,3 +1,5 @@
+let abortController = null; // Variable global o dentro del módulo
+
 let seccionActual = 'Planta Congelado';
 let panzoom, conexiones = [];
 let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después del loader
@@ -694,14 +696,32 @@ function aplicarCuadriculaSiCorresponde() {
 
   
 
-  function actualizarMedidores() {
+function actualizarMedidores(seccionActual) {
+  // Cancelar peticiones anteriores si aún están activas
+  if (abortController) {
+    abortController.abort();
+  }
+
+  abortController = new AbortController();
+  const signal = abortController.signal;
+
   document.querySelectorAll('.medidor-card').forEach(card => {
-    if (card.dataset.categoria === 'titulo') return; // ⛔ saltar títulos
+    const categoria = card.dataset.categoria;
+    const seccion = card.dataset.seccion;
+
+    if (!['medidor', 'energia_sola'].includes(categoria)) return;
+    if (seccion !== seccionActual) return;
+
     const medidorId = card.dataset.medidor;
 
-    fetch(`/api/consumos/${medidorId}/`)  // 🚀 Llamamos a tu vista en Django
-      .then(response => response.json())
+    fetch(`/api/consumos/${medidorId}/?seccion=${encodeURIComponent(seccionActual)}`, { signal })
+      .then(response => {
+        if (!response.ok || response.status === 204) return null;
+        return response.json();
+      })
       .then(data => {
+        if (!data) return;
+
         const energiaElement = card.querySelector('.energia_total');
         const potenciaElement = card.querySelector('.potencia_actual');
 
@@ -713,14 +733,18 @@ function aplicarCuadriculaSiCorresponde() {
           potenciaElement.textContent = data.potencia_total_kw;
         }
 
-        // 🔥 Aquí llamamos a la función que decide el color
         actualizarEstadoVisualMedidor(card, data.energia_total_kwh, data.potencia_total_kw);
       })
       .catch(error => {
-        console.error(`Error al actualizar medidor ${medidorId}:`, error);
+        if (error.name === 'AbortError') {
+          console.log(`Petición cancelada al cambiar de sección (${medidorId})`);
+        } else {
+          console.error(`Error al actualizar medidor ${medidorId}:`, error);
+        }
       });
   });
 }
+
 
 
 function actualizarEstadoVisualMedidor(card, energia, potencia) {

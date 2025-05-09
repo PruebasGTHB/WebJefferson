@@ -201,40 +201,32 @@ def obtener_configuracion(request):
 @api_view(['GET'])
 def obtener_consumo_medidor(request, medidor_id):
     seccion = request.GET.get('seccion')
-    energia_total = "--"
-    potencia_total = "--"
 
     # Validar formato del medidor
     if not re.match(
         r'^(em\d+|pem3_em\d+|pem6_em\d+|diesel_flota|c2_diesel|c2_glp|c2_vapor|c3_diesel|c3_glp|c3_vapor|c4_diesel|c4_glp|c4_vapor|calderas_diesel|calderas_glp|calderas_vapor|flujo_s|flujo_r|vapor)$',
         medidor_id.lower()
     ):
-        return JsonResponse({
-            "energia_total_kwh": energia_total,
-            "potencia_total_kw": potencia_total,
-        })
+        return JsonResponse({}, status=204)
 
     # Buscar el primer registro con ese medidor_id
     medidor = MedidorPosicion.objects.filter(medidor_id=medidor_id).first()
     if not medidor:
-        return JsonResponse({
-            "energia_total_kwh": energia_total,
-            "potencia_total_kw": potencia_total,
-        })
+        return JsonResponse({}, status=204)
 
     # Validar sección si aplica
     if seccion and medidor.seccion != seccion:
-        return JsonResponse({
-            "energia_total_kwh": energia_total,
-            "potencia_total_kw": potencia_total,
-        })
+        return JsonResponse({}, status=204)
 
-    # Asignar valores si existen
-    if medidor.energia_total_kwh is not None:
-        energia_total = float(medidor.energia_total_kwh)
+    # Aceptar solo si es de categoría 'medidor' o 'energia_sola'
+    if medidor.categoria_visual not in ['medidor', 'energia_sola']:
+        return JsonResponse({}, status=204)
 
-    if medidor.potencia_total_kw is not None:
-        potencia_total = float(medidor.potencia_total_kw)
+    # Preparar valores
+    energia_total = float(
+        medidor.energia_total_kwh) if medidor.energia_total_kwh is not None else "--"
+    potencia_total = float(
+        medidor.potencia_total_kw) if medidor.potencia_total_kw is not None else "--"
 
     return JsonResponse({
         "energia_total_kwh": energia_total,
