@@ -1,3 +1,5 @@
+from core.models import MedidorPosicion
+from django.views.decorators.cache import cache_page
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
@@ -33,28 +35,79 @@ from django.db import connection
 from django.db.models import Q
 
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.db.models import Q
+
+from core.models import MedidorPosicion, ConexionElemento
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.db.models import Q
+from django.contrib.contenttypes.models import ContentType
+from core.models import MedidorPosicion, ConexionElemento
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page
+from django.contrib.contenttypes.models import ContentType
+
+from core.models import ConexionElemento, MedidorPosicion
+from core.serializers import ConexionElementoFrontendSerializer
+
+
 @api_view(['GET'])
+@csrf_exempt
+@cache_page(60)  # Cache de 60 segundos (opcional pero recomendado)
 def obtener_conexiones(request):
     seccion = request.query_params.get('seccion')
     if not seccion:
         return Response([], status=400)
 
-    medidores = MedidorPosicion.objects.filter(
-        seccion=seccion).values_list('id', flat=True)
-    medidor_ids = set(str(mid) for mid in medidores)
+    # IDs de medidores de la sección
+    medidor_ids = list(
+        MedidorPosicion.objects.filter(
+            seccion=seccion).values_list('id', flat=True)
+    )
 
+    # Obtener solo conexiones relevantes
+    conexiones = list(ConexionElemento.objects.filter(
+        Q(origen_object_id__in=medidor_ids) |
+        Q(destino_object_id__in=medidor_ids)
+    ))
+
+    # Cache manual de objetos por content_type e ID
+    objetos_por_ct = {}
+
+    for con in conexiones:
+        for lado in ['origen', 'destino']:
+            ct = getattr(con, f'{lado}_content_type')
+            obj_id = getattr(con, f'{lado}_object_id')
+            objetos_por_ct.setdefault(ct, set()).add(obj_id)
+
+    # Cargar todos los objetos una sola vez
+    objeto_cache = {}
+    for ct, ids in objetos_por_ct.items():
+        model = ct.model_class()
+        for obj in model.objects.filter(id__in=ids):
+            objeto_cache[(ct.id, str(obj.id))] = obj
+
+    # Asignar objetos desde el cache y filtrar conexiones válidas
     conexiones_validas = []
+    for con in conexiones:
+        con.origen = objeto_cache.get(
+            (con.origen_content_type.id, con.origen_object_id))
+        con.destino = objeto_cache.get(
+            (con.destino_content_type.id, con.destino_object_id))
 
-    for conexion in ConexionElemento.objects.all():
-        try:
-            if (
-                (conexion.origen_object_id in medidor_ids and getattr(conexion.origen, 'seccion', None) == seccion) or
-                (conexion.destino_object_id in medidor_ids and getattr(
-                    conexion.destino, 'seccion', None) == seccion)
-            ):
-                conexiones_validas.append(conexion)
-        except Exception:
-            continue
+        if (
+            (con.origen and getattr(con.origen, 'seccion', None) == seccion) or
+            (con.destino and getattr(con.destino, 'seccion', None) == seccion)
+        ):
+            conexiones_validas.append(con)
 
     serializer = ConexionElementoFrontendSerializer(
         conexiones_validas, many=True)
@@ -144,58 +197,44 @@ def obtener_configuracion(request):
 ###########################################################################################################
 ###########################################################################################################
 
+
 @api_view(['GET'])
 def obtener_consumo_medidor(request, medidor_id):
     seccion = request.GET.get('seccion')
     energia_total = "--"
     potencia_total = "--"
 
-    # --- Validar medidor_id (insensible a mayúsculas) ---
-    if not re.match(r'^(em\d+|pem3_em\d+|pem6_em\d+)$', medidor_id.lower()):
+    # Validar formato del medidor
+    if not re.match(
+        r'^(em\d+|pem3_em\d+|pem6_em\d+|diesel_flota|c2_diesel|c2_glp|c2_vapor|c3_diesel|c3_glp|c3_vapor|c4_diesel|c4_glp|c4_vapor|calderas_diesel|calderas_glp|calderas_vapor|flujo_s|flujo_r|vapor)$',
+        medidor_id.lower()
+    ):
         return JsonResponse({
             "energia_total_kwh": energia_total,
             "potencia_total_kw": potencia_total,
         })
 
-    # --- Validar si el medidor pertenece a la sección (si se envió) ---
-    if seccion:
-        existe = MedidorPosicion.objects.filter(
-            medidor_id=medidor_id, seccion=seccion).exists()
-        if not existe:
-            return JsonResponse({
-                "energia_total_kwh": energia_total,
-                "potencia_total_kw": potencia_total,
-            })
+    # Buscar el primer registro con ese medidor_id
+    medidor = MedidorPosicion.objects.filter(medidor_id=medidor_id).first()
+    if not medidor:
+        return JsonResponse({
+            "energia_total_kwh": energia_total,
+            "potencia_total_kw": potencia_total,
+        })
 
-    # --- 1. Energía eléctrica ---
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(f'''
-                SELECT "{medidor_id}" 
-                FROM energia_electrica 
-                WHERE año = 2025 AND mes = 5
-                LIMIT 1
-            ''')
-            row = cursor.fetchone()
-            if row and row[0] is not None:
-                energia_total = float(row[0])
-    except Exception:
-        pass
+    # Validar sección si aplica
+    if seccion and medidor.seccion != seccion:
+        return JsonResponse({
+            "energia_total_kwh": energia_total,
+            "potencia_total_kw": potencia_total,
+        })
 
-    # --- 2. Potencia activa ---
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(f'''
-                SELECT "{medidor_id}" 
-                FROM potencia_activa 
-                WHERE año = 2025 AND mes = 5
-                LIMIT 1
-            ''')
-            row = cursor.fetchone()
-            if row and row[0] is not None:
-                potencia_total = float(row[0])
-    except Exception:
-        pass
+    # Asignar valores si existen
+    if medidor.energia_total_kwh is not None:
+        energia_total = float(medidor.energia_total_kwh)
+
+    if medidor.potencia_total_kw is not None:
+        potencia_total = float(medidor.potencia_total_kw)
 
     return JsonResponse({
         "energia_total_kwh": energia_total,
@@ -220,14 +259,16 @@ def obtener_consumo_medidor(request, medidor_id):
 
 
 # SUPUESTA API MEJORA ABAJO
+
 @api_view(['GET'])
 @csrf_exempt
+@cache_page(60)  # Opcional: cachea la respuesta por 60 segundos
 def obtener_posiciones(request):
     seccion = request.query_params.get('seccion')
     if not seccion:
         return Response([], status=400)
 
-    # Solo los campos realmente usados por el frontend
+    # Todos los campos que el frontend necesita
     campos_utilizados = [
         'id', 'medidor_id', 'x', 'y', 'seccion', 'categoria_visual',
         'tipo', 'tipo_descripcion', 'titulo', 'grafana_url',
@@ -238,15 +279,17 @@ def obtener_posiciones(request):
         'mostrar_icono_estado', 'tipo_icono_estado', 'fondo_personalizado',
         'color_titulo', 'tamano_titulo', 'fuente_titulo', 'bold_titulo',
         'alineacion_vertical', 'seccion_destino',
+        'energia_total_kwh', 'potencia_total_kw'
     ]
 
-    # Optimizamos la consulta con only() para reducir carga de memoria
-    queryset = MedidorPosicion.objects.filter(
-        seccion=seccion
-    ).only(*campos_utilizados).order_by('categoria_visual')
+    queryset = (
+        MedidorPosicion.objects
+        .filter(seccion=seccion)
+        .values(*campos_utilizados)
+        .order_by('categoria_visual')
+    )
 
-    serializer = MedidorPosicionSerializer(queryset, many=True)
-    return Response(serializer.data)
+    return Response(list(queryset))
 
 
 @api_view(['POST'])
