@@ -1,6 +1,3 @@
-
-
-
 .body_principal_dashboards{
     display: grid;
     grid-template-rows: 15vh 1fr;
@@ -28,11 +25,12 @@
 .contenido_inferior_dashboards {
     display: grid;
     grid-template-columns: 1fr 1fr; /* 2 columnas iguales */
-    grid-template-rows: 20rem 20rem 20rem;    /* 3 filas iguales */
+    grid-template-rows: 20rem 20rem 20rem 20rem;    /* 4 filas iguales */
     grid-template-areas: 
         "dashboard1 dashboard2"
         "dashboard4 dashboard3"
-        "dashboard5 dashboard6";
+        "dashboard5 dashboard6"
+        "dashboard7 dashboard8";
     width: 100vw;  /* ocupar todo el ancho de la pantalla */
     height: auto; /* ocupar todo el alto de la pantalla */
     gap: 10px;
@@ -82,6 +80,17 @@
     height: 100%;
 }
 
+.dashboard7 {
+    grid-area: dashboard7;
+    width: 100%;
+    height: 100%;
+}
+
+.dashboard8 {
+    grid-area: dashboard8;
+    width: 100%;
+    height: 100%;
+}
 
 
 .principal_dashboards iframe{
@@ -108,7 +117,9 @@
             "dashboard3"
             "dashboard4"
             "dashboard5"
-            "dashboard6";
+            "dashboard6"
+            "dashboard7"
+            "dashboard8";
         height: auto; /* para que se adapte al contenido */
     }
 }
@@ -123,7 +134,9 @@
             "dashboard3"
             "dashboard4"
             "dashboard5"
-            "dashboard6";
+            "dashboard6"
+            "dashboard7"
+            "dashboard8";
         height: auto;
         overflow-y: auto;
     }
@@ -131,7 +144,12 @@
     .dashboard1,
     .dashboard2,
     .dashboard3,
-    .dashboard4 {
+    .dashboard4,
+    .dashboard5,
+    .dashboard6,
+    .dashboard7,
+    .dashboard8
+     {
         height: auto; /* permite que cada bloque crezca según contenido */
     }
 
