@@ -44,7 +44,7 @@ class MedidorPosicionAdmin(admin.ModelAdmin):
             'fields': ('x', 'y')
         }),
         ('⚙️ Configuración de Medidor', {
-            'fields': ('titulo', 'tipo', 'tipo_descripcion', 'grafana_url'),
+            'fields': ('titulo', 'tipo', 'tipo_descripcion', 'grafana_url', 'energia_total_kwh', 'potencia_total_kw'),
             'classes': ('collapse',)
         }),
         ('🎨 Configuración de Título', {

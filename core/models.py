@@ -203,6 +203,11 @@ class MedidorPosicion(models.Model):
         choices=[('none', 'Ninguno'), ('underline', 'Subrayado')],
         default='none'
     )
+    # Agregar al modelo MedidorPosicion
+    energia_total_kwh = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0, help_text="Valor fijo si no se consulta por API")
+    potencia_total_kw = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0, help_text="Valor fijo si no se consulta por API")
 
     editable = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -216,7 +221,6 @@ class MedidorPosicion(models.Model):
             models.UniqueConstraint(
                 fields=['medidor_id', 'seccion'], name='unique_medidor_por_seccion')
         ]
-
 
 ####################################################################################################################################################################
 ####################################################################################################################################################################
