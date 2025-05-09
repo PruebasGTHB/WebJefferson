@@ -212,14 +212,12 @@ def obtener_configuracion(request):
 def obtener_consumo_medidor(request, medidor_id):
     seccion = request.GET.get('seccion')
 
-    # Validar formato del medidor
     if not re.match(
         r'^(em\d+|pem3_em\d+|pem6_em\d+|diesel_flota|c2_diesel|c2_glp|c2_vapor|c3_diesel|c3_glp|c3_vapor|c4_diesel|c4_glp|c4_vapor|calderas_diesel|calderas_glp|calderas_vapor|flujo_s|flujo_r|vapor)$',
         medidor_id.lower()
     ):
         return JsonResponse({}, status=204)
 
-    # Buscar medidor
     medidor = MedidorPosicion.objects.filter(medidor_id=medidor_id).first()
     if not medidor:
         return JsonResponse({}, status=204)
@@ -230,36 +228,43 @@ def obtener_consumo_medidor(request, medidor_id):
     if medidor.categoria_visual not in ['medidor', 'energia_sola']:
         return JsonResponse({}, status=204)
 
-    # Clave de caché única por medidor y sección
     base_key = f"{medidor_id}_{seccion or 'global'}"
     cache_key = f"consumo_medidor_{hashlib.md5(base_key.encode()).hexdigest()}"
     timestamp_key = f"{cache_key}_ts"
 
-    # Comparar updated_at con el timestamp guardado
     last_updated_db = medidor.updated_at.timestamp() if hasattr(medidor,
                                                                 "updated_at") else 0
     last_updated_cache = cache.get(timestamp_key)
 
-    # Si el valor no ha cambiado, devolvemos el cache
     if cache.get(cache_key) and last_updated_cache == last_updated_db:
         return JsonResponse(cache.get(cache_key))
 
-    # Construir respuesta
-    energia_total = float(
-        medidor.energia_total_kwh) if medidor.energia_total_kwh is not None else "--"
-    potencia_total = float(
-        medidor.potencia_total_kw) if medidor.potencia_total_kw is not None else "--"
+    # Aplicar condición a energia_total_kwh
+    if medidor.energia_total_kwh is not None:
+        energia_total = float(medidor.energia_total_kwh)
+        if energia_total < 2.5:
+            energia_total = 0
+    else:
+        energia_total = "--"
+
+    # Aplicar condición a potencia_total_kw
+    if medidor.potencia_total_kw is not None:
+        potencia_total = float(medidor.potencia_total_kw)
+        if potencia_total < 2.5:
+            potencia_total = 0
+    else:
+        potencia_total = "--"
 
     response_data = {
         "energia_total_kwh": energia_total,
         "potencia_total_kw": potencia_total,
     }
 
-    # Guardar en caché permanentemente
     cache.set(cache_key, response_data, timeout=None)
     cache.set(timestamp_key, last_updated_db, timeout=None)
 
     return JsonResponse(response_data)
+
 
 ###########################################################################################################
 ###########################################################################################################

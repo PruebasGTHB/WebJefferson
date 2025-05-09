@@ -123,7 +123,7 @@ html, body {
   background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+  /* text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6); */
   font-size: 1rem;
   margin: 0;
   padding: 0;

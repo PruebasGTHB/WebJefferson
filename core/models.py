@@ -55,6 +55,8 @@ class MedidorPosicion(models.Model):
         ('energia_sola', 'Solo Energía'),
         ('texto', 'Texto'),
         ('contenedor', 'Contenedor'),
+        ('contenedor-10', 'Contenedor-10'),
+        ('contenedor-100', 'Contenedor-100'),
     ]
     mostrar_icono_estado = models.BooleanField(default=False)
     # En caso quieras permitir variantes futuras

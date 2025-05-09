@@ -57,7 +57,7 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
           card.dataset.grafanaUrl = med.grafana_url;
         }
       
-        if (med.categoria_visual === 'texto' || med.categoria_visual === 'contenedor') {
+        if (med.categoria_visual === 'texto' || med.categoria_visual === 'contenedor' || med.categoria_visual === 'contenedor-10' || med.categoria_visual === 'contenedor-100') {
           const card = document.createElement('div');
           card.className = 'medidor-card';
           card.dataset.medidor = med.medidor_id;
@@ -68,9 +68,19 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
           aplicarEstilosBase(card, med);
         
           if (med.categoria_visual === 'contenedor') {
-            card.style.zIndex = med.z_index ?? '-100';      // ✅ debajo de todo
-            card.style.pointerEvents = 'none';              // ✅ no captura clics
+            card.style.zIndex = (med.z_index ?? 0).toString();
+            card.style.pointerEvents = 'none';  
+          } else if (med.categoria_visual === 'contenedor-10') {
+            card.style.zIndex = (med.z_index ?? -10).toString();
+            card.style.pointerEvents = 'none'; 
+          } else if (med.categoria_visual === 'contenedor-100') {
+            card.style.zIndex = (med.z_index ?? -100).toString();
+            card.style.pointerEvents = 'none'; 
           }
+
+
+
+
         
           canvas.appendChild(card);
           gsap.set(card, { x: med.x ?? 0, y: med.y ?? 0 });
@@ -736,7 +746,7 @@ function actualizarMedidores() {
 
 
 function actualizarEstadoVisualMedidor(card, energia, potencia) {
-  const energiaVal = energia === "--" ? 0 : parseFloat(energia);
+  const energiaVal = potencia === "--" ? 0 : parseFloat(potencia);
 
   const h3 = card.querySelector('h3');  // 🎯 Capturamos el h3 interno
 
@@ -778,7 +788,7 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
       contain: 'outside',
       disablePan: false,
       disableZoom: false,
-      minScale: 0.45,
+      minScale: 0.14,
       maxScale: 1.2,
     });
   
