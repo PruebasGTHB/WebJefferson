@@ -292,7 +292,7 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
             centrarCanvasRobusto();
           });
         });
-      }, 6000);
+      }, 1600);
     });
 }
 

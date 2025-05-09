@@ -219,30 +219,47 @@ def obtener_consumo_medidor(request, medidor_id):
     ):
         return JsonResponse({}, status=204)
 
-    # Buscar el primer registro con ese medidor_id
+    # Buscar medidor
     medidor = MedidorPosicion.objects.filter(medidor_id=medidor_id).first()
     if not medidor:
         return JsonResponse({}, status=204)
 
-    # Validar sección si aplica
     if seccion and medidor.seccion != seccion:
         return JsonResponse({}, status=204)
 
-    # Aceptar solo si es de categoría 'medidor' o 'energia_sola'
     if medidor.categoria_visual not in ['medidor', 'energia_sola']:
         return JsonResponse({}, status=204)
 
-    # Preparar valores
+    # Clave de caché única por medidor y sección
+    base_key = f"{medidor_id}_{seccion or 'global'}"
+    cache_key = f"consumo_medidor_{hashlib.md5(base_key.encode()).hexdigest()}"
+    timestamp_key = f"{cache_key}_ts"
+
+    # Comparar updated_at con el timestamp guardado
+    last_updated_db = medidor.updated_at.timestamp() if hasattr(medidor,
+                                                                "updated_at") else 0
+    last_updated_cache = cache.get(timestamp_key)
+
+    # Si el valor no ha cambiado, devolvemos el cache
+    if cache.get(cache_key) and last_updated_cache == last_updated_db:
+        return JsonResponse(cache.get(cache_key))
+
+    # Construir respuesta
     energia_total = float(
         medidor.energia_total_kwh) if medidor.energia_total_kwh is not None else "--"
     potencia_total = float(
         medidor.potencia_total_kw) if medidor.potencia_total_kw is not None else "--"
 
-    return JsonResponse({
+    response_data = {
         "energia_total_kwh": energia_total,
         "potencia_total_kw": potencia_total,
-    })
+    }
 
+    # Guardar en caché permanentemente
+    cache.set(cache_key, response_data, timeout=None)
+    cache.set(timestamp_key, last_updated_db, timeout=None)
+
+    return JsonResponse(response_data)
 
 ###########################################################################################################
 ###########################################################################################################
@@ -262,15 +279,13 @@ def obtener_consumo_medidor(request, medidor_id):
 
 # SUPUESTA API MEJORA ABAJO
 
+
 @api_view(['GET'])
-@csrf_exempt
-@cache_page(60)  # Opcional: cachea la respuesta por 60 segundos
 def obtener_posiciones(request):
     seccion = request.query_params.get('seccion')
     if not seccion:
         return Response([], status=400)
 
-    # Todos los campos que el frontend necesita
     campos_utilizados = [
         'id', 'medidor_id', 'x', 'y', 'seccion', 'categoria_visual',
         'tipo', 'tipo_descripcion', 'titulo', 'grafana_url',
@@ -284,6 +299,21 @@ def obtener_posiciones(request):
         'energia_total_kwh', 'potencia_total_kw'
     ]
 
+    # Cache keys
+    cache_key = f"posiciones_{hashlib.md5(seccion.encode()).hexdigest()}"
+    timestamp_key = f"{cache_key}_timestamp"
+
+    # Última modificación real
+    ultima_posicion = MedidorPosicion.objects.filter(
+        seccion=seccion).order_by('-updated_at').first()
+    last_updated_db = ultima_posicion.updated_at.timestamp() if ultima_posicion else 0
+    last_updated_cache = cache.get(timestamp_key)
+
+    # Usar cache si es válido
+    if cache.get(cache_key) and last_updated_cache == last_updated_db:
+        return Response(cache.get(cache_key))
+
+    # Regenerar datos y cachearlos
     queryset = (
         MedidorPosicion.objects
         .filter(seccion=seccion)
@@ -291,7 +321,12 @@ def obtener_posiciones(request):
         .order_by('categoria_visual')
     )
 
-    return Response(list(queryset))
+    data = list(queryset)
+
+    cache.set(cache_key, data, timeout=None)
+    cache.set(timestamp_key, last_updated_db, timeout=None)
+
+    return Response(data)
 
 
 @api_view(['POST'])
