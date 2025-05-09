@@ -59,58 +59,68 @@ from core.models import ConexionElemento, MedidorPosicion
 from core.serializers import ConexionElementoFrontendSerializer
 
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.core.cache import cache
+from django.db.models import Q
+from core.models import ConexionElemento, MedidorPosicion
+from django.contrib.contenttypes.models import ContentType
+import hashlib
+
+
 @api_view(['GET'])
-@csrf_exempt
-@cache_page(60)  # Cache de 60 segundos (opcional pero recomendado)
 def obtener_conexiones(request):
     seccion = request.query_params.get('seccion')
     if not seccion:
         return Response([], status=400)
 
-    # IDs de medidores de la sección
+    # Crea una clave de cache única por sección
+    cache_key = f"conexiones_{hashlib.md5(seccion.encode()).hexdigest()}"
+    timestamp_key = f"{cache_key}_timestamp"
+
+    # Obtener el último update de la tabla
+    ultima_conexion = ConexionElemento.objects.order_by('-updated_at').first()
+    last_updated_db = ultima_conexion.updated_at.timestamp() if ultima_conexion else 0
+    last_updated_cache = cache.get(timestamp_key)
+
+    if cache.get(cache_key) and last_updated_cache == last_updated_db:
+        return Response(cache.get(cache_key))
+
+    # Si no hay cache válido, lo regeneramos
+    medidor_ct = ContentType.objects.get_for_model(MedidorPosicion)
     medidor_ids = list(
         MedidorPosicion.objects.filter(
             seccion=seccion).values_list('id', flat=True)
     )
+    medidores = MedidorPosicion.objects.filter(id__in=medidor_ids)
+    medidor_dict = {str(m.id): m for m in medidores}
 
-    # Obtener solo conexiones relevantes
-    conexiones = list(ConexionElemento.objects.filter(
-        Q(origen_object_id__in=medidor_ids) |
-        Q(destino_object_id__in=medidor_ids)
-    ))
+    conexiones = ConexionElemento.objects.filter(
+        Q(origen_content_type=medidor_ct, origen_object_id__in=medidor_ids) |
+        Q(destino_content_type=medidor_ct, destino_object_id__in=medidor_ids)
+    )
 
-    # Cache manual de objetos por content_type e ID
-    objetos_por_ct = {}
-
-    for con in conexiones:
-        for lado in ['origen', 'destino']:
-            ct = getattr(con, f'{lado}_content_type')
-            obj_id = getattr(con, f'{lado}_object_id')
-            objetos_por_ct.setdefault(ct, set()).add(obj_id)
-
-    # Cargar todos los objetos una sola vez
-    objeto_cache = {}
-    for ct, ids in objetos_por_ct.items():
-        model = ct.model_class()
-        for obj in model.objects.filter(id__in=ids):
-            objeto_cache[(ct.id, str(obj.id))] = obj
-
-    # Asignar objetos desde el cache y filtrar conexiones válidas
     conexiones_validas = []
     for con in conexiones:
-        con.origen = objeto_cache.get(
-            (con.origen_content_type.id, con.origen_object_id))
-        con.destino = objeto_cache.get(
-            (con.destino_content_type.id, con.destino_object_id))
+        con.origen = medidor_dict.get(
+            str(con.origen_object_id)) if con.origen_content_type == medidor_ct else None
+        con.destino = medidor_dict.get(
+            str(con.destino_object_id)) if con.destino_content_type == medidor_ct else None
 
         if (
-            (con.origen and getattr(con.origen, 'seccion', None) == seccion) or
-            (con.destino and getattr(con.destino, 'seccion', None) == seccion)
+            (con.origen and con.origen.seccion == seccion) or
+            (con.destino and con.destino.seccion == seccion)
         ):
             conexiones_validas.append(con)
 
+    from core.serializers import ConexionElementoFrontendSerializer
     serializer = ConexionElementoFrontendSerializer(
         conexiones_validas, many=True)
+
+    # Guardar en caché indefinidamente y asociar timestamp
+    cache.set(cache_key, serializer.data, timeout=None)
+    cache.set(timestamp_key, last_updated_db, timeout=None)
+
     return Response(serializer.data)
 
 
