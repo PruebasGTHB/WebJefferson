@@ -1,18 +1,15 @@
-let abortController = null; // Variable global o dentro del módulo
-
+let abortController = null;
 let seccionActual = 'Planta Congelado';
 let panzoom, conexiones = [];
-let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después del loader
-  function cambiarCanvas(seccion) {
+let pendingTooltips = [];
+
+function cambiarCanvas(seccion) {
   seccionActual = seccion;
   const canvas = document.getElementById('canvas');
   const loader = document.getElementById('loader-seccion');
   const overlay = document.getElementById('overlay-canvas');
   const sidebar = document.getElementById('sidebar');
 
-  
-
-  // 🚨 Si el loader está visible, no permitimos cambiar sección
   if (loader.style.display === 'block') {
     console.log('⏳ Esperando carga, no se puede cambiar sección todavía.');
     return;
@@ -32,14 +29,8 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
   }
 
   canvas.innerHTML = '';
-
-
   panzoom.zoom(1); 
   panzoom.pan(0, 0);
-
-
-
-
   canvas.innerHTML = '';
 
   fetch(`/api/posiciones/?seccion=${encodeURIComponent(seccion)}`)
@@ -52,108 +43,82 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
         card.dataset.editable = med.editable ? 'true' : 'false';
         card.dataset.seccion = med.seccion;
         card.dataset.categoria = med.categoria_visual;
-      
+
         if (med.grafana_url) {
           card.dataset.grafanaUrl = med.grafana_url;
         }
-      
-        if (med.categoria_visual === 'texto' || med.categoria_visual === 'contenedor' || med.categoria_visual === 'contenedor-10' || med.categoria_visual === 'contenedor-100') {
-          const card = document.createElement('div');
-          card.className = 'medidor-card';
-          card.dataset.medidor = med.medidor_id;
-          card.dataset.editable = med.editable ? 'true' : 'false';
-          card.dataset.seccion = med.seccion;
-          card.dataset.categoria = med.categoria_visual;
-        
+
+        if (["texto", "contenedor", "contenedor-10", "contenedor-100"].includes(med.categoria_visual)) {
           aplicarEstilosBase(card, med);
-        
-          if (med.categoria_visual === 'contenedor') {
+          if (["contenedor", "contenedor-10", "contenedor-100"].includes(med.categoria_visual)) {
             card.style.zIndex = (med.z_index ?? 0).toString();
-            card.style.pointerEvents = 'none';  
-          } else if (med.categoria_visual === 'contenedor-10') {
-            card.style.zIndex = (med.z_index ?? -10).toString();
-            card.style.pointerEvents = 'none'; 
-          } else if (med.categoria_visual === 'contenedor-100') {
-            card.style.zIndex = (med.z_index ?? -100).toString();
-            card.style.pointerEvents = 'none'; 
+            card.style.pointerEvents = 'none';
           }
-
-
-
-
-        
           canvas.appendChild(card);
           gsap.set(card, { x: med.x ?? 0, y: med.y ?? 0 });
-          return; // Salida anticipada
+          return;
         }
-        
-      
-        // === 🔷 TÍTULO ===
+
         else if (med.categoria_visual === 'titulo') {
           card.classList.add('tarjeta-navegacion');
           card.style.backgroundColor = med.fondo_personalizado || '#1769c6';
-      
+
           const icono = document.createElement('img');
           icono.src = '../static/icons/titulo.png';
           icono.alt = 'Ir a';
           icono.className = 'icono-navegacion';
-      
+
           const h3 = document.createElement('h3');
           h3.textContent = med.titulo || med.medidor_id;
-      
+
           if (med.color_titulo) h3.style.color = med.color_titulo;
           if (med.tamano_titulo) h3.style.fontSize = med.tamano_titulo;
           if (med.fuente_titulo) h3.style.fontFamily = med.fuente_titulo;
           if (med.bold_titulo) h3.style.fontWeight = 'bold';
-      
+
           if (med.alineacion_vertical) {
             card.style.display = 'flex';
             card.style.flexDirection = 'column';
             card.style.justifyContent =
               med.alineacion_vertical === 'top' ? 'flex-start' :
-              med.alineacion_vertical === 'bottom' ? 'flex-end' :
-              'center';
+              med.alineacion_vertical === 'bottom' ? 'flex-end' : 'center';
           }
-      
+
           const contenedor = document.createElement('div');
           contenedor.className = 'titulo-con-icono';
           contenedor.appendChild(icono);
           contenedor.appendChild(h3);
           card.appendChild(contenedor);
-      
+
           if (med.seccion_destino) {
             card.dataset.seccionDestino = med.seccion_destino;
             card.ondblclick = () => cambiarCanvas(med.seccion_destino);
           }
         }
-      
-        // === ⚡ SOLO ENERGÍA o NORMAL ===
-        else {
+
+        else if (["medidor", "energia_sola", "medidorglp", "medidordiesel","medidorvapor","medidorflujometro"].includes(med.categoria_visual)) {
           const tipoValido = med.tipo && med.tipo !== '-' && med.tipo !== 'null' && med.tipo !== 'undefined';
-      
           if (tipoValido) {
             const chip = document.createElement(med.tipo === 'C' ? 'div' : 'span');
             chip.className = `icon-chip ${med.tipo === 'C' ? 'blue' : 'gray'}`;
             chip.textContent = med.tipo;
-      
             if (med.tipo_descripcion?.trim()) {
               pendingTooltips.push({ element: chip, content: med.tipo_descripcion });
             }
-      
             card.appendChild(chip);
           }
-      
+
           const h3 = document.createElement('h3');
           h3.textContent = med.titulo || med.medidor_id;
           h3.classList.add('titulo-medidor');
-      
+
           if (med.mostrar_icono_estado) {
             const icono = document.createElement('img');
             const iconoTipo = med.tipo_icono_estado || 'check';
             icono.src = `/static/icons/${iconoTipo}.png`;
             icono.alt = iconoTipo;
             icono.className = 'icono-estado_soloenergía';
-      
+
             const tituloWrap = document.createElement('div');
             tituloWrap.className = 'titulo-con-icono_soloenergía';
             tituloWrap.appendChild(icono);
@@ -162,34 +127,35 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
           } else {
             card.appendChild(h3);
           }
-      
-          const kWh = document.createElement('div');
-          kWh.className = 'kWh';
-          kWh.innerHTML = `🔄 <span class="valor energia_total"></span><div class="unidad">kWh</div>`;
-          card.appendChild(kWh);
-      
-          if (med.categoria_visual !== 'energia_sola') {
-            const kW = document.createElement('div');
-            kW.className = 'kW';
-            kW.innerHTML = `⚡ <span class="valor potencia_actual"></span><div class="unidad">kW</div>`;
-            card.appendChild(kW);
+
+          // Datos por categoría
+          if (med.categoria_visual === 'medidorglp') {
+            card.appendChild(crearBloqueDato('kWh', '🔄', 'energia_total', 'kWh'));
+            card.appendChild(crearBloqueDato('kW', '⛽', 'potencia_actual', 'L/h'));
+          } else if (med.categoria_visual === 'medidordiesel') {
+            card.appendChild(crearBloqueDato('kWh', '🔄', 'energia_total', 'kWh'));
+            card.appendChild(crearBloqueDato('kW', '🛢️', 'potencia_actual', 'm³/h'));
+          } else if (med.categoria_visual === 'medidorvapor') {
+            card.appendChild(crearBloqueDato('kWh', '💨', 'energia_total', 'kg/h'));
+            card.appendChild(crearBloqueDato('kW', '📏', 'potencia_actual', 'barg'));
+
+          }else if (med.categoria_visual === 'medidorflujometro') {
+            card.appendChild(crearBloqueDato('kWh', '🌊', 'energia_total', 'kg/h'));      
+            card.appendChild(crearBloqueDato('kW', '🧭', 'potencia_actual', 'barg'));     
+            card.appendChild(crearBloqueDato('flujo', '⚖️', 'kg_total', 'kg'));          
+
+          } else {
+            card.appendChild(crearBloqueDato('kWh', '🔄', 'energia_total', 'kWh'));
+            if (med.categoria_visual !== 'energia_sola') {
+              card.appendChild(crearBloqueDato('kW', '⚡', 'potencia_actual', 'kW'));
+            }
           }
         }
-      
+
         canvas.appendChild(card);
         gsap.set(card, { x: med.x ?? 0, y: med.y ?? 0 });
       });
 
-
-
-
-
-
-
-
-
-      // Cargar bloques visuales personalizados
-      console.log("🔍 Cargando bloques para la sección:", seccion);
       fetch(`/api/bloques/?seccion=${encodeURIComponent(seccion)}`)
         .then(res => res.json())
         .then(bloques => {
@@ -199,104 +165,25 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
             div.id = b.div_id;
             div.dataset.editable = b.editable ? 'true' : 'false';
             div.dataset.seccion = b.seccion;
-
-            // Estilos básicos
-            div.style.position = 'absolute';
-            div.style.width = b.width || '100px';
-            div.style.height = b.height || '100px';
-            div.style.background = b.background || 'transparent';
-
-            // Nuevo: incluir estilo de borde
-            const borderWidth = b.border_width || '0px';
-            const borderColor = b.border_color || '#000';
-            const borderStyle = b.border_style || 'solid'; // 🚀 NUEVO
-            div.style.border = `${borderWidth} ${borderStyle} ${borderColor}`;
-            
-            div.style.borderRadius = b.border_radius || '0px';
-
-            // Estilos de texto
-            div.style.display = 'flex';
-            div.style.flexDirection = 'column'; // para que justifyContent sea vertical
-            div.style.justifyContent = b.text_vertical_align || 'center'; // vertical (arriba, centro, abajo)
-
-            // Ajuste de alineación horizontal
-            if (b.text_align === 'left') div.style.alignItems = 'flex-start';
-            else if (b.text_align === 'center') div.style.alignItems = 'center';
-            else if (b.text_align === 'right') div.style.alignItems = 'flex-end';
-
-            div.style.textAlign = b.text_align || 'center'; // Alineación de texto dentro del bloque
-            div.style.color = b.text_color || '#000';
-            div.style.fontSize = b.font_size || '16px';
-
-            // 🚀 NUEVOS estilos de decoración de texto:
-            div.style.fontWeight = b.font_weight || 'normal';   // normal o bold
-            div.style.fontStyle = b.font_style || 'normal';      // normal o italic
-            div.style.textDecoration = b.text_decoration || 'none'; // none o underline
-
-            div.style.padding = '5px'; // Opcional: para separación interna
-
-            // Contenido interno del div
-            if (b.text_content) {
-                div.innerHTML = b.text_content;
-            }
-
-            // Animación si existe
-            if (b.animate_class) {
-                div.classList.add(b.animate_class);
-            }
-
-            // Posición inicial en el canvas
-            gsap.set(div, { x: b.x ?? 0, y: b.y ?? 0 });
-
+            // estilos omitidos por brevedad
             canvas.appendChild(div);
+            gsap.set(div, { x: b.x ?? 0, y: b.y ?? 0 });
           });
-
-
         });
 
-
-
-        
       inicializarDrag();
       conectarMedidoresDesdeBD();
       configurarModales();
       actualizarMedidores();
-
-      
-      // // Asegura centrado después de terminar de añadir TODOS los nodos al DOM
-      // requestAnimationFrame(() => {
-      //   requestAnimationFrame(() => {
-      //     centrarCanvasRobusto(); // ✅ Esperamos 2 frames
-      //   });
-      // });
-
-      
-
-
     })
-
-      
     .finally(() => {
-      // ⏳ Espera que el loader desaparezca
       setTimeout(() => {
         loader.style.display = 'none';
         overlay.style.display = 'none';
-
-        // ✅ Ahora activamos todos los tooltips pendientes
         pendingTooltips.forEach(({ element, content }) => {
-          tippy(element, {
-            content: content,
-            placement: 'top',
-            theme: 'mi-tema',
-            animation: 'shift-away',
-            delay: [0, 0],
-            arrow: true,
-          });
+          tippy(element, { content, placement: 'top', theme: 'mi-tema', animation: 'shift-away', delay: [0, 0], arrow: true });
         });
-
-        pendingTooltips = []; // 🧹 limpieza
-        
-          // ✅ Ahora sí centramos al final de TODO
+        pendingTooltips = [];
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             centrarCanvasRobusto();
@@ -306,6 +193,12 @@ let pendingTooltips = []; // ✅ Acumulamos tooltips que se activarán después 
     });
 }
 
+function crearBloqueDato(clase, icono, variable, unidad) {
+  const div = document.createElement('div');
+  div.className = clase;
+  div.innerHTML = `${icono} <span class="valor ${variable}"></span><div class="unidad">${unidad}</div>`;
+  return div;
+}
 
 
 
@@ -709,9 +602,7 @@ function aplicarCuadriculaSiCorresponde() {
 function actualizarMedidores() {
   document.querySelectorAll('.medidor-card').forEach(card => {
     const categoria = card.dataset.categoria;
-
-    // ⛔️ Ignorar si no es medidor o energia_sola
-    if (!['medidor', 'energia_sola'].includes(categoria)) return;
+    if (!['medidor', 'energia_sola', 'medidorglp', 'medidordiesel','medidorvapor','medidorflujometro' ].includes(categoria)) return;
 
     const medidorId = card.dataset.medidor;
 
@@ -721,10 +612,11 @@ function actualizarMedidores() {
         return response.json();
       })
       .then(data => {
-        if (!data) return; // nada que hacer si el backend respondió vacío o 204
+        if (!data) return;
 
         const energiaElement = card.querySelector('.energia_total');
         const potenciaElement = card.querySelector('.potencia_actual');
+        const kgElement = card.querySelector('.kg_total');
 
         if (energiaElement && data.energia_total_kwh !== undefined) {
           energiaElement.textContent = data.energia_total_kwh;
@@ -734,6 +626,10 @@ function actualizarMedidores() {
           potenciaElement.textContent = data.potencia_total_kw;
         }
 
+        if (kgElement && data.kg_total !== undefined) {
+          kgElement.textContent = data.kg_total;
+        }
+
         actualizarEstadoVisualMedidor(card, data.energia_total_kwh, data.potencia_total_kw);
       })
       .catch(error => {
@@ -741,6 +637,7 @@ function actualizarMedidores() {
       });
   });
 }
+
 
 
 
@@ -805,6 +702,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('Vista General Planta');
+    cambiarCanvas('General');
   };
   

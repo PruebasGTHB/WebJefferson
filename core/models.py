@@ -57,6 +57,11 @@ class MedidorPosicion(models.Model):
         ('contenedor', 'Contenedor'),
         ('contenedor-10', 'Contenedor-10'),
         ('contenedor-100', 'Contenedor-100'),
+        ('medidorglp', 'Medidor GLP'),
+        ('medidordiesel', 'Medidor Diésel'),
+        ('medidorvapor', 'Medidor de Vapor'),
+        ('medidorflujometro', 'Medidor de Flujometro'),
+
     ]
     mostrar_icono_estado = models.BooleanField(default=False)
     # En caso quieras permitir variantes futuras
@@ -209,6 +214,8 @@ class MedidorPosicion(models.Model):
     energia_total_kwh = models.DecimalField(
         max_digits=12, decimal_places=2, default=0, help_text="Valor fijo si no se consulta por API")
     potencia_total_kw = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0, help_text="Valor fijo si no se consulta por API")
+    kg_totalizador = models.DecimalField(
         max_digits=12, decimal_places=2, default=0, help_text="Valor fijo si no se consulta por API")
 
     editable = models.BooleanField(default=True)

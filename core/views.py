@@ -1,3 +1,4 @@
+from .models import MedidorPosicion  # Ajusta el import según tu estructura
 from core.models import MedidorPosicion
 from django.views.decorators.cache import cache_page
 from django.shortcuts import render, redirect
@@ -212,6 +213,7 @@ def obtener_configuracion(request):
 def obtener_consumo_medidor(request, medidor_id):
     seccion = request.GET.get('seccion')
 
+    # Validación de ID de medidor
     if not re.match(
         r'^(em\d+|pem3_em\d+|pem6_em\d+|diesel_flota|c2_diesel|c2_glp|c2_vapor|c3_diesel|c3_glp|c3_vapor|c4_diesel|c4_glp|c4_vapor|calderas_diesel|calderas_glp|calderas_vapor|flujo_s|flujo_r|vapor)$',
         medidor_id.lower()
@@ -225,9 +227,13 @@ def obtener_consumo_medidor(request, medidor_id):
     if seccion and medidor.seccion != seccion:
         return JsonResponse({}, status=204)
 
-    if medidor.categoria_visual not in ['medidor', 'energia_sola']:
+    if medidor.categoria_visual not in [
+        'medidor', 'energia_sola', 'medidorglp',
+        'medidordiesel', 'medidorvapor', 'medidorflujometro'
+    ]:
         return JsonResponse({}, status=204)
 
+    # Generación de claves de caché
     base_key = f"{medidor_id}_{seccion or 'global'}"
     cache_key = f"consumo_medidor_{hashlib.md5(base_key.encode()).hexdigest()}"
     timestamp_key = f"{cache_key}_ts"
@@ -239,7 +245,7 @@ def obtener_consumo_medidor(request, medidor_id):
     if cache.get(cache_key) and last_updated_cache == last_updated_db:
         return JsonResponse(cache.get(cache_key))
 
-    # Aplicar condición a energia_total_kwh
+    # Procesar energia_total_kwh
     if medidor.energia_total_kwh is not None:
         energia_total = float(medidor.energia_total_kwh)
         if energia_total < 2.5:
@@ -247,7 +253,7 @@ def obtener_consumo_medidor(request, medidor_id):
     else:
         energia_total = "--"
 
-    # Aplicar condición a potencia_total_kw
+    # Procesar potencia_total_kw
     if medidor.potencia_total_kw is not None:
         potencia_total = float(medidor.potencia_total_kw)
         if potencia_total < 2.5:
@@ -255,11 +261,25 @@ def obtener_consumo_medidor(request, medidor_id):
     else:
         potencia_total = "--"
 
-    response_data = {
-        "energia_total_kwh": energia_total,
-        "potencia_total_kw": potencia_total,
-    }
+    # Reglas específicas para medidor flujo_r con categoría 'medidorflujometro'
+    if medidor_id.lower() == "flujo_r" and medidor.categoria_visual == 'medidorflujometro':
+        if medidor.kg_totalizador is not None:
+            kg_total = float(medidor.kg_totalizador)
+        else:
+            kg_total = "--"
 
+        response_data = {
+            "energia_total_kwh": energia_total,
+            "potencia_total_kw": potencia_total,
+            "kg_total": kg_total
+        }
+    else:
+        response_data = {
+            "energia_total_kwh": energia_total,
+            "potencia_total_kw": potencia_total
+        }
+
+    # Guardar en caché
     cache.set(cache_key, response_data, timeout=None)
     cache.set(timestamp_key, last_updated_db, timeout=None)
 
