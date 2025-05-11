@@ -101,7 +101,7 @@ class MedidorPosicion(models.Model):
     seccion = models.CharField(
         max_length=100,
         choices=SECCION_CHOICES,
-        default='Planta Congelado',
+        default='Planta Harina',
     )
 
     tipo = models.CharField(
@@ -136,9 +136,9 @@ class MedidorPosicion(models.Model):
     )
     # Estilos generales para bloques
     width = models.CharField(max_length=10, blank=True,
-                             null=True, default='270px')
+                             null=True, default='10px')
     height = models.CharField(
-        max_length=10, blank=True, null=True, default='38px')
+        max_length=10, blank=True, null=True, default='10px')
     background = models.CharField(
         max_length=50, blank=True, null=True, default='white')
     border_color = models.CharField(max_length=50, blank=True, null=True)

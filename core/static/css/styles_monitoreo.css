@@ -692,7 +692,53 @@ html, body {
 
 
 
-div[data-medidor="flujo_r"] .potencia_actual {
+div[data-medidor="flujo_r"] .energia_total {
     margin-right: 0;
-    margin-left: 20px;
+    /* margin-left: 20px; */
+}
+
+div[data-medidor="flujo_r"] .potencia_actual {
+    margin-right: 10px;
+    /* margin-left: 20px; */
+}
+
+div[data-medidor="calderas_diesel"] .potencia_actual {
+    margin-right: 3px;
+    /* margin-left: 20px; */
+}
+
+div[data-medidor="diesel_flota"] .potencia_actual {
+    margin-right: 3px;
+    /* margin-left: 20px; */
+}
+
+
+div[data-medidor="c2_diesel"] .potencia_actual {
+    /* margin-right: 3px; */
+    margin-left: 6px;
+}
+div[data-medidor="c3_diesel"] .potencia_actual {
+    /* margin-right: 3px; */
+    margin-left: 6px;
+}
+div[data-medidor="c4_diesel"] .potencia_actual {
+    /* margin-right: 4px; */
+    margin-left: 6px;
+}
+div[data-medidor="c2_vapor"] .potencia_actual {
+    /* margin-right: 4px; */
+    margin-left: 11px;
+}
+div[data-medidor="c3_vapor"] .potencia_actual {
+    /* margin-right: 4px; */
+    margin-left: 11px;
+}
+div[data-medidor="c4_vapor"] .potencia_actual {
+    /* margin-right: 4px; */
+    margin-left: 11px;
+}
+
+div[data-medidor="flujo_s"] .potencia_actual {
+    /* margin-right: 4px; */
+    margin-left: 11px;
 }

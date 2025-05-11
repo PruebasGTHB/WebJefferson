@@ -51,8 +51,18 @@ function cambiarCanvas(seccion) {
         if (["texto", "contenedor", "contenedor-10", "contenedor-100"].includes(med.categoria_visual)) {
           aplicarEstilosBase(card, med);
           if (["contenedor", "contenedor-10", "contenedor-100"].includes(med.categoria_visual)) {
-            card.style.zIndex = (med.z_index ?? 0).toString();
-            card.style.pointerEvents = 'none';
+            switch (med.categoria_visual) {
+              case "contenedor":
+                card.style.zIndex = "0";
+                break;
+              case "contenedor-10":
+                card.style.zIndex = "-10";
+                break;
+              case "contenedor-100":
+                card.style.zIndex = "-100";
+                break;
+            }
+            card.style.pointerEvents = "none";
           }
           canvas.appendChild(card);
           gsap.set(card, { x: med.x ?? 0, y: med.y ?? 0 });
@@ -128,21 +138,32 @@ function cambiarCanvas(seccion) {
             card.appendChild(h3);
           }
 
+
+
+
+// kWh	🔋	Batería / Energía almacenada
+// m³/h	📦	Volumen / Flujo volumétrico (caja cúbica)
+// L/h	🧴	Líquido / Flujo de litros (botella de fluido)
+// kg/h	💨	Flujo de masa (vapor o gas)
+// Bar G	⚙️	Presión (sistema técnico, instrumentación)
+// kg	⚖️	Peso / Masa (balanza)
+
           // Datos por categoría
           if (med.categoria_visual === 'medidorglp') {
-            card.appendChild(crearBloqueDato('kWh', '🔄', 'energia_total', 'kWh'));
-            card.appendChild(crearBloqueDato('kW', '⛽', 'potencia_actual', 'L/h'));
+            card.appendChild(crearBloqueDato('kWh', '🔋', 'energia_total', 'kWh'));
+            card.appendChild(crearBloqueDato('kW', '📦', 'potencia_actual', 'm³/h')); 
           } else if (med.categoria_visual === 'medidordiesel') {
-            card.appendChild(crearBloqueDato('kWh', '🔄', 'energia_total', 'kWh'));
-            card.appendChild(crearBloqueDato('kW', '🛢️', 'potencia_actual', 'm³/h'));
+            card.appendChild(crearBloqueDato('kWh', '🔋', 'energia_total', 'kWh'));
+            card.appendChild(crearBloqueDato('kW', '🧴', 'potencia_actual', 'L/h'));
           } else if (med.categoria_visual === 'medidorvapor') {
-            card.appendChild(crearBloqueDato('kWh', '💨', 'energia_total', 'kg/h'));
-            card.appendChild(crearBloqueDato('kW', '📏', 'potencia_actual', 'barg'));
-
-          }else if (med.categoria_visual === 'medidorflujometro') {
-            card.appendChild(crearBloqueDato('kWh', '🌊', 'energia_total', 'kg/h'));      
-            card.appendChild(crearBloqueDato('kW', '🧭', 'potencia_actual', 'barg'));     
-            card.appendChild(crearBloqueDato('flujo', '⚖️', 'kg_total', 'kg'));          
+            card.appendChild(crearBloqueDato('kWh', '🔋', 'energia_total', 'kWh'));
+            card.appendChild(crearBloqueDato('kW', '💨', 'potencia_actual', 'kg/h'));
+          } else if (med.categoria_visual === 'medidorflujometro') {
+            card.appendChild(crearBloqueDato('kWh', '⚙️', 'energia_total', 'Bar G'));      
+            card.appendChild(crearBloqueDato('kW', '💨', 'potencia_actual', 'kg/h'));     
+            card.appendChild(crearBloqueDato('flujo', '⚖️', 'kg_total', 'kg'));    
+          
+       
 
           } else {
             card.appendChild(crearBloqueDato('kWh', '🔄', 'energia_total', 'kWh'));
@@ -702,6 +723,6 @@ function actualizarEstadoVisualMedidor(card, energia, potencia) {
     });
   
     aplicarCuadriculaSiCorresponde();
-    cambiarCanvas('General');
+    cambiarCanvas('Sala de Calderas');
   };
   
