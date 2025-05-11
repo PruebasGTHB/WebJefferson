@@ -286,31 +286,39 @@ function actualizarPotencias() {
       cards.forEach(card => {
         const header = card.querySelector('.card-header');
         const potenciaEl = card.querySelector('.potencia');
+        const estadoEl = card.querySelector('.estado-color');
 
-        if (!header || !potenciaEl) return;
+        if (!header || !potenciaEl || !estadoEl) return;
 
         const tag = header.textContent.split('-')[0];
+        const valor = data[tag];
+        const estaSeleccionado = card.classList.contains("selected");
 
-        if (data[tag] !== undefined) {
-          const valor = data[tag];
-          potenciaEl.textContent = `${valor} kW`;
+        // Mostrar potencia siempre (incluso si no hay datos)
+        if (valor !== undefined) {
+          const valorMostrar = valor < 0 ? 0 : valor;
+          potenciaEl.textContent = `${valorMostrar} kW`;
+        } else {
+          potenciaEl.textContent = "– kW";
+        }
 
-          potenciaEl.classList.remove("estado-activo", "estado-inactivo", "estado-gris");
-          card.classList.remove("estado-activo", "estado-inactivo");
+        // Limpiar clases visuales
+        potenciaEl.classList.remove("estado-activo", "estado-inactivo", "estado-gris");
+        card.classList.remove("estado-activo", "estado-inactivo");
 
-          const estaSeleccionado = card.classList.contains("selected");
-
-          if (estaSeleccionado) {
-            if (valor > 0) {
-              potenciaEl.classList.add("estado-activo");
-              card.classList.add("estado-activo");
-            } else {
-              potenciaEl.classList.add("estado-inactivo");
-              card.classList.add("estado-inactivo");
-            }
+        // Mostrar borde y color solo si está seleccionado
+        if (estaSeleccionado) {
+          estadoEl.style.color = coloresPorTag[tag] || "#000";
+          if (valor > 0) {
+            potenciaEl.classList.add("estado-activo");
+            card.classList.add("estado-activo");
           } else {
-            potenciaEl.classList.add("estado-gris");
+            potenciaEl.classList.add("estado-inactivo");
+            card.classList.add("estado-inactivo");
           }
+        } else {
+          estadoEl.style.color = "#b0b0b0";
+          potenciaEl.classList.add("estado-gris");
         }
       });
     })
@@ -477,3 +485,5 @@ function recargarDatosConDelay() {
     cargarDatos();
   }, 400);
 }
+
+

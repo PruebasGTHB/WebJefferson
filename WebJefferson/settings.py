@@ -164,3 +164,11 @@ INFLUXDB_BUCKET_TUNELES = "Tuneles"
 
 # Zona horaria para convertir los timestamps de Influx
 INFLUXDB_ZONE = "America/Santiago"
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
