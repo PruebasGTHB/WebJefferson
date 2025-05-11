@@ -208,7 +208,7 @@ function renderizarGrafico(canvasId, graficoData, seleccionados) {
       labels: graficoData.fechas,
       datasets: series.map(s => ({
         label: s.nombre,
-        data: s.valores,
+        data: s.valores.map(v => v < 0 ? 0 : v),
         borderColor: coloresPorTag[s.nombre] || '#000000',
         backgroundColor: coloresPorTag[s.nombre] || '#000000',
         borderWidth: 2,

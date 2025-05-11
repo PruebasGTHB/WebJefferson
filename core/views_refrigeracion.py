@@ -28,17 +28,18 @@ TUNELES = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10"]
 # ----------------------------
 
 def limpiar_nan(valores):
-    """Convierte NaN o strings no numéricos a None. Redondea números válidos."""
     resultado = []
     for v in valores:
         if isinstance(v, (int, float)):
             if math.isnan(v):
                 resultado.append(None)
             else:
-                resultado.append(round(v, 2))
+                valor = max(0, round(v, 2))  # 👈 fuerza mínimo 0
+                resultado.append(valor)
         else:
             resultado.append(None)
     return resultado
+
 
 from pandas import DataFrame
 
@@ -298,7 +299,7 @@ def descargar_datos(request):
                         for fecha, valor in zip(fechas, valores):
                             if pd.notna(valor):
                                 datos_ws.append([fecha, tag, field, round(valor, 2)])
-                        valores_validos = valores.dropna()
+                        valores_validos = valores.dropna().apply(lambda x: max(0, x))  # 👈 Fuerza mínimo 0
                         if not valores_validos.empty:
                             resumen_ws.append([
                                 tag, field,
