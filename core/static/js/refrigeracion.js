@@ -273,10 +273,10 @@ function renderizarGrafico(canvasId, graficoData, seleccionados) {
 }
 
 function actualizarPotencias() {
-  const tags = [...filtros.compresores, ...filtros.tuneles];
-  if (tags.length === 0) return;
+  const todosTags = Array.from(document.querySelectorAll('.card-equipo'))
+    .map(card => card.querySelector('.card-header').textContent.split('-')[0]);
 
-  const query = tags.map(tag => `tags[]=${tag}`).join("&");
+  const query = todosTags.map(tag => `tags[]=${tag}`).join("&");
 
   fetch(`/api/ultima_potencia/?${query}`)
     .then(res => res.json())
@@ -294,7 +294,7 @@ function actualizarPotencias() {
         const valor = data[tag];
         const estaSeleccionado = card.classList.contains("selected");
 
-        // Mostrar potencia siempre (incluso si no hay datos)
+        // Mostrar potencia siempre
         if (valor !== undefined) {
           const valorMostrar = valor < 0 ? 0 : valor;
           potenciaEl.textContent = `${valorMostrar} kW`;
@@ -302,28 +302,33 @@ function actualizarPotencias() {
           potenciaEl.textContent = "– kW";
         }
 
+        // Pelota: solo tiene color si está seleccionado
+        estadoEl.style.color = estaSeleccionado ? (coloresPorTag[tag] || "#000") : "#b0b0b0";
+
         // Limpiar clases visuales
         potenciaEl.classList.remove("estado-activo", "estado-inactivo", "estado-gris");
         card.classList.remove("estado-activo", "estado-inactivo");
 
-        // Mostrar borde y color solo si está seleccionado
-        if (estaSeleccionado) {
-          estadoEl.style.color = coloresPorTag[tag] || "#000";
-          if (valor > 0) {
-            potenciaEl.classList.add("estado-activo");
-            card.classList.add("estado-activo");
-          } else {
-            potenciaEl.classList.add("estado-inactivo");
-            card.classList.add("estado-inactivo");
-          }
+        // ✅ Fondo: si tiene potencia, mostrar fondo verde aunque NO esté seleccionado
+        if (valor > 0) {
+          potenciaEl.classList.add("estado-activo"); // Esto aplica el fondo verde SIEMPRE
+          card.classList.add("estado-activo");       // Esto también aplica el borde verde
         } else {
-          estadoEl.style.color = "#b0b0b0";
-          potenciaEl.classList.add("estado-gris");
+          potenciaEl.classList.add("estado-inactivo"); // Fondo gris claro
+          card.classList.add("estado-inactivo");
+        }
+
+        // ✅ Si no está seleccionado, quitamos borde visual
+        if (!estaSeleccionado) {
+          card.classList.remove("selected");
         }
       });
     })
     .catch(err => console.error("❌ Error al cargar potencia:", err));
 }
+
+
+
 
 function toggleGroup(tipo, seleccionar) {
   const containerId = tipo === "compresores" ? "compresores-cards" : "tuneles-cards";
