@@ -52,7 +52,7 @@ def metricas_por_metrica(bucket, tag_key, tags, field, inicio, fin):
         from(bucket: "{bucket}")
         |> range(start: time(v: "{inicio}T00:00:00Z"), stop: time(v: "{fin}T23:59:59Z"))
         |> filter(fn: (r) => r._measurement == "sensor_data" and r._field == "{field}" and ({tag_filter}))
-        |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)
+        |> aggregateWindow(every: 1h, fn: last, createEmpty: false)
     '''
 
     with InfluxDBClient(
@@ -100,7 +100,7 @@ def graficos_por_bucket(bucket, tag_key, fields, inicio, fin):
         from(bucket: "{bucket}")
         |> range(start: time(v: "{inicio}T00:00:00Z"), stop: time(v: "{fin}T23:59:59Z"))
         |> filter(fn: (r) => r._measurement == "sensor_data" and ({field_filter}))
-        |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)
+        |> aggregateWindow(every: 1h, fn: last, createEmpty: false)
         |> pivot(rowKey: ["_time"], columnKey: ["_field", "{tag_key}"], valueColumn: "_value")
     '''
 
