@@ -354,15 +354,30 @@ function toggleGroup(tipo, seleccionar) {
   actualizarPotencias();
 }
 
-// BOTÓN DE DESCARGA CON SPINNER
 document.querySelector(".btn-descarga").addEventListener("click", () => {
-  const inicio = document.getElementById("fecha-inicio").value;
-  const fin = document.getElementById("fecha-fin").value;
+  const inicioInput = document.getElementById("fecha-inicio");
+  const finInput = document.getElementById("fecha-fin");
+
+  const inicio = inicioInput.value.trim();
+  const fin = finInput.value.trim();
+
+  if (!inicio || !fin) {
+    alert("⚠️ Debes seleccionar ambas fechas (inicio y fin) antes de descargar.");
+    return;
+  }
+
   const spinner = document.querySelector(".btn-descarga .spinner");
+
+  // Obtener los tags seleccionados
+  const tags = [
+    ...Array.from(filtros.compresores),
+    ...Array.from(filtros.tuneles)
+  ];
+  const tagParams = tags.map(tag => `tags[]=${tag}`).join("&");
 
   spinner.style.display = "inline-block";
 
-  fetch(`/api/descargar_datos/?inicio=${inicio}&fin=${fin}`)
+  fetch(`/api/descargar_datos/?inicio=${inicio}&fin=${fin}&${tagParams}`)
     .then(response => {
       if (!response.ok) throw new Error("No se pudo descargar el archivo.");
       return response.blob();
@@ -385,7 +400,6 @@ document.querySelector(".btn-descarga").addEventListener("click", () => {
       spinner.style.display = "none";
     });
 });
-
 
 function actualizarCheckboxGrupo(tipo) {
   const containerId = tipo === "compresores" ? "compresores-cards" : "tuneles-cards";

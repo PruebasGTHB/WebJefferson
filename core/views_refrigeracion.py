@@ -251,9 +251,17 @@ def ultima_potencia(request):
 def descargar_datos(request):
     try:
         import pandas as pd
-        inicio = request.GET.get("inicio", "2025-01-01")
-        fin = request.GET.get("fin", "2025-01-31")
+        from io import BytesIO
+
+        inicio = request.GET.get("inicio")
+        fin = request.GET.get("fin")
+        tags_usuario = request.GET.getlist("tags[]")
         zona = pytz.timezone(settings.INFLUXDB_ZONE)
+
+        if not inicio or not fin:
+            return HttpResponse("❌ Faltan fechas de inicio o fin.", status=400)
+        if not tags_usuario:
+            return HttpResponse("❌ No se seleccionaron equipos.", status=400)
 
         equipos = {
             "Compresores": ("topic", COMPRESORES),
@@ -266,15 +274,20 @@ def descargar_datos(request):
         with InfluxDBClient(url=settings.INFLUXDB_URL, token=settings.INFLUXDB_TOKEN, org=settings.INFLUXDB_ORG) as client:
             query_api = client.query_api()
 
-            for bucket, (tag_key, tags) in equipos.items():
-                # Consulta combinada por bucket
+            for bucket, (tag_key, tags_definidos) in equipos.items():
+                tags = [t for t in tags_usuario if t in tags_definidos]
+                if not tags:
+                    continue
+
                 field_filter = " or ".join([f'r._field == "{f}"' for f in METRICAS.values()])
+                tag_filter = " or ".join([f'r["{tag_key}"] == "{tag}"' for tag in tags])
+
                 query = f'''
                     from(bucket: "{bucket}")
                     |> range(start: time(v: "{inicio}T00:00:00Z"), stop: time(v: "{fin}T23:59:59Z"))
-                    |> filter(fn: (r) => r._measurement == "sensor_data" and ({field_filter}))
+                    |> filter(fn: (r) => r._measurement == "sensor_data" and ({field_filter}) and ({tag_filter}))
                     |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)
-                    |> pivot(rowKey: ["_time"], columnKey: ["_field", "{tag_key}"], valueColumn: "_value")
+                    |> yield(name: "mean")
                 '''
 
                 df = query_api.query_data_frame(query)
@@ -282,30 +295,34 @@ def descargar_datos(request):
                     continue
 
                 df["_time"] = df["_time"].dt.tz_convert(zona)
-                fechas = df["_time"].dt.strftime("%Y-%m-%d %H:%M")
+                df["_value"] = pd.to_numeric(df["_value"], errors="coerce")
+                df = df.dropna(subset=["_value"])
 
                 datos_ws = wb.create_sheet(title=f"{bucket} - Datos")
                 resumen_ws = wb.create_sheet(title=f"{bucket} - Resumen")
                 datos_ws.append(["Fecha", "Tag", "Métrica", "Valor"])
                 resumen_ws.append(["Tag", "Métrica", "Mínimo", "Máximo", "Promedio"])
 
-                for field, field_name in METRICAS.items():
-                    columnas = [col for col in df.columns if isinstance(col, tuple) and col[0] == field_name]
-                    for col in columnas:
-                        tag = col[1]
-                        valores = pd.to_numeric(df[col], errors="coerce").fillna(pd.NA)
-                        if valores.isna().all():
+                for tag in tags:
+                    for metrica, field in METRICAS.items():
+                        df_filtrado = df[(df[tag_key] == tag) & (df["_field"] == field)]
+                        if df_filtrado.empty:
                             continue
+
+                        fechas = df_filtrado["_time"].dt.strftime("%Y-%m-%d %H:%M").tolist()
+                        valores = limpiar_nan(df_filtrado["_value"].tolist())
+                        valores_validos = [v for v in valores if v is not None]
+
                         for fecha, valor in zip(fechas, valores):
-                            if pd.notna(valor):
-                                datos_ws.append([fecha, tag, field, round(valor, 2)])
-                        valores_validos = valores.dropna().apply(lambda x: max(0, x))  # 👈 Fuerza mínimo 0
-                        if not valores_validos.empty:
+                            if valor is not None:
+                                datos_ws.append([fecha, tag, metrica, valor])
+
+                        if valores_validos:
                             resumen_ws.append([
-                                tag, field,
-                                round(valores_validos.min(), 2),
-                                round(valores_validos.max(), 2),
-                                round(valores_validos.mean(), 2)
+                                tag, metrica,
+                                round(min(valores_validos), 2),
+                                round(max(valores_validos), 2),
+                                round(sum(valores_validos) / len(valores_validos), 2)
                             ])
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -317,4 +334,3 @@ def descargar_datos(request):
     except Exception as e:
         print("❌ Error en descargar_datos:", traceback.format_exc())
         return HttpResponse(f"Error al generar Excel: {str(e)}", status=500)
-
